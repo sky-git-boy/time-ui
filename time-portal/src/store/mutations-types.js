@@ -1,0 +1,37 @@
+export const ADD_TODO = 'addTodo';
+export const TOGGLE_DONE = 'toggleDone';
+export const DEL_TODO = 'delTodo';
+export const DECREASE_MIN = 'decreaseMin';
+export const DECREASE_SEC = 'decreaseSec';
+export const TIME_OVER = 'timeOver';
+export const SORTED_TODOS = 'sortedTodos';
+export const UPDATE_TODOS = 'updateTodos';
+export const DELETE_NOTE = 'deleteNote';
+export const UPDATE_NOTE = 'updateNote';
+export const ADD_A_NOTE = 'addANote';
+
+export const INIT_TOMATO = 'initTomato';
+export const CHANGE_STATUS_TO_RESTART = 'changeStatusToRestart';
+export const CHANGE_STATUS_TO_START = 'changeStatusToStart';
+export const CHANGE_STATUS_TO_STOP = 'changeStatusToStop';
+export const CHANGE_STATUS_TO_END = 'changeStatusToEnd';
+export const CHANGE_CURRENT_TIME = 'changeCurrentTime';
+export const TOGGLE_SHOW_SIDEBAR = 'toggleShowSidebar';
+export const MODIFY_SETTING = 'modifySetting';
+export const SAVE_SONG = 'saveSong';
+export const THE_NEXT_SONG = 'nextSong';
+export const PLAYER_READY_STATE = 'readyPlay';
+export const PLAY_OR_PAUSE = 'playOrPause';
+export const UPDATE_PROPRESS = 'updateProgress';
+export const CLEAR_AUDIO = 'clearAudio';
+export const CHANGE_SONG_INDEX = 'changeSongIndex';
+export const UPDATE_SONG = 'updateSong';
+export const LOAD_WHITE_NOISE = 'loadWhiteNoise';
+export const PLAY_OR_PAUSE_NOISE = 'playOrPauseNoise';
+
+export const LS_SET_TODOS = 'lsSetTodos';
+export const LS_GET_TODOS = 'lsGetTodos';
+export const LS_SET_NOTES = 'lsSetNoets';
+export const LS_GET_NOTES = 'lsGetNoets';
+export const LS_SET_SETTING = 'lsSetSetting';
+export const LS_GET_SETTING = 'lsGetSetting';

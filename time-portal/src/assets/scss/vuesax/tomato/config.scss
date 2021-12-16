@@ -1,0 +1,33 @@
+$breakpoints: ("xs": "only screen and ( min-width: 480px)",
+  "sm": "only screen and ( min-width: 768px)",
+  "md": "only screen and ( min-width: 992px)",
+  "lg": "only screen and ( min-width: 1026px)"
+) !default;
+
+// ==== 定义一些颜色
+$cl-main1: #8E84F3;
+$cl-main2: #9C93F5;
+$cl-main3: #ffe300;
+$cl-main4: #02e079;
+$cl-main5: #325bf0;
+$cl-main6: #a04cf7;
+
+$cl-shallow1: #9C93F5;
+$cl-shallow2: #ff670060;
+$cl-shallow3: #ffe30060;
+$cl-shallow4: #02e07960;
+$cl-shallow5: #325bf060;
+$cl-shallow6: #a04cf760;
+
+$cl-font1: #333333;
+$cl-font2: #666666;
+$cl-font3: #999999;
+$cl-font4: #bbbbbb;
+$cl-font5: #efefef;
+
+$cl-aux1: #ffffff;
+$cl-aux2: #efefef;
+$cl-aux3: #efeffe;
+$cl-aux4: #d4d4f5;
+$cl-aux5: #fbfcfe;
+$cl-aux6: #dddddd;

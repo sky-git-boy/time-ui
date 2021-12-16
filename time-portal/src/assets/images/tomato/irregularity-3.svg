@@ -1,0 +1,24 @@
+<svg width="420" height="420" 
+  xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient y2="0" x2="0" y1="1" x1="1" id="svg_21">
+      <stop offset="0.308594" stop-color="#9C93F5"/>
+      <stop offset="1" stop-color="#CAC6F6"/>
+    </linearGradient>
+  </defs>
+  <g>
+    <title>background</title>
+    <rect fill="none" id="canvas_background" height="422" width="422" y="-1" x="-1"/>
+    <g display="none" overflow="visible" y="0" x="0" height="100%" width="100%" id="canvasGrid">
+      <rect fill="url(#gridpattern)" stroke-width="0" y="0" x="0" height="100%" width="100%"/>
+    </g>
+  </g>
+  <g>
+    <title>Layer 1</title>
+    <path id="svg_9" d="m679.5,198.953125c-17,19 -93,230 -87,239c6,9 143,293 362,141c219,-152 527,-363 131,-376c-396,-13 -389,-23 -406,-4z" fill-opacity="null" stroke-opacity="null" stroke-width="1.5" stroke="#000" fill="url(#svg_7)"/>
+    <path id="svg_10" d="m221.5,1.453125" opacity="0.5" fill-opacity="null" stroke-opacity="null" stroke-width="1.5" stroke="#000" fill="url(#svg_7)"/>
+    <path id="svg_13" d="m188.5,5.453125" opacity="0.5" fill-opacity="null" stroke-opacity="null" stroke-width="0" stroke="#000" fill="url(#svg_7)"/>
+    <path id="svg_15" d="m198.333333,46.302083" opacity="0.5" fill-opacity="null" stroke-opacity="null" stroke-width="0" stroke="#000" fill="url(#svg_7)"/>
+    <path stroke="#000" id="svg_18" d="m162.367722,40.96875c51.847584,-45.333333 258.265097,52 240.413901,163.333333c-17.851196,111.333333 -232.060613,206.666667 -299.46293,141.333333c-67.402317,-65.333333 7.201445,-259.333333 59.049029,-304.666666z" fill-opacity="0.57" stroke-opacity="null" stroke-width="0" fill="url(#svg_21)"/>
+  </g>
+</svg>
