@@ -2,14 +2,14 @@
   <div id="data-list-list-view" class="data-list-container">
     <vs-table
       :sst="true"
-      @change-page="handleChangePage"
-      @search="handleSearch"
-      search
       :total="total"
       :max-items="queryParams.pageSize"
-      pagination
       :data="list"
-      noDataText=""
+      search
+      pagination
+      no-data-text=""
+      @change-page="handleChangePage"
+      @search="handleSearch"
     >
       <div
         slot="header"
@@ -21,7 +21,7 @@
             class="p-3 mb-4 mr-4 rounded-lg cursor-pointer flex items-center justify-between text-lg font-medium text-base text-primary border border-solid border-primary"
             @click="activePrompt = true"
           >
-            <feather-icon icon="PlusIcon" svgClasses="h-4 w-4" />
+            <feather-icon icon="PlusIcon" svg-classes="h-4 w-4" />
             <span class="ml-2 text-base text-primary">Add New</span>
           </div>
         </div>
@@ -31,16 +31,17 @@
           <div
             class="p-4 border border-solid d-theme-border-grey-light rounded-full d-theme-dark-bg cursor-pointer flex items-center justify-between font-medium"
           >
-            <span class="mr-2"
-              >{{ queryParams.pageNum * queryParams.pageSize - (queryParams.pageSize - 1) }} -
+            <span
+              class="mr-2"
+            >{{ queryParams.pageNum * queryParams.pageSize - (queryParams.pageSize - 1) }} -
               {{
                 total - queryParams.pageNum * queryParams.pageSize > 0
                   ? queryParams.pageNum * queryParams.pageSize
                   : total
               }}
               of {{ total }}</span
-            >
-            <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" />
+              >
+            <feather-icon icon="ChevronDownIcon" svg-classes="h-4 w-4" />
           </div>
           <vs-dropdown-menu>
             <vs-dropdown-item @click="queryParams.pageSize = 4; getJournalList()">
@@ -59,9 +60,9 @@
       <!-- 数据展示 -->
       <div class="vx-row">
         <div
-          class="vx-col w-full md:w-1/4 sm:w-1/2 mb-base"
           v-for="item in list"
           :key="item.recordId"
+          class="vx-col w-full md:w-1/4 sm:w-1/2 mb-base"
           @click="handleUpdate(item.recordId)"
         >
           <vx-card class="text-center" style="height: 150px" >
@@ -74,27 +75,27 @@
 
     <!-- 添加修改弹出层 -->
     <vs-prompt
+      :is-valid="validateForm"
+      :active.sync="activePrompt"
       title="Diary"
       accept-text="Submit"
       button-cancel="border"
       @cancel="clearFields"
       @accept="submit"
       @close="clearFields"
-      :is-valid="validateForm"
-      :active.sync="activePrompt"
     >
       <div>
         <form>
           <div class="vx-row">
-            <div class="vx-col w-full" :model="form">
+            <div :model="form" class="vx-col w-full">
               <vs-input
+                v-model="form.title"
+                :color="validateForm ? 'success' : 'danger'"
                 label-placeholder="title"
                 class="w-full mb-4 mt-5"
                 placeholder="Title"
-                v-model="form.title"
-                :color="validateForm ? 'success' : 'danger'"
               />
-              <vs-textarea rows="5" label="Description" v-model="form.description" :color="validateForm ? 'success' : 'danger'" />
+              <vs-textarea v-model="form.description" :color="validateForm ? 'success' : 'danger'" rows="5" label="Description" />
             </div>
           </div>
         </form>
@@ -104,7 +105,7 @@
 </template>
 
 <script>
-import { listJournalForPage, addJournal, getJournalById, updateJournal } from "@/api/journal.js";
+import { listJournalForPage, addJournal, getJournalById, updateJournal } from '@/api/journal.js'
 export default {
   data() {
     return {
@@ -123,31 +124,31 @@ export default {
         pageSize: 4,
         title: undefined
       }
-    };
+    }
   },
   computed: {
     validateForm() {
-      return !this.errors.any() && this.form.title != "" && this.form.description != "";
+      return !this.errors.any() && this.form.title !== '' && this.form.description !== ''
     }
   },
   created() {
-    this.getJournalList();
+    this.getJournalList()
   },
   methods: {
     formatData(data) {
       // formats data received from API
-      let formattedData = data.map(item => {
-        const fields = item.fields;
-        let obj = {};
+      const formattedData = data.map(item => {
+        const fields = item.fields
+        const obj = {}
         for (const key of Object.keys(fields)) {
           obj[key] =
             Number(fields[key].integerValue) ||
             Number(fields[key].doubleValue) ||
-            fields[key].stringValue;
+            fields[key].stringValue
         }
-        return obj;
-      });
-      return formattedData;
+        return obj
+      })
+      return formattedData
     },
     // 获取列表
     getJournalList() {
@@ -168,7 +169,7 @@ export default {
       }).catch(() => {
         this.$vs.loading.close()
       })
-      this.clearFields();
+      this.clearFields()
     },
     // 清空
     clearFields() {
@@ -178,38 +179,38 @@ export default {
     // 提交
     submit() {
       this.$vs.loading()
-      if(this.form.recordId === undefined) {
-        addJournal(this.form).then(() => { //做添加
+      if (this.form.recordId === undefined) {
+        addJournal(this.form).then(() => { // 做添加
           this.$vs.loading.close()
           this.getJournalList()
           this.$vs.notify({
             title: 'Success',
-            text:'添加成功',
+            text: '添加成功',
             color: 'success'
           })
           this.open = false
         }).catch(() => {
           this.$vs.notify({
             title: 'Fail',
-            text:'添加失败',
+            text: '添加失败',
             color: 'danger'
           })
           this.$vs.loading.close()
         })
-      } else { //做修改
+      } else { // 做修改
         updateJournal(this.form).then(() => {
           this.$vs.loading.close()
           this.getJournalList()
           this.open = false
           this.$vs.notify({
             title: 'Success',
-            text:'修改成功',
+            text: '修改成功',
             color: 'success'
           })
         }).catch(() => {
           this.$vs.notify({
             title: 'Fail',
-            text:'修改失败',
+            text: '修改失败',
             color: 'danger'
           })
           this.$vs.loading.close()
@@ -241,11 +242,11 @@ export default {
     reset() {
       this.form = {
         title: undefined,
-        description: undefined,
+        description: undefined
       }
-    },
+    }
   }
-};
+}
 </script>
 
 <style lang="scss">
