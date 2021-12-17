@@ -473,7 +473,7 @@ button {
   justify-content: space-between;
 }
 .font-desc {
-  width: 200px;
+  width: 270px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
