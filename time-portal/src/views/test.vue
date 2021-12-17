@@ -1,153 +1,121 @@
-<template lang="html">
-  <div>
-    <vs-table
-      :sst="true"
-      @search="handleSearch"
-      @change-page="handleChangePage"
-      @sort="handleSort"
-      v-model="selected"
-      :total="totalItems"
-      pagination
-      max-items="10"
-      search
-      :data="users">
-      <template slot="header">
-        <h3>
-          Users
-        </h3>
-      </template>
-      <template slot="thead">
-        <vs-th sort-key="email">
-          Email
-        </vs-th>
-        <vs-th sort-key="username">
-          Name
-        </vs-th>
-        <vs-th sort-key="website">
-          Website
-        </vs-th>
-        <vs-th sort-key="id">
-          Nro
-        </vs-th>
-      </template>
+<!-- =========================================================================================
+    File Name: TodoAddNew.vue
+    Description: Add new todo component
+    ----------------------------------------------------------------------------------------
+    Item Name: Vuesax Admin - VueJS Dashboard Admin Template
+      Author: Pixinvent
+    Author URL: http://www.themeforest.net/user/pixinvent
+========================================================================================== -->
 
-      <template slot-scope="{data}">
-        <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data" >
-          <vs-td :data="data[indextr].email">
-            {{data[indextr].email}}
-          </vs-td>
 
-          <vs-td :data="data[indextr].username">
-            {{data[indextr].username}}
-          </vs-td>
+<template>
+    <div class="px-6 pb-2 pt-6">
+    <vs-button @click="activePrompt = true" class="w-full">Add Task</vs-button>
+    <vs-prompt
+        title="Add Task"
+        accept-text= "Add Task"
+        button-cancel = "border"
+        @cancel="clearFields"
+        @accept="submitTodo"
+        @close="clearFields"
+        :is-valid="validateForm"
+        :active.sync="activePrompt">
+        <div>
+            <form>
+                <div class="vx-row">
+                    <!-- 结束时间 -->
+                    <div class="vx-col">
+                        test
+                    </div>
+                    <div class="vx-col ml-auto flex">
+                        <feather-icon icon="InfoIcon" class="cursor-pointer" :svgClasses="[{'text-success stroke-current': isImportant}, 'w-5', 'h-5 mr-4']" @click.prevent="isImportant = !isImportant"></feather-icon>
 
-          <vs-td :data="data[indextr].id">
-            {{data[indextr].website}}
-          </vs-td>
+                        <feather-icon icon="StarIcon" class="cursor-pointer" :svgClasses="[{'text-warning stroke-current': isStarred}, 'w-5', 'h-5 mr-4']" @click.prevent="isStarred = !isStarred"></feather-icon>
 
-          <vs-td :data="data[indextr].id">
-            {{data[indextr].id}}
-          </vs-td>
-        </vs-tr>
-      </template>
-    </vs-table>
+                        <vs-dropdown class="cursor-pointer" vs-custom-content>
+                            <feather-icon icon="TagIcon" svgClasses="h-5 w-5" @click.prevent></feather-icon>
+                            <vs-dropdown-menu style="z-index: 200001">
+                                <vs-dropdown-item v-for="(tag, index) in todoTags" :key="index" vs-collapse>
+                                    <vs-checkbox :vs-value="tag.value" v-model="tags">{{ tag.text }}</vs-checkbox>
+                                </vs-dropdown-item>
+                            </vs-dropdown-menu>
+                        </vs-dropdown>
+                    </div>
+                </div>
 
-    <pre ref="pre"></pre>
-  </div>
+                <div class="vx-row">
+                    <div class="vx-col w-full">
+                        <vs-input v-validate="'required'" name="title" class="w-full mb-4 mt-5" placeholder="Title" v-model="title" :color="validateForm ? 'success' : 'danger'" />
+                        <vs-textarea rows="5" label="Add description" v-model="desc" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </vs-prompt>
+    </div>
 </template>
 
 <script>
 export default {
-  data:()=>({
-    selected:[],
-    totalItems:10,
-    users:[
-      {
-        "id": 1,
-        "name": "Leanne Graham",
-        "username": "Bret",
-        "email": "Sincere@april.biz",
-        "website": "hildegard.org",
-      },
-      {
-        "id": 2,
-        "name": "Ervin Howell",
-        "username": "Antonette",
-        "email": "Shanna@melissa.tv",
-        "website": "anastasia.net",
-      },
-      {
-        "id": 3,
-        "name": "Clementine Bauch",
-        "username": "Samantha",
-        "email": "Nathan@yesenia.net",
-        "website": "ramiro.info",
-      },
-      {
-        "id": 4,
-        "name": "Patricia Lebsack",
-        "username": "Karianne",
-        "email": "Julianne.OConner@kory.org",
-        "website": "kale.biz",
-      },
-      {
-        "id": 5,
-        "name": "Chelsey Dietrich",
-        "username": "Kamren",
-        "email": "Lucio_Hettinger@annie.ca",
-        "website": "demarco.info",
-      },
-      {
-        "id": 6,
-        "name": "Mrs. Dennis Schulist",
-        "username": "Leopoldo_Corkery",
-        "email": "Karley_Dach@jasper.info",
-        "website": "ola.org",
-      },
-      {
-        "id": 7,
-        "name": "Kurtis Weissnat",
-        "username": "Elwyn.Skiles",
-        "email": "Telly.Hoeger@billy.biz",
-        "website": "elvis.io",
-      },
-      {
-        "id": 8,
-        "name": "Nicholas Runolfsdottir V",
-        "username": "Maxime_Nienow",
-        "email": "Sherwood@rosamond.me",
-        "website": "jacynthe.com",
-      },
-      {
-        "id": 9,
-        "name": "Glenna Reichert",
-        "username": "Delphine",
-        "email": "Chaim_McDermott@dana.io",
-        "website": "conrad.com",
-      },
-      {
-        "id": 10,
-        "name": "Clementina DuBuque",
-        "username": "Moriah.Stanton",
-        "email": "Rey.Padberg@karina.biz",
-        "website": "ambrose.net",
-      }
-    ]
-  }),
-  methods:{
-    handleSearch(searching) {
-      console.log(searching)
-      let _print = `The user searched for: ${searching}\n`
-      this.$refs.pre.appendChild(document.createTextNode(_print))
+    data() {
+        return {
+            activePrompt: false,
+
+            // task fields
+            title: '',
+            desc: '',
+            isDone: false,
+            isImportant: false,
+            isStarred: false,
+            tags: [],
+            todoTags: [
+              { text: 'none', value: '0', color: 'primary' },
+              { text: 'work', value: '1', color: 'warning' },
+              { text: 'business', value: '2', color: 'success' },
+              { text: 'personal', value: '3', color: 'danger' }
+            ],
+            // task obj
+            taskObj: {},
+        }
     },
-    handleChangePage(page) {
-      let _print = `The user changed the page to: ${page}\n`
-      this.$refs.pre.appendChild(document.createTextNode(_print))
+    computed: {
+        todoArrayLength() {
+            return this.$store.getters['todo/todoArrayLength'];
+        },
+        validateForm() {
+            return !this.errors.any() && this.title != '';
+        }
     },
-    handleSort(key, active) {
-      let _print = `the user ordered: ${key} ${active}\n`
-      this.$refs.pre.appendChild(document.createTextNode(_print))
-    }
-  }
+    methods: {
+        addTodo() {
+            // update todo in store and clear all fields in dialog
+            const newId = this.todoArrayLength;
+            this.taskObj.id = newId;
+            this.taskObj.title = this.title;
+            this.taskObj.desc = this.desc;
+            this.taskObj.isDone = this.isDone;
+            this.taskObj.isImportant = this.isImportant;
+            this.taskObj.isStarred = this.isStarred;
+            this.taskObj.tags = this.tags;
+            this.taskObj.isTrashed = false;
+
+            this.$store.dispatch('todo/addTodo', this.taskObj);
+            this.clearFields();
+        },
+        clearFields() {
+            // clear all fileds in todo
+            this.title = "";
+            this.desc = "";
+            this.isDone = false;
+            this.isImportant = false;
+            this.isStarred = false;
+            this.tags = [];
+        },
+        submitTodo() {
+            this.$validator.validateAll().then(result => {
+                if (result) this.addTodo();
+            })
+        }
+    },
 }
 </script>

@@ -8,7 +8,7 @@
           <div>
             <h5 class="text-lg">待办</h5>
           </div>
-          <button type="button" @click="handleAdd">
+          <button type="button" @click="handleAdd('0')">
             <feather-icon class="cursor-pointer plusIcon" icon="PlusIcon" :svgClasses="['h-6 w-6']"></feather-icon>
           </button>
         </div>
@@ -41,7 +41,7 @@
                       <ul style="min-width: 6rem">
                         <li
                           class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
-                          @click="$router.push('/pages/profile')"
+                          @click="handleUpdate(item.taskId)"
                         >
                           <feather-icon icon="EditIcon" svgClasses="w-3 h-3"></feather-icon>
                           <span class="ml-3">编辑</span>
@@ -69,7 +69,7 @@
           <div>
             <h5 class="text-lg">进行中</h5>
           </div>
-          <button type="button" @click="activePrompt = true">
+          <button type="button" @click="handleAdd('1')">
             <feather-icon class="cursor-pointer plusIcon" icon="PlusIcon" :svgClasses="['h-6 w-6']"></feather-icon>
           </button>
         </div>
@@ -102,7 +102,7 @@
                       <ul style="min-width: 6rem">
                         <li
                           class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
-                          @click="$router.push('/pages/profile')"
+                          @click="handleUpdate(item.taskId)"
                         >
                           <feather-icon icon="EditIcon" svgClasses="w-3 h-3"></feather-icon>
                           <span class="ml-3">编辑</span>
@@ -130,7 +130,7 @@
           <div>
             <h5 class="text-lg">已完成</h5>
           </div>
-          <button type="button" @click="activePrompt = true">
+          <button type="button" @click="handleAdd('2')">
             <feather-icon class="cursor-pointer plusIcon" icon="PlusIcon" :svgClasses="['h-6 w-6']"></feather-icon>
           </button>
         </div>
@@ -164,7 +164,7 @@
                       <ul style="min-width: 6rem">
                         <li
                           class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
-                          @click="$router.push('/pages/profile')"
+                          @click="handleUpdate(item.taskId)"
                         >
                           <feather-icon icon="EditIcon" svgClasses="w-3 h-3"></feather-icon>
                           <span class="ml-3">编辑</span>
@@ -202,37 +202,41 @@
         <div>
           <form>
             <div class="vx-row">
+              <!-- 结束时间 -->
               <div class="vx-col">
                 <flat-pickr
                   :config="configdateTimePicker"
                   v-model="form.endTime"
-                  placeholder="Date Time"
+                  placeholder="End Time"
                 />
               </div>
 
               <div class="vx-col ml-auto flex">
+                <!-- 是否重要 -->
                 <feather-icon
                   icon="InfoIcon"
                   class="cursor-pointer"
                   :svgClasses="[
+                    { 'text-success stroke-current': isImportant },
                     'w-5',
                     'h-5 mr-4'
                   ]"
-                  @click.prevent
+                  @click.prevent="isImportant = !isImportant"
                 ></feather-icon>
 
+                <!-- 标签列表 -->
                 <vs-dropdown class="cursor-pointer" vs-custom-content>
                   <feather-icon icon="TagIcon" svgClasses="h-5 w-5" @click.prevent></feather-icon>
-
-                  <vs-dropdown-menu style="z-index: 200001; width: 120px">
-                    <vs-dropdown-item v-for="(tag, index) in todoTags" :key="index">
-                      <vs-checkbox :vs-value="tag.value" v-model="form.tags">{{ tag.text }}</vs-checkbox>
+                  <vs-dropdown-menu style="z-index: 200001">
+                    <vs-dropdown-item v-for="tag in todoTags" :key="tag.value">
+                      <vs-radio @click="test" :color="tag.color" :vs-value="tag.value" v-model="form.tags">{{ tag.text }}</vs-radio>
                     </vs-dropdown-item>
                   </vs-dropdown-menu>
                 </vs-dropdown>
               </div>
             </div>
 
+            <!-- 任务主体 -->
             <div class="vx-row">
               <div class="vx-col w-full">
                 <vs-input
@@ -257,7 +261,7 @@
 import draggable from "vuedraggable";
 import flatPickr from "vue-flatpickr-component";
 import "flatpickr/dist/flatpickr.css";
-import { addTask, kanBan, updateTask, delTask } from '@/api/task.js'
+import { addTask, kanBan, updateTask, delTask, getTaskById } from '@/api/task.js'
 
 export default {
   //注册draggable组件
@@ -267,6 +271,8 @@ export default {
   },
   data() {
     return {
+      // 重要
+      isImportant: false,
       // 打开弹出层
       activePrompt: false,
       // 拖拽的taskId
@@ -280,12 +286,13 @@ export default {
         enableTime: true,
         dateFormat: "Y-m-d H:i"
       },
+      tags: [],
       // 标签
       todoTags: [
-        { text: "收集箱", value: "none", color: "primary" },
-        { text: "工作任务", value: "work", color: "warning" },
-        { text: "学习安排", value: "business", color: "success" },
-        { text: "个人备忘", value: "personal", color: "danger" }
+        { text: 'none', value: '0', color: 'primary' },
+        { text: 'work', value: '1', color: 'warning' },
+        { text: 'business', value: '2', color: 'success' },
+        { text: 'personal', value: '3', color: 'danger' }
       ],
       // 表单
       form: {},
@@ -302,6 +309,9 @@ export default {
     this.getTaskList()
   },
   methods: {
+    test() {
+      console.log('test')
+    },
     // 通过状态获取任务列表
     getTaskList() {
       this.$vs.loading() // 打开遮罩
@@ -312,11 +322,57 @@ export default {
         this.$vs.loading.close()// 关闭遮罩
       })
     },
-    // 添加开始
-    handleAdd() {
+    // 添加
+    handleAdd(status) {
+      this.isImportant = false
       this.activePrompt = true // 打开弹出层
       this.clearFields()
       this.title = 'Add Task'
+      this.form.status = status
+      if (this.form.tags === undefined)
+        this.form.tags = '0'
+    },
+    // 修改
+    handleUpdate(id) {
+      this.activePrompt = true // 打开弹出层
+      this.clearFields()
+      this.title = 'Update Task'
+      this.$vs.loading()
+      getTaskById(id).then(res => {
+        this.form = res.data
+        if (this.form.important === '0')
+          this.isImportant = false
+        else
+          this.isImportant = true
+        this.$vs.loading.close()
+      })
+    },
+    // 提交
+    handleSubmit() {
+      this.$vs.loading()
+      if (this.isImportant)
+        this.form.important = '1'
+      else 
+        this.form.important = '0'
+      if (this.form.taskId === undefined) { // 添加
+        addTask(this.form).then(() => {
+          this.$vs.loading.close()
+          this.clearFields()
+          this.getTaskList()// 列表重新查询
+          this.activePrompt = false// 关闭弹出层
+        }).catch(() => {
+          this.$vs.loading.close()
+        })
+      } else { // 做修改
+        updateTask(this.form).then(() => {
+          this.$vs.loading.close()
+          this.clearFields()
+          this.getTaskList()
+          this.activePrompt = false
+        }).catch(() => {
+          this.$vs.loading.close()
+        })
+      }
     },
     // 删除
     handleDel(id) {
@@ -334,19 +390,6 @@ export default {
           color: 'danger'
         })
       })
-    },
-    // 提交
-    handleSubmit() {
-      this.$vs.loading()
-      if (this.form.taskId === undefined) { // 添加
-        addTask(this.form).then(() => {
-          this.loading = false
-          this.getTaskList()// 列表重新查询
-          this.open = false// 关闭弹出层
-        }).catch(() => {
-          this.loading = false
-        })
-      }
     },
     onChange(evt) {
       let flag = undefined
@@ -377,13 +420,13 @@ export default {
     // 重置表单
     clearFields() {
       this.form = {
-        taskId: '',
+        taskId: undefined,
         title: undefined,
         description: undefined,
-        status: '0',
-        important: '0',
-        tags: '0',
-        end_time: undefined
+        status: undefined,
+        important: undefined,
+        tags: undefined,
+        endTime: undefined
       }
     }
   }

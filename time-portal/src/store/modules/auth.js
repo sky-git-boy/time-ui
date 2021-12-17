@@ -11,7 +11,7 @@ const state = {
 const mutations = {};
 
 const actions = {
-  login(payload) {
+  login({ commit }, payload) {
     return new Promise((resolve, reject) => {
       requestLogin(payload.userDetails)
         .then((response) => {
@@ -29,8 +29,8 @@ const actions = {
             router.push(router.currentRoute.query.to || "/");
 
             // Update user details
-            // commit("UPDATE_USER_INFO", data, { root: true });
-
+            commit("UPDATE_USER_INFO", data, { root: true });
+            
             resolve(response);
           } else {
             reject({ message: "密码或手机号错误！！！" });
