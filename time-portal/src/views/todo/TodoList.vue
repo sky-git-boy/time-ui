@@ -228,9 +228,11 @@
                 <vs-dropdown class="cursor-pointer" vs-custom-content>
                   <feather-icon icon="TagIcon" svgClasses="h-5 w-5" @click.prevent></feather-icon>
                   <vs-dropdown-menu style="z-index: 200001">
-                    <vs-dropdown-item v-for="tag in todoTags" :key="tag.value">
-                      <vs-radio @click="test" :color="tag.color" :vs-value="tag.value" v-model="form.tags">{{ tag.text }}</vs-radio>
-                    </vs-dropdown-item>
+                    <ul style="min-width: 6.5rem">
+                      <li v-for="tag in todoTags" :key="tag.value">
+                        <vs-radio @click="test" :color="tag.color" :vs-value="tag.value" v-model="form.tags">{{ tag.text }}</vs-radio>
+                      </li>
+                    </ul>
                   </vs-dropdown-menu>
                 </vs-dropdown>
               </div>
