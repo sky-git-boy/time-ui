@@ -1,14 +1,14 @@
 <template>
   <div
-    class="h-screen flex w-full bg-img vx-row no-gutter items-center justify-center"
     id="page-login"
+    class="h-screen flex w-full bg-img vx-row no-gutter items-center justify-center"
   >
     <div class="vx-col sm:w-1/2 md:w-1/2 lg:w-3/4 xl:w-3/5 sm:m-0 m-4">
       <vx-card>
         <div slot="no-body" class="full-page-bg-color">
           <div class="vx-row no-gutter justify-center items-center">
             <div class="vx-col hidden lg:block lg:w-1/2">
-              <img src="@/assets/images/pages/login.png" alt="login" class="mx-auto" />
+              <img src="@/assets/images/pages/login.png" alt="login" class="mx-auto" >
             </div>
             <div class="vx-col sm:w-full md:w-full lg:w-1/2 d-theme-dark-bg">
               <div class="p-8">
@@ -17,21 +17,21 @@
                   <p>欢迎使用时间轮，请登录你的账号.</p>
                 </div>
                 <vs-input
+                  v-model="username"
                   name="username"
                   icon="icon icon-user"
                   icon-pack="feather"
                   label-placeholder="手机号"
-                  v-model="username"
                   class="w-full no-icon-border"
                 />
 
                 <vs-input
+                  v-model="password"
                   type="password"
                   name="password"
                   icon="icon icon-lock"
                   icon-pack="feather"
                   label-placeholder="密码"
-                  v-model="password"
                   class="w-full mt-6 no-icon-border"
                 />
 
@@ -39,7 +39,7 @@
                   <vs-checkbox v-model="checkbox_remember_me" class="mb-3">记住我</vs-checkbox>
                   <router-link to="/pages/forgot-password">忘记密码</router-link>
                 </div>
-                
+
                 <vs-button type="border" @click="registerUser">注册</vs-button>
                 <vs-button class="float-right" @click="handleLogin">登录</vs-button>
               </div>
@@ -55,18 +55,17 @@
 export default {
   data() {
     return {
-      username: "",
-      password: "",
+      username: '',
+      password: '',
       checkbox_remember_me: false
-    };
+    }
   },
   methods: {
     registerUser() {
-      this.$router.push("/pages/register");
+      this.$router.push('/pages/register')
     },
-    checkLogin () {
+    checkLogin() {
       if (this.$store.state.auth.isUserLoggedIn()) {
-
         this.$vs.notify({
           title: 'Login Attempt',
           text: 'You are already logged in!',
@@ -106,7 +105,7 @@ export default {
         })
     }
   }
-};
+}
 </script>
 
 <style lang="scss">

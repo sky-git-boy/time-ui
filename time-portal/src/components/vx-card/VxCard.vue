@@ -27,7 +27,7 @@
       <div v-if="hasAction" class="vx-card__actions">
         <slot name="actions">
           <div v-if="(actionButtons || collapseAction || refreshContentAction || removeCardAction) && !codeToggler" class="vx-card__action-buttons">
-            <feather-icon :class="{rotate180: !isContentCollapsed}" v-if="actionButtons || collapseAction" icon="ChevronUpIcon" class="ml-4" @click="toggleContent" />
+            <feather-icon v-if="actionButtons || collapseAction" :class="{rotate180: !isContentCollapsed}" icon="ChevronUpIcon" class="ml-4" @click="toggleContent" />
             <feather-icon v-if="actionButtons || refreshContentAction" icon="RotateCwIcon" class="ml-4" @click="refreshcard" />
             <feather-icon v-if="actionButtons || removeCardAction" icon="XIcon" class="ml-4" @click="removeCard" />
           </div>

@@ -1,42 +1,42 @@
 <template>
   <div class="bg-box">
-    <div class="bg" :style="{ backgroundImage: 'url(' + noise.content.picurl + ')' }"></div>
+    <div :style="{ backgroundImage: 'url(' + noise.content.picurl + ')' }" class="bg"/>
     <div class="content">
-      <WhiteNoise :noise="noise" @togle-noise-play="toggleNoisePlay($event)"></WhiteNoise>
+      <WhiteNoise :noise="noise" @togle-noise-play="toggleNoisePlay($event)"/>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
-import WhiteNoise from "@/components/music/WhiteNoise.vue";
+import { mapState, mapMutations } from 'vuex'
+import WhiteNoise from '@/components/music/WhiteNoise.vue'
 
 export default {
-  name: "Music",
-  data() {
-    return {};
-  },
+  name: 'Music',
   components: {
     WhiteNoise
   },
+  data() {
+    return {}
+  },
   computed: {
-    ...mapState(["noise"])
+    ...mapState(['noise'])
+  },
+  mounted() {
+    this.loadWhiteNoise()
   },
   methods: {
-    ...mapMutations(["playOrPauseNoise", "loadWhiteNoise"]),
+    ...mapMutations(['playOrPauseNoise', 'loadWhiteNoise']),
 
     toggleNoisePlay(e) {
-      this.playOrPauseNoise({ isPlay: e });
+      this.playOrPauseNoise({ isPlay: e })
     },
 
     toggleNoiseMusic() {
-      this.playOrPauseNoise({ isPlay: false });
+      this.playOrPauseNoise({ isPlay: false })
     }
-  },
-  mounted() {
-    this.loadWhiteNoise();
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

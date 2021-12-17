@@ -1,63 +1,63 @@
 <template>
   <div class="content c-edition">
-    <div class="img-center"></div>
+    <div class="img-center"/>
     <div class="time-box">
       <span class="time">{{ formatMin }}:{{ formatSec }}</span>
       <div class="control-box">
         <i
-          class="btn fa fa-play"
           v-show="time.status === 1 || time.status === 3"
+          class="btn fa fa-play"
           @click="handleStart"
-        ></i>
-        <i class="btn fa fa-pause" v-show="time.status === 2" @click="handleStop"></i>
-        <i class="btn fa fa-undo" v-show="time.status === 3" @click="handleRestart"></i>
-        <i class="btn fa fa-forward" v-show="time.status === 4" @click="handleJump"></i>
+        />
+        <i v-show="time.status === 2" class="btn fa fa-pause" @click="handleStop"/>
+        <i v-show="time.status === 3" class="btn fa fa-undo" @click="handleRestart"/>
+        <i v-show="time.status === 4" class="btn fa fa-forward" @click="handleJump"/>
       </div>
     </div>
-    <div class="img-bottom"></div>
+    <div class="img-bottom"/>
   </div>
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState, mapGetters } from 'vuex'
 
 export default {
-  name: "Tomato",
+  name: 'Tomato',
   created() {
     this.$store.dispatch({
-      type: "loaclDataInit"
-    });
+      type: 'loaclDataInit'
+    })
   },
 
   computed: {
-    ...mapState(["time"]),
+    ...mapState(['time']),
 
-    ...mapGetters(["formatMin", "formatSec"])
+    ...mapGetters(['formatMin', 'formatSec'])
   },
 
   methods: {
     handleStart() {
       this.$store.dispatch({
-        type: "startTime"
-      });
+        type: 'startTime'
+      })
     },
     handleStop() {
       this.$store.dispatch({
-        type: "stopTime"
-      });
+        type: 'stopTime'
+      })
     },
     handleRestart() {
       this.$store.dispatch({
-        type: "restartTime"
-      });
+        type: 'restartTime'
+      })
     },
     handleJump() {
       this.$store.dispatch({
-        type: "jumpTime"
-      });
+        type: 'jumpTime'
+      })
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

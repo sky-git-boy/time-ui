@@ -5,7 +5,7 @@
         <div slot="no-body" class="full-page-bg-color">
           <div class="vx-row">
             <div class="vx-col hidden sm:hidden md:hidden lg:block lg:w-1/2 mx-auto self-center">
-              <img src="@/assets/images/pages/forgot-password.png" alt="login" class="mx-auto" />
+              <img src="@/assets/images/pages/forgot-password.png" alt="login" class="mx-auto" >
             </div>
             <div class="vx-col sm:w-full md:w-full lg:w-1/2 mx-auto self-center d-theme-dark-bg">
               <div class="p-8">
@@ -14,12 +14,12 @@
                   <p>请输入您的联系方式，我们将向您发送有关如何重置密码的说明.</p>
                 </div>
                 <vs-input
+                  v-model="phone"
                   type="phone"
                   label-placeholder="手机号"
-                  v-model="phone"
                   class="w-full mb-8"
                 />
-                <vs-input type="code" label-placeholder="验证码" v-model="yzm" class="w-full mb-8" />
+                <vs-input v-model="yzm" type="code" label-placeholder="验证码" class="w-full mb-8" />
                 <vs-button
                   type="border"
                   to="/pages/login"
@@ -41,9 +41,9 @@
 export default {
   data() {
     return {
-      phone: "",
-      yzm: ""
-    };
+      phone: '',
+      yzm: ''
+    }
   }
-};
+}
 </script>

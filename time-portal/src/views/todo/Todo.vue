@@ -11,8 +11,50 @@
       parent="#todo-app"
     >
       <todo-add-new/>
-      <VuePerfectScrollbar :settings="settings" class="todo-scroll-area">
+      <!-- <VuePerfectScrollbar :settings="settings" class="todo-scroll-area">
         <todo-filters @closeSidebar="toggleTodoSidebar"/>
+      </VuePerfectScrollbar> -->
+
+      <VuePerfectScrollbar :settings="settings" class="todo-scroll-area">
+        <!-- 分割线 -->
+        <vs-divider/>
+
+        <!-- 时间条件 -->
+        <div class="px-6 py-4">
+          <h5>Time</h5>
+          <template v-for="filter in todoFilters">
+            <div
+              :class="{'text-primary': todoFilter == filter.filter}"
+              :key="filter.filter"
+              class="flex mt-6 cursor-pointer"
+              @click="applyTodoFilter('all')"
+            >
+              <feather-icon
+                :icon="filter.icon"
+                :svg-classes="[{'text-primary stroke-current': todoFilter == filter.filter}, 'h-6 w-6']"
+              />
+              <span class="text-lg ml-3">{{ filter.filterName }}</span>
+            </div>
+          </template>
+        </div>
+        <!-- 分割线 -->
+        <vs-divider/>
+
+        <!-- 标签 -->
+        <div class="px-6 py-4">
+          <h5>Tags</h5>
+          <div class="todo__lables-list">
+            <div
+              v-for="(tag, index) in todoTags"
+              :key="index"
+              class="todo__label flex items-center mt-6 cursor-pointer"
+              @click="applyTodoFilter(tag.value)"
+            >
+              <div :class="'bg-' + tag.color" class="h-4 w-4 rounded-full mr-4"/>
+              <span :class="{'text-primary': todoFilter == tag.value}" class="text-lg">{{ tag.text }}</span>
+            </div>
+          </div>
+        </div>
       </VuePerfectScrollbar>
     </vs-sidebar>
 

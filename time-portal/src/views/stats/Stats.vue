@@ -8,18 +8,18 @@
             class="decore-left"
             alt="Decore Left"
             width="200"
-          />
+          >
           <img
             src="../../assets/images/elements/decore-right.png"
             class="decore-right"
             alt="Decore Right"
             width="175"
-          />
+          >
           <feather-icon
             icon="AwardIcon"
             class="p-6 mb-8 bg-primary inline-flex rounded-full text-white shadow"
-            svgClasses="h-8 w-8"
-          ></feather-icon>
+            svg-classes="h-8 w-8"
+          />
           <h1 class="mb-6 text-white">Congratulations John,</h1>
           <p class="xl:w-3/4 lg:w-4/5 md:w-2/3 w-4/5 mx-auto text-white">
             You have done
@@ -31,24 +31,24 @@
       <!-- CARD 2: SUBSCRIBERS GAINED -->
       <div class="vx-col w-full sm:w-1/2 md:w-1/2 lg:w-1/4 xl:w-1/4 mb-base">
         <statistics-card-line
+          :chart-data="analyticsData.subscribersGained"
           icon="UsersIcon"
           statistic="92.6k"
-          statisticTitle="Subscribers Gained"
-          :chartData="analyticsData.subscribersGained"
+          statistic-title="Subscribers Gained"
           type="area"
-        ></statistics-card-line>
+        />
       </div>
 
       <!-- CARD 3: ORDER RECIEVED -->
       <div class="vx-col w-full sm:w-1/2 md:w-1/2 lg:w-1/4 xl:w-1/4 mb-base">
         <statistics-card-line
+          :chart-data="analyticsData.ordersRecevied"
           icon="ShoppingBagIcon"
           statistic="97.5K"
-          statisticTitle="Orders Received"
-          :chartData="analyticsData.ordersRecevied"
+          statistic-title="Orders Received"
           color="warning"
           type="area"
-        ></statistics-card-line>
+        />
       </div>
     </div>
 
@@ -63,25 +63,25 @@
 
           <div slot="no-body">
             <vue-apex-charts
-              type="radialBar"
-              height="300"
               :options="analyticsData.productOrdersRadialBar.chartOptions"
               :series="analyticsData.productOrdersRadialBar.series"
+              type="radialBar"
+              height="300"
             />
           </div>
 
           <ul>
             <li
               v-for="orderData in analyticsData.productOrdersRadialBar
-                .analyticsData"
+              .analyticsData"
               :key="orderData.orderType"
               class="flex mb-3 justify-between"
             >
               <span class="flex items-center">
                 <span
-                  class="inline-block h-4 w-4 rounded-full mr-2 bg-white border-3 border-solid"
                   :class="`border-${orderData.color}`"
-                ></span>
+                  class="inline-block h-4 w-4 rounded-full mr-2 bg-white border-3 border-solid"
+                />
                 <span class="font-semibold">{{ orderData.orderType }}</span>
               </span>
               <span>{{ orderData.counts }}</span>
@@ -94,19 +94,19 @@
         <vx-card title="Client Retention">
           <div class="flex">
             <span class="flex items-center">
-              <div class="h-3 w-3 rounded-full mr-1 bg-warning"></div>
+              <div class="h-3 w-3 rounded-full mr-1 bg-warning"/>
               <span>New Clients</span>
             </span>
             <span class="flex items-center ml-4">
-              <div class="h-3 w-3 rounded-full mr-1 bg-danger"></div>
+              <div class="h-3 w-3 rounded-full mr-1 bg-danger"/>
               <span>Retained Clients</span>
             </span>
           </div>
           <vue-apex-charts
-            type="bar"
-            height="368"
             :options="analyticsData.clientRetentionBar.chartOptions"
             :series="analyticsData.clientRetentionBar.series"
+            type="bar"
+            height="368"
           />
         </vx-card>
       </div>
@@ -125,10 +125,10 @@
             </div>
           </div>
           <vue-apex-charts
-            type="line"
-            height="266"
             :options="analyticsData.revenueComparisonLine.chartOptions"
             :series="analyticsData.revenueComparisonLine.series"
+            type="line"
+            height="266"
           />
         </div>
       </vx-card>
@@ -137,10 +137,10 @@
 </template>
 
 <script>
-import VueApexCharts from "vue-apexcharts";
-import StatisticsCardLine from "@/components/statistics-cards/StatisticsCardLine.vue";
-import analyticsData from "./analyticsData.js";
-import ChangeTimeDurationDropdown from "@/components/ChangeTimeDurationDropdown.vue";
+import VueApexCharts from 'vue-apexcharts'
+import StatisticsCardLine from '@/components/statistics-cards/StatisticsCardLine.vue'
+import analyticsData from './analyticsData.js'
+import ChangeTimeDurationDropdown from '@/components/ChangeTimeDurationDropdown.vue'
 
 export default {
   components: {
@@ -151,9 +151,9 @@ export default {
   data() {
     return {
       analyticsData: analyticsData
-    };
+    }
   }
-};
+}
 </script>
 
 <style lang="scss">
