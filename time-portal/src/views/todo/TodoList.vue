@@ -9,7 +9,7 @@
             <h5 class="text-lg">待办</h5>
           </div>
           <button type="button" @click="handleAdd('0')">
-            <feather-icon class="cursor-pointer plusIcon" icon="PlusIcon" :svgClasses="['h-6 w-6']"></feather-icon>
+            <feather-icon :svg-classes="['h-6 w-6']" class="cursor-pointer plusIcon" icon="PlusIcon"/>
           </button>
         </div>
 
@@ -17,14 +17,14 @@
           v-model="todoArr"
           group="site"
           animation="300"
-          dragClass="dragClass"
-          ghostClass="ghostClass"
-          chosenClass="chosenClass"
+          drag-class="dragClass"
+          ghost-class="ghostClass"
+          chosen-class="chosenClass"
           @start="onStart"
           @end="onEnd"
         >
           <transition-group id="0" class="board-group">
-            <div class="item flex" v-for="item in todoArr" :key="item.taskId">
+            <div v-for="item in todoArr" :key="item.taskId" class="item flex">
               <div>
                 <div class="font-weight-bold">{{ item.title }}</div>
                 <div class="font-desc">{{ item.description }}</div>
@@ -33,24 +33,24 @@
                 <button type="button">
                   <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
                     <feather-icon
+                      :svg-classes="['w-5', 'h-5']"
                       icon="MoreVerticalIcon"
                       class="cursor-pointer moreIcon"
-                      :svgClasses="['w-5', 'h-5']"
-                    ></feather-icon>
+                    />
                     <vs-dropdown-menu class="vx-navbar-dropdown">
                       <ul style="min-width: 6rem">
                         <li
                           class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
                           @click="handleUpdate(item.taskId)"
                         >
-                          <feather-icon icon="EditIcon" svgClasses="w-3 h-3"></feather-icon>
+                          <feather-icon icon="EditIcon" svg-classes="w-3 h-3"/>
                           <span class="ml-3">编辑</span>
                         </li>
                         <li
                           class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
                           @click="handleDel(item.taskId)"
                         >
-                          <feather-icon icon="DeleteIcon" svgClasses="w-3 h-3"></feather-icon>
+                          <feather-icon icon="DeleteIcon" svg-classes="w-3 h-3"/>
                           <span class="ml-3">删除</span>
                         </li>
                       </ul>
@@ -70,7 +70,7 @@
             <h5 class="text-lg">进行中</h5>
           </div>
           <button type="button" @click="handleAdd('1')">
-            <feather-icon class="cursor-pointer plusIcon" icon="PlusIcon" :svgClasses="['h-6 w-6']"></feather-icon>
+            <feather-icon :svg-classes="['h-6 w-6']" class="cursor-pointer plusIcon" icon="PlusIcon"/>
           </button>
         </div>
 
@@ -78,14 +78,14 @@
           v-model="doingArr"
           group="site"
           animation="300"
-          dragClass="dragClass"
-          ghostClass="ghostClass"
-          chosenClass="chosenClass"
+          drag-class="dragClass"
+          ghost-class="ghostClass"
+          chosen-class="chosenClass"
           @start="onStart"
           @end="onEnd"
         >
           <transition-group id="1" class="board-group">
-            <div class="item flex" v-for="item in doingArr" :key="item.taskId">
+            <div v-for="item in doingArr" :key="item.taskId" class="item flex">
               <div>
                 <div class="font-weight-bold">{{ item.title }}</div>
                 <div class="font-desc">{{ item.description }}</div>
@@ -94,24 +94,24 @@
                 <button type="button">
                   <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
                     <feather-icon
+                      :svg-classes="['w-5', 'h-5']"
                       icon="MoreVerticalIcon"
                       class="cursor-pointer moreIcon"
-                      :svgClasses="['w-5', 'h-5']"
-                    ></feather-icon>
+                    />
                     <vs-dropdown-menu class="vx-navbar-dropdown">
                       <ul style="min-width: 6rem">
                         <li
                           class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
                           @click="handleUpdate(item.taskId)"
                         >
-                          <feather-icon icon="EditIcon" svgClasses="w-3 h-3"></feather-icon>
+                          <feather-icon icon="EditIcon" svg-classes="w-3 h-3"/>
                           <span class="ml-3">编辑</span>
                         </li>
                         <li
                           class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
                           @click="handleDel(item.taskId)"
                         >
-                          <feather-icon icon="DeleteIcon" svgClasses="w-3 h-3"></feather-icon>
+                          <feather-icon icon="DeleteIcon" svg-classes="w-3 h-3"/>
                           <span class="ml-3">删除</span>
                         </li>
                       </ul>
@@ -131,7 +131,7 @@
             <h5 class="text-lg">已完成</h5>
           </div>
           <button type="button" @click="handleAdd('2')">
-            <feather-icon class="cursor-pointer plusIcon" icon="PlusIcon" :svgClasses="['h-6 w-6']"></feather-icon>
+            <feather-icon :svg-classes="['h-6 w-6']" class="cursor-pointer plusIcon" icon="PlusIcon"/>
           </button>
         </div>
 
@@ -139,15 +139,15 @@
           v-model="doneArr"
           group="site"
           animation="300"
-          dragClass="dragClass"
-          ghostClass="ghostClass"
-          chosenClass="chosenClass"
+          drag-class="dragClass"
+          ghost-class="ghostClass"
+          chosen-class="chosenClass"
           @change="onChange"
           @start="onStart"
           @end="onEnd"
         >
           <transition-group id="2" class="board-group">
-            <div class="item flex" v-for="item in doneArr" :key="item.taskId">
+            <div v-for="item in doneArr" :key="item.taskId" class="item flex">
               <div>
                 <div class="font-weight-bold">{{ item.title }}</div>
                 <div class="font-desc">{{ item.description }}</div>
@@ -156,24 +156,24 @@
                 <button type="button">
                   <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
                     <feather-icon
+                      :svg-classes="['w-5', 'h-5']"
                       icon="MoreVerticalIcon"
                       class="cursor-pointer moreIcon"
-                      :svgClasses="['w-5', 'h-5']"
-                    ></feather-icon>
+                    />
                     <vs-dropdown-menu class="vx-navbar-dropdown">
                       <ul style="min-width: 6rem">
                         <li
                           class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
                           @click="handleUpdate(item.taskId)"
                         >
-                          <feather-icon icon="EditIcon" svgClasses="w-3 h-3"></feather-icon>
+                          <feather-icon icon="EditIcon" svg-classes="w-3 h-3"/>
                           <span class="ml-3">编辑</span>
                         </li>
                         <li
                           class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
                           @click="handleDel(item.taskId)"
                         >
-                          <feather-icon icon="DeleteIcon" svgClasses="w-3 h-3"></feather-icon>
+                          <feather-icon icon="DeleteIcon" svg-classes="w-3 h-3"/>
                           <span class="ml-3">删除</span>
                         </li>
                       </ul>
@@ -191,13 +191,13 @@
     <div class="px-6 pb-2 pt-6">
       <vs-prompt
         :title="title"
+        :active.sync="activePrompt"
+        :model="form"
         accept-text="Submit"
         button-cancel="border"
         @cancel="clearFields"
         @accept="handleSubmit"
         @close="clearFields"
-        :active.sync="activePrompt"
-        :model="form"
       >
         <div>
           <form>
@@ -214,23 +214,23 @@
               <div class="vx-col ml-auto flex">
                 <!-- 是否重要 -->
                 <feather-icon
-                  icon="InfoIcon"
-                  class="cursor-pointer"
-                  :svgClasses="[
+                  :svg-classes="[
                     { 'text-success stroke-current': isImportant },
                     'w-5',
                     'h-5 mr-4'
                   ]"
+                  icon="InfoIcon"
+                  class="cursor-pointer"
                   @click.prevent="isImportant = !isImportant"
-                ></feather-icon>
+                />
 
                 <!-- 标签列表 -->
                 <vs-dropdown class="cursor-pointer" vs-custom-content>
-                  <feather-icon icon="TagIcon" svgClasses="h-5 w-5" @click.prevent></feather-icon>
+                  <feather-icon icon="TagIcon" svg-classes="h-5 w-5" @click.prevent/>
                   <vs-dropdown-menu style="z-index: 200001">
                     <ul style="min-width: 6.5rem">
                       <li v-for="tag in todoTags" :key="tag.value">
-                        <vs-radio @click="test" :color="tag.color" :vs-value="tag.value" v-model="form.tags">{{ tag.text }}</vs-radio>
+                        <vs-radio :color="tag.color" :vs-value="tag.value" v-model="form.tags" @click="test">{{ tag.text }}</vs-radio>
                       </li>
                     </ul>
                   </vs-dropdown-menu>
@@ -243,12 +243,12 @@
               <div class="vx-col w-full">
                 <vs-input
                   v-validate="'required'"
+                  v-model="form.title"
                   name="title"
                   class="w-full mb-4 mt-5"
                   placeholder="Title"
-                  v-model="form.title"
                 />
-                <vs-textarea rows="5" label="Add description" v-model="form.description" />
+                <vs-textarea v-model="form.description" rows="5" label="Add description" />
               </div>
             </div>
           </form>
@@ -259,14 +259,14 @@
 </template>
 
 <script>
-//导入draggable组件
-import draggable from "vuedraggable";
-import flatPickr from "vue-flatpickr-component";
-import "flatpickr/dist/flatpickr.css";
+// 导入draggable组件
+import draggable from 'vuedraggable'
+import flatPickr from 'vue-flatpickr-component'
+import 'flatpickr/dist/flatpickr.css'
 import { addTask, kanBan, updateTask, delTask, getTaskById } from '@/api/task.js'
 
 export default {
-  //注册draggable组件
+  // 注册draggable组件
   components: {
     draggable,
     flatPickr
@@ -286,7 +286,7 @@ export default {
       // 时间配置
       configdateTimePicker: {
         enableTime: true,
-        dateFormat: "Y-m-d H:i"
+        dateFormat: 'Y-m-d H:i'
       },
       tags: [],
       // 标签
@@ -305,9 +305,9 @@ export default {
       doingArr: [],
       // 已完成
       doneArr: []
-    };
+    }
   },
-  created () {
+  created() {
     this.getTaskList()
   },
   methods: {
@@ -331,8 +331,7 @@ export default {
       this.clearFields()
       this.title = 'Add Task'
       this.form.status = status
-      if (this.form.tags === undefined)
-        this.form.tags = '0'
+      if (this.form.tags === undefined) { this.form.tags = '0' }
     },
     // 修改
     handleUpdate(id) {
@@ -342,35 +341,29 @@ export default {
       this.$vs.loading()
       getTaskById(id).then(res => {
         this.form = res.data
-        if (this.form.important === '0')
-          this.isImportant = false
-        else
-          this.isImportant = true
+        if (this.form.important === '0') { this.isImportant = false } else { this.isImportant = true }
         this.$vs.loading.close()
       })
     },
     // 提交
     handleSubmit() {
       this.$vs.loading()
-      if (this.isImportant)
-        this.form.important = '1'
-      else 
-        this.form.important = '0'
+      if (this.isImportant) { this.form.important = '1' } else { this.form.important = '0' }
       if (this.form.taskId === undefined) { // 添加
         addTask(this.form).then(() => {
-          this.$vs.loading.close()
           this.clearFields()
           this.getTaskList()// 列表重新查询
           this.activePrompt = false// 关闭弹出层
+          this.$vs.loading.close()
         }).catch(() => {
           this.$vs.loading.close()
         })
       } else { // 做修改
         updateTask(this.form).then(() => {
-          this.$vs.loading.close()
           this.clearFields()
           this.getTaskList()
           this.activePrompt = false
+          this.$vs.loading.close()
         }).catch(() => {
           this.$vs.loading.close()
         })
@@ -381,7 +374,7 @@ export default {
       delTask(id).then(() => {
         this.$vs.notify({
           title: 'Success',
-          text:'删除成功',
+          text: '删除成功',
           color: 'success'
         })
         this.getTaskList()
@@ -394,7 +387,7 @@ export default {
       })
     },
     onChange(evt) {
-      let flag = undefined
+      let flag
       // 获取拖拽对象的id
       if (evt.added === undefined) {
         flag = evt.removed.element.taskId
@@ -403,20 +396,20 @@ export default {
       }
       this.dragTaskId = flag
     },
-    //开始拖拽事件
+    // 开始拖拽事件
     onStart() {
       this.drag = true
       this.dragTaskId = ''
       this.form.status = ''
     },
-    //拖拽结束事件
+    // 拖拽结束事件
     onEnd(evt) {
       this.form.taskId = this.dragTaskId
       this.form.status = evt.to.id
       // 修改任务状态
       updateTask(this.form).then(() => {
         this.clearFields()
-        this.drag = false;
+        this.drag = false
       })
     },
     // 重置表单
@@ -432,7 +425,7 @@ export default {
       }
     }
   }
-};
+}
 </script>
 
 <style scoped>
