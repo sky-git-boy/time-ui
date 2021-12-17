@@ -1,38 +1,38 @@
 <template>
   <div
     :class="isPlay ? 'active outer' : 'outer'"
-    @click="togglePlay"
     :style="{ backgroundImage: 'url(' + noise.content.picurl + ')' }"
+    @click="togglePlay"
   >
-    <div class="inner"></div>
+    <div class="inner"/>
   </div>
 </template>
 
 <script>
 export default {
-  name: "WhiteNoise",
-  data() {
-    return {
-      isPlay: false
-    };
-  },
+  name: 'WhiteNoise',
   props: {
     noise: {
       type: Object
     }
   },
+  data() {
+    return {
+      isPlay: false
+    }
+  },
   methods: {
     togglePlay() {
       if (this.noise.audio.paused) {
-        this.$emit("togle-noise-play", true);
-        this.isPlay = true;
+        this.$emit('togle-noise-play', true)
+        this.isPlay = true
       } else {
-        this.$emit("togle-noise-play", false);
-        this.isPlay = false;
+        this.$emit('togle-noise-play', false)
+        this.isPlay = false
       }
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

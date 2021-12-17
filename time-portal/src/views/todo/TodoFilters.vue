@@ -1,32 +1,17 @@
 <template>
   <div class="todo__filters-container">
-    <!-- all -->
-    <div class="px-6 py-4">
-      <div
-        :class="{'text-primary': todoFilter == 'all'}"
-        class="flex cursor-pointer"
-        @click="applyTodoFilter('all')"
-      >
-        <feather-icon
-          :svg-classes="[{'text-primary stroke-current': todoFilter == 'all'}, 'h-6 w-6']"
-          icon="MailIcon"
-        />
-        <span class="text-lg ml-3">All</span>
-      </div>
-    </div>
 
     <vs-divider/>
 
-    <!-- starred -->
+    <!-- 时间条件 -->
     <div class="px-6 py-4">
-      <h5>Filters</h5>
-
+      <h5>Time</h5>
       <template v-for="filter in todoFilters">
         <div
           :class="{'text-primary': todoFilter == filter.filter}"
           :key="filter.filter"
           class="flex mt-6 cursor-pointer"
-          @click="applyTodoFilter(filter.filter)"
+          @click="applyTodoFilter('all')"
         >
           <feather-icon
             :icon="filter.icon"
@@ -39,6 +24,7 @@
 
     <vs-divider/>
 
+    <!-- 标签 -->
     <div class="px-6 py-4">
       <h5>Tags</h5>
       <div class="todo__lables-list">

@@ -1,4 +1,4 @@
-import request from "@/utils/request";
+import request from '@/utils/request'
 
 // todo看板
 export function kanBan(query) {

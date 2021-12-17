@@ -37,16 +37,6 @@
           @click.stop="toggleIsImportant"
         />
         <feather-icon
-          :svg-classes="[
-            { 'text-warning stroke-current': isStarred },
-            'w-5',
-            'h-5 mr-4'
-          ]"
-          icon="StarIcon"
-          class="cursor-pointer"
-          @click.stop="toggleIsStarred"
-        />
-        <feather-icon
           v-if="!isTrashed"
           icon="TrashIcon"
           class="cursor-pointer"
