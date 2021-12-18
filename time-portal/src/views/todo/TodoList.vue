@@ -87,7 +87,7 @@
           <transition-group id="1" class="board-group">
             <div v-for="item in doingArr" :key="item.taskId" class="item flex">
               <div>
-                <div class="font-weight-bold">{{ item.title }}</div>
+                <div class="font-weight-bold todo-title">{{ item.title }}</div>
                 <div class="font-desc">{{ item.description }}</div>
               </div>
               <div>
@@ -149,7 +149,7 @@
           <transition-group id="2" class="board-group">
             <div v-for="item in doneArr" :key="item.taskId" class="item flex">
               <div>
-                <div class="font-weight-bold">{{ item.title }}</div>
+                <div class="font-weight-bold todo-title">{{ item.title }}</div>
                 <div class="font-desc">{{ item.description }}</div>
               </div>
               <div>
@@ -465,11 +465,12 @@ button {
 .font-desc {
   width: 270px;
   white-space: nowrap;
+  color: rgb(119,119,119);
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .font-weight-bold {
-  font-weight: 600 !important;
+  color: rgb(31,31,31)
 }
 .board .board-column {
   position: relative;
