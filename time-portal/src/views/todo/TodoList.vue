@@ -230,7 +230,7 @@
                   <vs-dropdown-menu style="z-index: 200001">
                     <ul style="min-width: 6.5rem">
                       <li v-for="tag in todoTags" :key="tag.value">
-                        <vs-radio :color="tag.color" :vs-value="tag.value" v-model="form.tags" @click="test">{{ tag.text }}</vs-radio>
+                        <vs-radio :color="tag.color" :vs-value="tag.value" v-model="form.tags">{{ tag.text }}</vs-radio>
                       </li>
                     </ul>
                   </vs-dropdown-menu>
@@ -311,9 +311,6 @@ export default {
     this.getTaskList()
   },
   methods: {
-    test() {
-      console.log('test')
-    },
     // 通过状态获取任务列表
     getTaskList() {
       this.$vs.loading() // 打开遮罩

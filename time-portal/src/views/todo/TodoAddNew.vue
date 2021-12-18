@@ -18,7 +18,7 @@
               <flat-pickr
                 :config="configdateTimePicker"
                 v-model="datetime"
-                placeholder="Date Time"
+                placeholder="End Time"
               />
             </div>
 

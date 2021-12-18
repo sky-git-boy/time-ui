@@ -1,16 +1,16 @@
-import axios from "axios";
-// import router from "@/router";
-import { getToken } from "@/utils/auth";
+import axios from 'axios'
+import router from '@/router'
+import { getToken } from '@/utils/auth'
 
 const request = axios.create({
-  baseURL: "http://localhost",
+  baseURL: 'http://localhost',
   timeout: 20000
-});
+})
 
-//http request 拦截器
+// http request 拦截器
 request.interceptors.request.use(
   config => {
-    //this.$vs.loading();
+    // this.$vs.loading();
     // let curTime = new Date();
     // const accessExpiration = window.localStorage.getItem("AccessExpiration");
     // let refreshExpiration = window.localStorage.getItem("RefreshExpiration");
@@ -22,7 +22,7 @@ request.interceptors.request.use(
     // let accesstime = new Date(Date.parse(accessExpiration));
     // let refreshtime = new Date(Date.parse(refreshExpiration));
 
-    const token = getToken();
+    const token = getToken()
     // if (token && curTime > accesstime && curTime < refreshtime) {
     //   //重新请求token  TODO
     // } else if (token && curTime > accesstime && curTime > refreshtime) {
@@ -36,12 +36,14 @@ request.interceptors.request.use(
     //   config.headers.Authorization = token;
     // }
     if (token) {
-      config.headers.Authorization = token;
+      config.headers.Authorization = token
     }
 
-    return config;
+    return config
   },
   error => {
+    console.log('请求失败：', error)
+
     // this.$vs.loading.close();
     // this.$vs.notify({
     //   title: "Error",
@@ -50,16 +52,16 @@ request.interceptors.request.use(
     //   icon: "icon-alert-circle",
     //   color: "danger",
     // });
-    return Promise.reject(error);
+    return Promise.reject(error)
   }
-);
+)
 
-//http response 拦截器
+// http response 拦截器
 request.interceptors.response.use(
   response => {
-    //this.$vs.loading.close();
-    return response.data;
-    //TODO 401处理
+    // this.$vs.loading.close();
+    return response.data
+    // TODO 401处理
     // if (response.data.code == 0 || response.headers.success === "true") {
     //   return response.data;
     // } else {
@@ -75,6 +77,21 @@ request.interceptors.response.use(
     // }
   },
   error => {
+    this.$vs.loading.close()
+    if (error.response.status === 429) {
+      this.$vs.notify({
+        text: '请求太频繁，请稍后再试！',
+        iconPack: 'feather',
+        icon: 'icon-alert-circle',
+        color: 'danger',
+        position: 'top-center'
+      })
+    } else if (error.response.status === 401) {
+      router.push({
+        path: '/pages/error-401'
+        // query: { redirect: router.currentRoute.fullPath }
+      })
+    }
     // this.$vs.loading.close();
     // this.$vs.notify({
     //   title: "Error",
@@ -83,9 +100,9 @@ request.interceptors.response.use(
     //   icon: "icon-alert-circle",
     //   color: "danger",
     // });
-    //TODO 401处理
-    return Promise.reject(error);
+    // TODO 401处理
+    return Promise.reject(error)
   }
-);
+)
 
-export default request;
+export default request

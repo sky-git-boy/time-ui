@@ -11,10 +11,6 @@
       parent="#todo-app"
     >
       <todo-add-new/>
-      <!-- <VuePerfectScrollbar :settings="settings" class="todo-scroll-area">
-        <todo-filters @closeSidebar="toggleTodoSidebar"/>
-      </VuePerfectScrollbar> -->
-
       <VuePerfectScrollbar :settings="settings" class="todo-scroll-area">
         <!-- 分割线 -->
         <vs-divider/>
@@ -27,7 +23,7 @@
               :class="{'text-primary': todoFilter == filter.filter}"
               :key="filter.filter"
               class="flex mt-6 cursor-pointer"
-              @click="applyTodoFilter('all')"
+              @click="applyTodoFilter(filter.el-table-filter__list)"
             >
               <feather-icon
                 :icon="filter.icon"
@@ -62,6 +58,7 @@
       :class="{ 'sidebar-spacer': clickNotClose }"
       class="app-fixed-height border border-r-0 border-b-0 border-t-0 border-solid d-theme-border-grey-light app-fixed-height"
     >
+      <!-- 搜索 -->
       <div
         class="flex items-center app-search-container border border-l-0 border-r-0 border-t-0 border-solid d-theme-border-grey-light"
       >
@@ -83,7 +80,7 @@
         />
       </div>
 
-      <!-- TODO LIST -->
+      <!-- TODO 列表 -->
       <VuePerfectScrollbar
         ref="todoListPS"
         :settings="settings"
@@ -146,7 +143,19 @@ export default {
       settings: {
         maxScrollbarLength: 60,
         wheelSpeed: 0.3
-      }
+      },
+      todoFilters: [
+        { filterName: '所有', filter: 'starred', icon: 'LayersIcon' },
+        { filterName: '今天', filter: 'important', icon: 'SunIcon' },
+        { filterName: '明天', filter: 'done', icon: 'SunriseIcon' },
+        { filterName: '最近七天', filter: 'trashed', icon: 'CalendarIcon' }
+      ],
+      todoTags: [
+        { text: 'none', value: '0', color: 'primary' },
+        { text: 'work', value: '1', color: 'warning' },
+        { text: 'business', value: '2', color: 'success' },
+        { text: 'personal', value: '3', color: 'danger' }
+      ]
     }
   },
   computed: {
@@ -183,6 +192,10 @@ export default {
     window.removeEventListener('resize', this.handleWindowResize)
   },
   methods: {
+    applyTodoFilter(filterName) {
+      this.$store.dispatch('todo/applyTodoFilter', filterName)
+      this.$emit('closeSidebar', false)
+    },
     showDisplayPrompt(itemId) {
       this.todoIdToEdit = itemId
       this.displayPrompt = true
