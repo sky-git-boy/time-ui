@@ -51,3 +51,11 @@ export function delTask(id) {
     method: 'delete'
   })
 }
+
+// todo看板
+export function doneCount() {
+  return request({
+    url: '/member/profile/doneCount',
+    method: 'get'
+  })
+}
