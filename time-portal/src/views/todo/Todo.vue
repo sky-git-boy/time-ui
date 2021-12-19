@@ -10,47 +10,11 @@
       class="items-no-padding"
       parent="#todo-app"
     >
-      <todo-add-new/>
+      <!-- 添加任务组件 -->
+      <todo-add-new @getTaskList="getTaskList()"/>
+
       <VuePerfectScrollbar :settings="settings" class="todo-scroll-area">
-        <!-- 分割线 -->
-        <vs-divider/>
-
-        <!-- 时间条件 -->
-        <div class="px-6 py-4">
-          <h5>Time</h5>
-          <template v-for="filter in todoFilters">
-            <div
-              :class="{'text-primary': todoFilter == filter.filter}"
-              :key="filter.filter"
-              class="flex mt-6 cursor-pointer"
-              @click="applyTodoFilter(filter.el-table-filter__list)"
-            >
-              <feather-icon
-                :icon="filter.icon"
-                :svg-classes="[{'text-primary stroke-current': todoFilter == filter.filter}, 'h-6 w-6']"
-              />
-              <span class="text-lg ml-3">{{ filter.filterName }}</span>
-            </div>
-          </template>
-        </div>
-        <!-- 分割线 -->
-        <vs-divider/>
-
-        <!-- 标签 -->
-        <div class="px-6 py-4">
-          <h5>Tags</h5>
-          <div class="todo__lables-list">
-            <div
-              v-for="(tag, index) in todoTags"
-              :key="index"
-              class="todo__label flex items-center mt-6 cursor-pointer"
-              @click="applyTodoFilter(tag.value)"
-            >
-              <div :class="'bg-' + tag.color" class="h-4 w-4 rounded-full mr-4"/>
-              <span :class="{'text-primary': todoFilter == tag.value}" class="text-lg">{{ tag.text }}</span>
-            </div>
-          </div>
-        </div>
+        <todo-filters @closeSidebar="toggleTodoSidebar" @queryBy="queryBy($event)"/>
       </VuePerfectScrollbar>
     </vs-sidebar>
 
@@ -60,23 +24,22 @@
     >
       <!-- 搜索 -->
       <div
+        :model="queryParams"
         class="flex items-center app-search-container border border-l-0 border-r-0 border-t-0 border-solid d-theme-border-grey-light"
       >
-        <!-- TOGGLE SIDEBAR BUTTON -->
         <feather-icon
           class="md:inline-flex lg:hidden ml-4 mr-4 cursor-pointer"
           icon="MenuIcon"
           @click.stop="toggleTodoSidebar(true)"
         />
-
-        <!-- SEARCH BAR -->
         <vs-input
-          v-model="searchQuery"
+          v-model="queryParams.title"
           size="large"
           icon-pack="feather"
           icon="icon-search"
           placeholder="Search..."
           class="vs-input-no-border vs-input-no-shdow-focus no-icon-border w-full"
+          @input="query"
         />
       </div>
 
@@ -93,26 +56,26 @@
           appear
         >
           <li
-            v-for="(todoItem, index) in todoList"
-            :key="String(todoFilter) + String(todoItem.id)"
+            v-for="(todoItem, index) in taskList"
+            :key="String(todoFilter) + String(todoItem.taskId)"
             :style="[{ transitionDelay: index * 0.1 + 's' }]"
             class="cursor-pointer todo_todo-item"
           >
             <todo-item
-              :todo-item-id="todoItem.id"
+              :todo-item="todoItem"
               @showDisplayPrompt="showDisplayPrompt($event)"
+              @getTaskList="getTaskList()"
             />
           </li>
         </transition-group>
       </VuePerfectScrollbar>
-      <!-- /TODO LIST -->
     </div>
 
-    <!-- EDIT TODO DIALOG -->
+    <!-- 修改任务 -->
     <todo-edit
       v-if="displayPrompt"
       :display-prompt="displayPrompt"
-      :todo-item-id="todoIdToEdit"
+      :todo-item="todoItem"
       @hideDisplayPrompt="hidePrompt"
     />
   </div>
@@ -124,6 +87,7 @@ import TodoItem from './TodoItem.vue'
 import TodoFilters from './TodoFilters.vue'
 import TodoEdit from './TodoEdit.vue'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
+import { getList } from '@/api/task.js'
 
 export default {
   components: {
@@ -137,7 +101,7 @@ export default {
     return {
       clickNotClose: true,
       displayPrompt: false,
-      todoIdToEdit: 0,
+      todoItem: {},
       isSidebarActive: true,
       windowWidth: window.innerWidth,
       settings: {
@@ -145,17 +109,19 @@ export default {
         wheelSpeed: 0.3
       },
       todoFilters: [
-        { filterName: '所有', filter: 'starred', icon: 'LayersIcon' },
-        { filterName: '今天', filter: 'important', icon: 'SunIcon' },
-        { filterName: '明天', filter: 'done', icon: 'SunriseIcon' },
-        { filterName: '最近七天', filter: 'trashed', icon: 'CalendarIcon' }
+        { filterName: '所有', filter: '1', icon: 'LayersIcon' },
+        { filterName: '今天', filter: '2', icon: 'SunIcon' },
+        { filterName: '明天', filter: '3', icon: 'SunriseIcon' },
+        { filterName: '最近七天', filter: '4', icon: 'CalendarIcon' }
       ],
       todoTags: [
         { text: 'none', value: '0', color: 'primary' },
         { text: 'work', value: '1', color: 'warning' },
         { text: 'business', value: '2', color: 'success' },
         { text: 'personal', value: '3', color: 'danger' }
-      ]
+      ],
+      taskList: [],
+      queryParams: {}
     }
   },
   computed: {
@@ -167,14 +133,6 @@ export default {
     },
     todoList() {
       return this.$store.getters['todo/todoList']
-    },
-    searchQuery: {
-      get() {
-        return this.$store.state.todo.todoSearchQuery
-      },
-      set(val) {
-        this.$store.dispatch('todo/setTodoSearchQuery', val)
-      }
     }
   },
   watch: {
@@ -183,6 +141,7 @@ export default {
     }
   },
   created() {
+    this.getTaskList()
     this.$nextTick(() => {
       window.addEventListener('resize', this.handleWindowResize)
     })
@@ -192,12 +151,29 @@ export default {
     window.removeEventListener('resize', this.handleWindowResize)
   },
   methods: {
+    // 文字查询
+    query() {
+      this.queryParams.description = this.queryParams.title
+      this.getTaskList()
+    },
+    // 条件查询
+    queryBy(params) {
+      this.queryParams = params
+      this.getTaskList()
+    },
+    // 获取任务列表
+    getTaskList() {
+      getList(this.queryParams).then(res => {
+        this.taskList = res.data
+      })
+    },
     applyTodoFilter(filterName) {
       this.$store.dispatch('todo/applyTodoFilter', filterName)
       this.$emit('closeSidebar', false)
     },
-    showDisplayPrompt(itemId) {
-      this.todoIdToEdit = itemId
+    // 展示编辑弹出层
+    showDisplayPrompt(item) {
+      this.todoItem = item
       this.displayPrompt = true
     },
     hidePrompt() {
@@ -217,6 +193,10 @@ export default {
     toggleTodoSidebar(value = false) {
       if (!value && this.clickNotClose) return
       this.isSidebarActive = value
+    },
+    // 清空查询条件
+    clearField() {
+      this.queryParams = {}
     }
   }
 }

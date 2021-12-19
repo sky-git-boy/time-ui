@@ -9,6 +9,15 @@ export function kanBan(query) {
   })
 }
 
+// todo列表
+export function getList(query) {
+  return request({
+    url: '/member/task/list',
+    method: 'get',
+    params: query
+  })
+}
+
 // 添加
 export function addTask(data) {
   return request({

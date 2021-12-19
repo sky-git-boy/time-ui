@@ -8,19 +8,20 @@
       <h5>Time</h5>
       <template v-for="filter in todoFilters">
         <div
-          :class="{'text-primary': todoFilter == filter.filter}"
+          :class="{'text-primary': 0 == filter.filter}"
           :key="filter.filter"
           class="flex mt-6 cursor-pointer"
-          @click="applyTodoFilter('all')"
+          @click="queryByTime(filter.filter)"
         >
           <feather-icon
             :icon="filter.icon"
-            :svg-classes="[{'text-primary stroke-current': todoFilter == filter.filter}, 'h-6 w-6']"
+            :svg-classes="[{'text-primary stroke-current': 0 == filter.filter}, 'h-6 w-6']"
           />
           <span class="text-lg ml-3">{{ filter.filterName }}</span>
         </div>
       </template>
     </div>
+
     <!-- 分割线 -->
     <vs-divider/>
 
@@ -32,10 +33,10 @@
           v-for="(tag, index) in todoTags"
           :key="index"
           class="todo__label flex items-center mt-6 cursor-pointer"
-          @click="applyTodoFilter(tag.value)"
+          @click="queryByTag(tag.value)"
         >
           <div :class="'bg-' + tag.color" class="h-4 w-4 rounded-full mr-4"/>
-          <span :class="{'text-primary': todoFilter == tag.value}" class="text-lg">{{ tag.text }}</span>
+          <span :class="{'text-primary': 0 == tag.value}" class="text-lg">{{ tag.text }}</span>
         </div>
       </div>
     </div>
@@ -43,29 +44,57 @@
 </template>
 
 <script>
+import { parseTime } from '@/utils/index.js'
+
 export default {
   data() {
     return {
       todoFilters: [
-        { filterName: '所有', filter: 'starred', icon: 'LayersIcon' },
-        { filterName: '今天', filter: 'important', icon: 'SunIcon' },
-        { filterName: '明天', filter: 'done', icon: 'SunriseIcon' },
-        { filterName: '最近七天', filter: 'trashed', icon: 'CalendarIcon' }
-      ]
+        { filterName: '所有', filter: 0, icon: 'LayersIcon' },
+        { filterName: '今天', filter: 1, icon: 'SunIcon' },
+        { filterName: '明天', filter: 2, icon: 'SunriseIcon' },
+        { filterName: '最近七天', filter: 3, icon: 'CalendarIcon' }
+      ],
+      // 查询条件
+      queryParams: { }
     }
   },
   computed: {
     todoTags() {
       return this.$store.state.todo.todoTags
-    },
-    todoFilter() {
-      return this.$store.state.todo.todoFilter
     }
   },
   methods: {
-    applyTodoFilter(filterName) {
-      this.$store.dispatch('todo/applyTodoFilter', filterName)
-      this.$emit('closeSidebar', false)
+    // 标签查询
+    queryByTag(tagValue) {
+      this.clearfield()
+      this.queryParams.tags = tagValue
+      this.$emit('queryBy', this.queryParams)
+    },
+    // 时间查询
+    queryByTime(filter) {
+      this.clearfield()
+      // 开始/结束时间（yyyy-MM-dd HH:mm:ss
+      const time = new Date() // 获取当前时间
+      time.setDate(time.getDate() + 1) // 明日
+      if (filter == 1) { // 查询今日待办
+        this.queryParams.qEndTime = parseTime(time, '{y}-{m}-{d}')
+        time.setDate(time.getDate() - 1)
+        this.queryParams.beginTime = parseTime(time, '{y}-{m}-{d}')
+      } else if (filter == 2) { // 查询明日待办
+        this.queryParams.beginTime = parseTime(time, '{y}-{m}-{d}')
+        time.setDate(time.getDate() + 1)
+        this.queryParams.qEndTime = parseTime(time, '{y}-{m}-{d}')
+      } else if (filter == 3) { // 查询近七日待办
+        this.queryParams.qEndTime = parseTime(time, '{y}-{m}-{d}')
+        time.setDate(time.getDate() - 7)
+        this.queryParams.beginTime = parseTime(time, '{y}-{m}-{d}')
+      }
+      console.log(this.queryParams)
+      this.$emit('queryBy', this.queryParams)
+    },
+    clearfield() {
+      this.queryParams = {}
     }
   }
 }

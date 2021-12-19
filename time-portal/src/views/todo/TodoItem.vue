@@ -5,22 +5,23 @@
         class="vx-col w-full sm:w-5/6 flex sm:items-center sm:flex-row flex-col"
       >
         <div class="flex items-center">
-          <vs-checkbox
-            v-model="isDone"
-            class="w-8 m-0 vs-checkbox-small"
-            @click.stop
-          />
-          <h6 :class="{ 'line-through': isDone }" class="todo-title">
-            {{ title }}
+          <div @click.stop>
+            <vs-checkbox
+              v-model="isDone"
+              class="w-8 m-0 vs-checkbox-small"
+            />
+          </div>
+          <h6 :class="{ 'line-through': isDone }" class="todo-title" >
+            {{ todoItem.title }}
           </h6>
         </div>
         <div class="todo-tags sm:ml-2 sm:my-0 my-2 flex">
-          <vs-chip v-for="(tag, index) in tags" :key="index">
+          <vs-chip>
             <div
-              :class="'bg-' + todoLabelColor(tag)"
+              :class="'bg-' + tags.color"
               class="h-2 w-2 rounded-full mr-1"
             />
-            <span>{{ tag | capitalize }}</span>
+            <span>{{ tags.text }}</span>
           </vs-chip>
         </div>
       </div>
@@ -37,18 +38,17 @@
           @click.stop="toggleIsImportant"
         />
         <feather-icon
-          v-if="!isTrashed"
           icon="TrashIcon"
           class="cursor-pointer"
           svg-classes="w-5 h-5"
-          @click.stop="moveToTrash"
+          @click.stop="handleDel"
         />
       </div>
     </div>
     <div class="vx-row">
       <div class="vx-col w-full">
         <p :class="{ 'line-through': isDone }" class="mt-2 truncate">
-          {{ desc }}
+          {{ todoItem.description }}
         </p>
       </div>
     </div>
@@ -56,10 +56,11 @@
 </template>
 
 <script>
+import { updateTask, delTask } from '@/api/task.js'
 export default {
   props: {
-    todoItemId: {
-      type: Number,
+    todoItem: {
+      type: Object,
       required: true
     }
   },
@@ -69,79 +70,70 @@ export default {
   computed: {
     isImportant: {
       get() {
-        return this.$store.state.todo.todoArray[this.todoItemId].isImportant
+        return this.todoItem.important == '1'
       },
       set(value) {
-        this.$store.dispatch('todo/toggleIsImportant', {
-          id: this.todoItemId,
-          value: value
-        })
+        value ? this.todoItem.important = '1' : this.todoItem.important = '0'
       }
-    },
-    isStarred: {
-      get() {
-        return this.$store.state.todo.todoArray[this.todoItemId].isStarred
-      },
-      set(value) {
-        this.$store.dispatch('todo/toggleIsStarred', {
-          id: this.todoItemId,
-          value: value
-        })
-      }
-    },
-    isTrashed: {
-      get() {
-        return this.$store.state.todo.todoArray[this.todoItemId].isTrashed
-      },
-      set(value) {
-        this.$store.dispatch('todo/moveToTrash', {
-          id: this.todoItemId,
-          value: value
-        })
-      }
-    },
-    title() {
-      return this.$store.state.todo.todoArray[this.todoItemId].title
-    },
-    desc() {
-      return this.$store.state.todo.todoArray[this.todoItemId].desc
     },
     tags() {
-      return this.$store.state.todo.todoArray[this.todoItemId].tags
+      const tags = this.$store.state.todo.todoTags
+      return tags.find(tag => {
+        return tag.value === this.todoItem.tags
+      })
     },
     isDone: {
       get() {
-        return this.$store.state.todo.todoArray[this.todoItemId].isDone
+        return this.todoItem.status == '2'
       },
       set(value) {
-        var payload = { id: this.todoItemId, value: value }
-        this.$store.dispatch('todo/toggleIsDone', payload)
+        !value ? this.todoItem.status = '0' : this.todoItem.status = '2'
       }
+    }
+  },
+  watch: {
+    isDone() {
+      this.handleUpdate()
     },
-    todoLabelColor() {
-      return label => {
-        const tags = this.$store.state.todo.todoTags
-        return tags.find(tag => {
-          return tag.value === label
-        }).color
-      }
+    isImportant() {
+      this.handleUpdate()
     }
   },
   methods: {
     toggleIsImportant() {
       this.isImportant = !this.isImportant
     },
-    toggleIsStarred() {
-      this.isStarred = !this.isStarred
+    handleUpdate() {
+      updateTask(this.todoItem).then()
+        .catch(e => {
+          this.$vs.notify({
+            title: 'Fail',
+            text: e.data,
+            color: 'danger'
+          })
+        })
     },
-    moveToTrash() {
-      this.isTrashed = !this.isTrashed
-    },
-    editTodo() {
-      alert()
+    handleDel() {
+      this.$vs.loading()
+      delTask(this.todoItem.taskId).then(() => {
+        this.$emit('getTaskList')
+        this.$vs.notify({
+          title: 'Success',
+          text: '删除成功',
+          color: 'success'
+        })
+        this.$vs.loading.close()
+      }).catch(e => {
+        this.$vs.notify({
+          title: 'Fail',
+          text: e.data,
+          color: 'danger'
+        })
+        this.$vs.loading.close()
+      })
     },
     displayPrompt() {
-      this.$emit('showDisplayPrompt', this.todoItemId)
+      this.$emit('showDisplayPrompt', this.todoItem)
     }
   }
 }
