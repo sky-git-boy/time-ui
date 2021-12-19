@@ -98,12 +98,12 @@
 
     <!-- ADD EVENT -->
     <vs-prompt
-      :vs-is-valid="validForm"
-      :vs-active.sync="activePromptAddEvent"
+      :is-valid="validForm"
+      :active.sync="activePromptAddEvent"
       class="calendar-event-dialog"
-      vs-title="Add Event"
-      vs-accept-text="Add Event"
-      @vs-accept="addEvent"
+      title="Add Event"
+      accept-text="Add Event"
+      @accept="addEvent"
     >
       <div class="calendar__label-container flex">
         <vs-chip
@@ -114,8 +114,8 @@
         >
 
         <vs-dropdown
-          vs-custom-content
-          vs-trigger-click
+          custom-content
+          trigger-click
           class="ml-auto my-2 cursor-pointer"
         >
           <feather-icon
@@ -183,15 +183,15 @@
 
     <!-- EDIT EVENT -->
     <vs-prompt
-      :vs-is-valid="validForm"
-      :vs-active.sync="activePromptEditEvent"
+      :is-valid="validForm"
+      :active.sync="activePromptEditEvent"
       class="calendar-event-dialog"
-      vs-title="Edit Event"
-      vs-accept-text="Submit"
-      vs-cancel-text="Remove"
-      vs-button-cancel="border"
-      @vs-cancel="removeEvent"
-      @vs-accept="editEvent"
+      title="Edit Event"
+      accept-text="Submit"
+      cancel-text="Remove"
+      button-cancel="border"
+      @cancel="removeEvent"
+      @accept="editEvent"
     >
       <div class="calendar__label-container flex">
         <vs-chip
