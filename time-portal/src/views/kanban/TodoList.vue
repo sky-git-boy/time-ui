@@ -25,39 +25,41 @@
           @end="onEnd"
         >
           <transition-group id="0" class="board-group">
-            <div v-for="item in todoArr" :key="item.taskId" class="item flex">
-              <div>
+            <div v-for="item in todoArr" :key="item.taskId" class="item">
+              <div class="vx-row flex">
                 <div class="font-weight-bold">{{ item.title }}</div>
-                <div class="font-desc">{{ item.description }}</div>
+                <div>
+                  <button type="button">
+                    <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
+                      <feather-icon
+                        :svg-classes="['w-5', 'h-5']"
+                        icon="MoreVerticalIcon"
+                        class="cursor-pointer moreIcon"
+                      />
+                      <vs-dropdown-menu class="vx-navbar-dropdown">
+                        <ul style="min-width: 6rem">
+                          <li
+                            class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
+                            @click="handleUpdate(item.taskId)"
+                          >
+                            <feather-icon icon="EditIcon" svg-classes="w-3 h-3"/>
+                            <span class="ml-3">编辑</span>
+                          </li>
+                          <li
+                            class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
+                            @click="handleDel(item.taskId)"
+                          >
+                            <feather-icon icon="DeleteIcon" svg-classes="w-3 h-3"/>
+                            <span class="ml-3">删除</span>
+                          </li>
+                        </ul>
+                      </vs-dropdown-menu>
+                    </vs-dropdown>
+                  </button>
+                </div>
               </div>
-              <div>
-                <button type="button">
-                  <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
-                    <feather-icon
-                      :svg-classes="['w-5', 'h-5']"
-                      icon="MoreVerticalIcon"
-                      class="cursor-pointer moreIcon"
-                    />
-                    <vs-dropdown-menu class="vx-navbar-dropdown">
-                      <ul style="min-width: 6rem">
-                        <li
-                          class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
-                          @click="handleUpdate(item.taskId)"
-                        >
-                          <feather-icon icon="EditIcon" svg-classes="w-3 h-3"/>
-                          <span class="ml-3">编辑</span>
-                        </li>
-                        <li
-                          class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
-                          @click="handleDel(item.taskId)"
-                        >
-                          <feather-icon icon="DeleteIcon" svg-classes="w-3 h-3"/>
-                          <span class="ml-3">删除</span>
-                        </li>
-                      </ul>
-                    </vs-dropdown-menu>
-                  </vs-dropdown>
-                </button>
+              <div class="vx-row">
+                <div class="font-desc">{{ item.description }}</div>
               </div>
             </div>
           </transition-group>
@@ -87,39 +89,41 @@
           @end="onEnd"
         >
           <transition-group id="1" class="board-group">
-            <div v-for="item in doingArr" :key="item.taskId" class="item flex">
-              <div>
+            <div v-for="item in doingArr" :key="item.taskId" class="item">
+              <div class="vx-row flex">
                 <div class="font-weight-bold todo-title">{{ item.title }}</div>
-                <div class="font-desc">{{ item.description }}</div>
+                <div class="">
+                  <button type="button">
+                    <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
+                      <feather-icon
+                        :svg-classes="['w-5', 'h-5']"
+                        icon="MoreVerticalIcon"
+                        class="cursor-pointer moreIcon"
+                      />
+                      <vs-dropdown-menu class="vx-navbar-dropdown">
+                        <ul style="min-width: 6rem">
+                          <li
+                            class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
+                            @click="handleUpdate(item.taskId)"
+                          >
+                            <feather-icon icon="EditIcon" svg-classes="w-3 h-3"/>
+                            <span class="ml-3">编辑</span>
+                          </li>
+                          <li
+                            class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
+                            @click="handleDel(item.taskId)"
+                          >
+                            <feather-icon icon="DeleteIcon" svg-classes="w-3 h-3"/>
+                            <span class="ml-3">删除</span>
+                          </li>
+                        </ul>
+                      </vs-dropdown-menu>
+                    </vs-dropdown>
+                  </button>
+                </div>
               </div>
-              <div>
-                <button type="button">
-                  <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
-                    <feather-icon
-                      :svg-classes="['w-5', 'h-5']"
-                      icon="MoreVerticalIcon"
-                      class="cursor-pointer moreIcon"
-                    />
-                    <vs-dropdown-menu class="vx-navbar-dropdown">
-                      <ul style="min-width: 6rem">
-                        <li
-                          class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
-                          @click="handleUpdate(item.taskId)"
-                        >
-                          <feather-icon icon="EditIcon" svg-classes="w-3 h-3"/>
-                          <span class="ml-3">编辑</span>
-                        </li>
-                        <li
-                          class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
-                          @click="handleDel(item.taskId)"
-                        >
-                          <feather-icon icon="DeleteIcon" svg-classes="w-3 h-3"/>
-                          <span class="ml-3">删除</span>
-                        </li>
-                      </ul>
-                    </vs-dropdown-menu>
-                  </vs-dropdown>
-                </button>
+              <div class="vx-row">
+                <div class="font-desc">{{ item.description }}</div>
               </div>
             </div>
           </transition-group>
@@ -149,39 +153,41 @@
           @end="onEnd"
         >
           <transition-group id="2" class="board-group">
-            <div v-for="item in doneArr" :key="item.taskId" class="item flex">
-              <div>
+            <div v-for="item in doneArr" :key="item.taskId" class="item">
+              <div class="vx-row flex">
                 <div class="font-weight-bold todo-title">{{ item.title }}</div>
-                <div class="font-desc">{{ item.description }}</div>
+                <div>
+                  <button type="button">
+                    <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
+                      <feather-icon
+                        :svg-classes="['w-5', 'h-5']"
+                        icon="MoreVerticalIcon"
+                        class="cursor-pointer moreIcon"
+                      />
+                      <vs-dropdown-menu class="vx-navbar-dropdown">
+                        <ul style="min-width: 6rem">
+                          <li
+                            class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
+                            @click="handleUpdate(item.taskId)"
+                          >
+                            <feather-icon icon="EditIcon" svg-classes="w-3 h-3"/>
+                            <span class="ml-3">编辑</span>
+                          </li>
+                          <li
+                            class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
+                            @click="handleDel(item.taskId)"
+                          >
+                            <feather-icon icon="DeleteIcon" svg-classes="w-3 h-3"/>
+                            <span class="ml-3">删除</span>
+                          </li>
+                        </ul>
+                      </vs-dropdown-menu>
+                    </vs-dropdown>
+                  </button>
+                </div>
               </div>
-              <div>
-                <button type="button">
-                  <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
-                    <feather-icon
-                      :svg-classes="['w-5', 'h-5']"
-                      icon="MoreVerticalIcon"
-                      class="cursor-pointer moreIcon"
-                    />
-                    <vs-dropdown-menu class="vx-navbar-dropdown">
-                      <ul style="min-width: 6rem">
-                        <li
-                          class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
-                          @click="handleUpdate(item.taskId)"
-                        >
-                          <feather-icon icon="EditIcon" svg-classes="w-3 h-3"/>
-                          <span class="ml-3">编辑</span>
-                        </li>
-                        <li
-                          class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
-                          @click="handleDel(item.taskId)"
-                        >
-                          <feather-icon icon="DeleteIcon" svg-classes="w-3 h-3"/>
-                          <span class="ml-3">删除</span>
-                        </li>
-                      </ul>
-                    </vs-dropdown-menu>
-                  </vs-dropdown>
-                </button>
+              <div class="vx-row">
+                <div class="font-desc">{{ item.description }}</div>
               </div>
             </div>
           </transition-group>
@@ -464,11 +470,11 @@ button {
   justify-content: space-between;
 }
 .font-desc {
-  width: 270px;
-  white-space: nowrap;
-  color: rgb(119,119,119);
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-top: 0.5rem !important;
+  color: rgb(119,119,119);
 }
 .font-weight-bold {
   color: rgb(31,31,31)
@@ -525,6 +531,7 @@ button {
 }
 
 .item {
+  width: 100% !important;
   margin-bottom: 10px;
   padding: 16px 12px;
   background-color: #fff;

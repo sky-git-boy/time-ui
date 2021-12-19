@@ -32,7 +32,7 @@ const router = new Router({
       {
         path: '/todo-list',
         name: 'todo-list',
-        component: () => import('./views/todo/TodoList.vue'),
+        component: () => import('./views/kanban/TodoList.vue'),
         meta: {
           rule: 'editor'
         }
