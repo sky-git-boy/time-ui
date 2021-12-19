@@ -20,6 +20,7 @@
           drag-class="dragClass"
           ghost-class="ghostClass"
           chosen-class="chosenClass"
+          @change="onChange"
           @start="onStart"
           @end="onEnd"
         >
@@ -81,6 +82,7 @@
           drag-class="dragClass"
           ghost-class="ghostClass"
           chosen-class="chosenClass"
+          @change="onChange"
           @start="onStart"
           @end="onEnd"
         >
@@ -384,14 +386,13 @@ export default {
       })
     },
     onChange(evt) {
-      let flag
       // 获取拖拽对象的id
       if (evt.added === undefined) {
-        flag = evt.removed.element.taskId
+        this.dragTaskId = evt.removed.element.taskId
       } else {
-        flag = evt.added.element.taskId
+        this.dragTaskId = evt.added.element.taskId
       }
-      this.dragTaskId = flag
+      console.log(this.dragTaskId)
     },
     // 开始拖拽事件
     onStart() {
