@@ -23,16 +23,17 @@ import { mapState, mapGetters } from 'vuex'
 
 export default {
   name: 'Tomato',
-  created() {
-    this.$store.dispatch({
-      type: 'loaclDataInit'
-    })
-  },
 
   computed: {
     ...mapState(['time']),
 
     ...mapGetters(['formatMin', 'formatSec'])
+  },
+
+  created() {
+    this.$store.dispatch({
+      type: 'loaclDataInit'
+    })
   },
 
   methods: {
