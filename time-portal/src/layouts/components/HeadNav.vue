@@ -1,42 +1,43 @@
 <template>
   <div class="nav-box">
     <span :class="currNav === 'Tomato' ? 'active nav' : 'nav'" @mousedown="toPage('Tomato')">番茄钟</span>
+    <span :class="currNav === 'Home' ? 'active nav' : 'nav'" @mousedown="toPage('home')">首页</span>
     <span :class="currNav === 'Music' ? 'active nav' : 'nav'" @mousedown="toPage('Music')">白噪音</span>
   </div>
 </template>
 
 <script>
 export default {
-  name: "HeadNav",
+  name: 'HeadNav',
 
   data() {
     return {
-      currNav: ""
-    };
-  },
-
-  methods: {
-    // 切换路由
-    toPage(page) {
-      if (this.$route.name !== page) {
-        this.$router.replace({ name: page });
-        this.currNav = page;
-      }
+      currNav: ''
     }
   },
 
   watch: {
     // 监听路由变化，改变样式
     $route(to) {
-      this.currNav = to.name;
+      this.currNav = to.name
     }
   },
 
   mounted() {
     // 初始化
-    this.currNav = this.$route.name;
+    this.currNav = this.$route.name
+  },
+
+  methods: {
+    // 切换路由
+    toPage(page) {
+      if (this.$route.name !== page) {
+        this.$router.replace({ name: page })
+        this.currNav = page
+      }
+    }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
