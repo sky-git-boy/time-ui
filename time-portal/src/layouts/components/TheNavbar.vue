@@ -99,7 +99,6 @@
           <vs-dropdown-menu class="notification-dropdown dropdown-custom vx-navbar-dropdown">
             <div class="notification-top text-center p-5 bg-primary text-white">
               <h3 class="text-white">{{ unreadNotifications.length }} 条</h3>
-              <p class="opacity-75">信息与公告</p>
             </div>
 
             <VuePerfectScrollbar

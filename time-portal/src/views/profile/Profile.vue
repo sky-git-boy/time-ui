@@ -1,8 +1,8 @@
 <template>
   <div id="container">
-    <!-- 未办事项 -->
+    <!-- 待办事项 -->
     <div>
-      <h4 style="padding: 0 15px;"><b>未办事项</b></h4>
+      <h4 style="padding: 0 15px;"><b>待办事项</b></h4>
       <vs-row style="padding-top: 15px">
         <vs-col v-for="item in taskList" :key="item.taskId" type="flex" vs-w="4">
           <vs-card actionable class="cardx">
@@ -41,7 +41,6 @@
             <p class="font-semibold">Client Meeting</p>
             <small class="text-grey activity-e-time">25 mins ago</small>
           </div>
-          <span class="activity-desc">Bonbon macaroon jelly beans gummi bears jelly lollipop apple</span>
         </li>
         <li>
           <div class="timeline-icon bg-warning">
@@ -51,7 +50,6 @@
             <p class="font-semibold">Email Newsletter</p>
             <small class="text-grey activity-e-time">15 days ago</small>
           </div>
-          <span class="activity-desc">Cupcake gummi bears soufflé caramels candy</span>
         </li>
         <li>
           <div class="timeline-icon bg-danger">
@@ -61,27 +59,24 @@
             <p class="font-semibold">Plan Webinar</p>
             <small class="text-grey activity-e-time">20 days ago</small>
           </div>
-          <span class="activity-desc">Candy ice cream cake. Halvah gummi bears</span>
         </li>
         <li>
           <div class="timeline-icon bg-success">
             <feather-icon icon="CheckIcon" svg-classes="text-white stroke-current w-5 h-5"/>
           </div>
-          <div class="timeline-info">
+          <div class="timeline-info info">
             <p class="font-semibold">Launch Website</p>
-            <span class="activity-desc">Candy ice cream cake. Halvah gummi bears Cupcake gummi bears soufflé caramels candy.</span>
+            <small class="text-grey activity-e-time">25 days ago</small>
           </div>
-          <small class="text-grey activity-e-time">25 days ago</small>
         </li>
         <li>
           <div class="timeline-icon bg-primary">
             <feather-icon icon="CheckIcon" svg-classes="text-white stroke-current w-5 h-5"/>
           </div>
-          <div class="timeline-info">
+          <div class="timeline-info info">
             <p class="font-semibold">Marketing</p>
-            <span class="activity-desc">Candy ice cream cake. Halvah gummi bears Cupcake gummi bears.</span>
+            <small class="text-grey activity-e-time">28 days ago</small>
           </div>
-          <small class="text-grey activity-e-time">28 days ago</small>
         </li>
       </ul>
     </div>
@@ -91,6 +86,8 @@
 <script>
 import * as echarts from 'echarts'
 import { doneCount, getList } from '@/api/task'
+import { operInfo } from '@/api/operLog'
+
 export default {
   data() {
     return {
@@ -121,10 +118,15 @@ export default {
     })
     getList(this.queryParams).then(res => {
       this.taskList = res.data
-      console.log(res.data)
     })
+    this.opreLogList()
   },
   methods: {
+    opreLogList() {
+      operInfo().then(res => {
+
+      })
+    },
     // 加载图表
     initDate: function() {
       const chart = echarts.init(document.getElementById('echart'))
@@ -239,6 +241,7 @@ export default {
   .info {
     display: flex; /* 弹性布局 */
     margin-top: 10px;
+    padding-top: 10px;
     justify-content: space-between; /* 横向中间自动空间 */
   }
 </style>
