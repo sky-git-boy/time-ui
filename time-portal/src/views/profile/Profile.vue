@@ -16,8 +16,7 @@
             </div>
             <div slot="footer">
               <vs-row vs-justify="flex-end">
-                <vs-button v-for="tag in tags" v-show="tag.value == item.tags" :key="tag.calue" :color="tag.color">
-                  <!-- <div :class="'bg-' + tag.color" class="h-2 w-2 rounded-full mr-1" /> -->
+                <vs-button v-for="tag in tags" v-show="tag.value == item.tags" :key="tag.calue" :color="tag.color" @click.stop>
                   <span>{{ tag.text | capitalize }}</span>
                 </vs-button>
               </vs-row>
@@ -58,11 +57,11 @@
           <div class="timeline-icon bg-danger">
             <feather-icon icon="CheckIcon" svg-classes="text-white stroke-current w-5 h-5"/>
           </div>
-          <div class="timeline-info">
+          <div class="timeline-info info">
             <p class="font-semibold">Plan Webinar</p>
-            <span class="activity-desc">Candy ice cream cake. Halvah gummi bears</span>
+            <small class="text-grey activity-e-time">20 days ago</small>
           </div>
-          <small class="text-grey activity-e-time">20 days ago</small>
+          <span class="activity-desc">Candy ice cream cake. Halvah gummi bears</span>
         </li>
         <li>
           <div class="timeline-icon bg-success">

@@ -1,7 +1,7 @@
 <template>
   <div class="nav-box">
     <span :class="currNav === 'Tomato' ? 'active nav' : 'nav'" @mousedown="toPage('Tomato')">番茄钟</span>
-    <span :class="currNav === 'Home' ? 'active nav' : 'nav'" @mousedown="toPage('home')">首页</span>
+    <span :class="currNav === 'Todo' ? 'active nav' : 'nav'" @mousedown="toPage('todo-list')">Todo看板</span>
     <span :class="currNav === 'Music' ? 'active nav' : 'nav'" @mousedown="toPage('Music')">白噪音</span>
   </div>
 </template>

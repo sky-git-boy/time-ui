@@ -1,25 +1,25 @@
-import router from "./router";
+import router from './router'
 // import store from "@/store/store.js";
-import NProgress from "nprogress"; // progress bar
-import "nprogress/nprogress.css"; // progress bar style
-import { isAuthenticated } from "@/utils/auth";
+import NProgress from 'nprogress' // progress bar
+import 'nprogress/nprogress.css' // progress bar style
+import { isAuthenticated } from '@/utils/auth'
 
-NProgress.configure({ showSpinner: false }); // NProgress Configuration
+NProgress.configure({ showSpinner: false }) // NProgress Configuration
 // let asyncRouterFlag = 0;
-const whiteList = ["/pages/login", "/auth-redirect", "/pages/register", "/pages/forgot-password"]; // no redirect whitelist
+const whiteList = ['/pages/login', '/auth-redirect', '/pages/register', '/pages/forgot-password'] // no redirect whitelist
 
-router.beforeEach(async (to, from, next) => {
-  NProgress.start();
+router.beforeEach(async(to, from, next) => {
+  NProgress.start()
   // document.title = to.meta.title;
-  
+
   // if (!to.meta.authRequired) {
   //   return next();
   // }
 
   if (isAuthenticated()) {
-    if (to.path === "/pages/login") {
+    if (to.path === '/pages/login') {
       // 已登录且要跳转的页面是登录页
-      next({ path: "/todo-list" }); // 跳转到todo-list页
+      next({ path: '/todo-list' }) // 跳转到todo-list页
     } else {
       // const hasRoutes = store.getters.routes && store.getters.routes.length > 0;
 
@@ -62,22 +62,22 @@ router.beforeEach(async (to, from, next) => {
       //     NProgress.done();
       //   }
       // }
-      next();
+      next()
     }
   } else {
     if (whiteList.indexOf(to.path) !== -1) {
-      next();
+      next()
     } else {
       next({
-        path: "/pages/login",
+        path: '/pages/login',
         query: { redirect: to.path } // 将跳转的路由path作为参数，登录成功后跳转到该路由
-      });
+      })
       NProgress.done()
     }
   }
-});
+})
 
 router.afterEach(() => {
   // finish progress bar
-  NProgress.done();
-});
+  NProgress.done()
+})

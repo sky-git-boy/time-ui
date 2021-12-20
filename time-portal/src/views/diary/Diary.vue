@@ -65,7 +65,7 @@
           class="vx-col w-full md:w-1/4 sm:w-1/2 mb-base"
           @click="handleUpdate(item.recordId)"
         >
-          <vx-card class="text-center" style="height: 150px" >
+          <vx-card class="text-center" style="height: 200px" >
             <h5>{{ item.title.toUpperCase() }}</h5>
             <small>{{ item.description }}</small>
           </vx-card>
