@@ -19,7 +19,7 @@ const router = new Router({
       {
         path: '/',
         name: 'home',
-        component: () => import('./views/Home.vue')
+        component: () => import('./views/kanban/TodoList.vue')
       },
       {
         path: '/todo',

@@ -5,7 +5,13 @@
         <div slot="no-body" class="full-page-bg-color">
           <div class="vx-row">
             <div class="vx-col hidden sm:hidden md:hidden lg:block lg:w-1/2 mx-auto self-center">
-              <img src="@/assets/images/pages/forgot-password.png" alt="login" class="mx-auto" >
+              <swiper :options="swiperOption">
+                <swiper-slide v-for="item in slideList" :key="item.id">
+                  <img :src="item.picUrl" alt="register" class="mx-auto">
+                </swiper-slide>
+                <div slot="button-prev" class="swiper-button-prev swiper-button-white"/>
+                <div slot="button-next" class="swiper-button-next swiper-button-white"/>
+              </swiper>
             </div>
             <div class="vx-col sm:w-full md:w-full lg:w-1/2 mx-auto self-center d-theme-dark-bg">
               <div class="p-8">
@@ -38,12 +44,33 @@
 </template>
 
 <script>
+import 'swiper/dist/css/swiper.min.css'
+import { swiper, swiperSlide } from 'vue-awesome-swiper'
+import { slide } from '@/api/slide'
+
 export default {
+  components: {
+    swiper,
+    swiperSlide
+  },
   data() {
     return {
       phone: '',
-      yzm: ''
+      yzm: '',
+      photos: [],
+      swiperOption: {
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev'
+        }
+      },
+      slideList: []
     }
+  },
+  created() {
+    slide().then(res => {
+      this.slideList = res.data
+    })
   }
 }
 </script>

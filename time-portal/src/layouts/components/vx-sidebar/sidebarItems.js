@@ -1,4 +1,4 @@
-/*=========================================================================================
+/* =========================================================================================
   File Name: sidebarItems.js
   Description: Sidebar Items list. Add / Remove menu items from here.
   Strucutre:
@@ -14,54 +14,46 @@
           isDisabled  => disable sidebar item/group
 ==========================================================================================*/
 
-
 export default [{
-    url: "/todo-list",
-    name: "Todo看板",
-    slug: "todo-list",
-    icon: "BarChart2Icon",
-    i18n: "TodoList",
-  },
-  {
-    url: "/todo",
-    name: "Todo",
-    slug: "todo",
-    icon: "CheckCircleIcon",
-    i18n: "Todo",
-  },
-  {
-    url: "/diary",
-    name: "每日自省",
-    slug: "diary",
-    icon: "Edit2Icon",
-    i18n: "diary",
-  },
-  {
-    url: "/stats",
-    name: "数据统计",
-    slug: "stats",
-    icon: "PieChartIcon",
-    i18n: "stats",
-  },
-  {
-    url: "/goal",
-    name: "个人目标",
-    slug: "goal",
-    icon: "DiscIcon",
-    i18n: "goal",
-  },
-  {
-    url: '/calendar/vue-simple-calendar',
-    name: "Calendar",
-    slug: "calendarSimpleCalendar",
-    icon: "CalendarIcon",
-    i18n: "SimpleCalendar",
-  },
-  {
-    url: '/music',
-    name: "白噪音",
-    slug: "music",
-    icon: "MusicIcon",
-    i18n: "music",
-  },
+  url: '/todo-list',
+  name: 'Todo看板',
+  slug: 'todo-list',
+  icon: 'BarChart2Icon',
+  i18n: 'TodoList'
+},
+{
+  url: '/todo',
+  name: 'Todo',
+  slug: 'todo',
+  icon: 'CheckCircleIcon',
+  i18n: 'Todo'
+},
+{
+  url: '/diary',
+  name: '每日自省',
+  slug: 'diary',
+  icon: 'Edit2Icon',
+  i18n: 'diary'
+},
+{
+  url: '/stats',
+  name: '数据统计',
+  slug: 'stats',
+  icon: 'PieChartIcon',
+  i18n: 'stats'
+},
+{
+  url: '/calendar/vue-simple-calendar',
+  name: 'Calendar',
+  slug: 'calendarSimpleCalendar',
+  icon: 'CalendarIcon',
+  i18n: 'SimpleCalendar'
+},
+{
+  url: '/music',
+  name: '白噪音',
+  slug: 'music',
+  icon: 'MusicIcon',
+  i18n: 'music'
+}
 ]

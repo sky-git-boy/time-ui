@@ -5,7 +5,13 @@
         <div slot="no-body" class="full-page-bg-color">
           <div class="vx-row no-gutter">
             <div class="vx-col hidden sm:hidden md:hidden lg:block lg:w-1/2 mx-auto self-center">
-              <img src="@/assets/images/pages/register.jpg" alt="register" class="mx-auto" >
+              <swiper :options="swiperOption">
+                <swiper-slide v-for="item in slideList" :key="item.id">
+                  <img :src="item.picUrl" alt="register" class="mx-auto">
+                </swiper-slide>
+                <div slot="button-prev" class="swiper-button-prev swiper-button-white"/>
+                <div slot="button-next" class="swiper-button-next swiper-button-white"/>
+              </swiper>
             </div>
             <div class="vx-col sm:w-full md:w-full lg:w-1/2 mx-auto self-center d-theme-dark-bg">
               <div class="p-8">
@@ -15,25 +21,25 @@
                 </div>
                 <div class="clearfix">
                   <vs-input
-                    v-validate="'required|alpha_dash|min:3'"
+                    v-validate="'required|alpha_dash|min:11'"
                     v-model="phone"
                     data-vv-validate-on="blur"
                     label-placeholder="手机号"
-                    name="phone"
+                    name="手机号"
                     placeholder="手机号"
-                    class="w-full"
-                  />
+                    class="w-full" />
+                  <span class="text-danger text-sm">{{ errors.first('手机号') }}</span>
 
                   <vs-input
                     v-validate="'required|email'"
                     v-model="email"
                     data-vv-validate-on="blur"
-                    name="email"
+                    name="邮箱"
                     type="email"
                     label-placeholder="邮箱"
                     placeholder="邮箱"
-                    class="w-full mt-6"
-                  />
+                    class="w-full mt-6" />
+                  <span class="text-danger text-sm">{{ errors.first('邮箱') }}</span>
 
                   <vs-input
                     v-validate="'required|min:6|max:10'"
@@ -41,11 +47,11 @@
                     v-model="password"
                     type="password"
                     data-vv-validate-on="blur"
-                    name="password"
+                    name="密码"
                     label-placeholder="密码"
                     placeholder="密码"
-                    class="w-full mt-6"
-                  />
+                    class="w-full mt-6" />
+                  <span class="text-danger text-sm">{{ errors.first('密码') }}</span>
 
                   <vs-input
                     v-validate="'min:6|max:10|confirmed:password'"
@@ -53,18 +59,14 @@
                     type="password"
                     data-vv-validate-on="blur"
                     data-vv-as="password"
-                    name="confirm_password"
+                    name="确认密码"
                     label-placeholder="确认密码"
                     placeholder="确认密码"
-                    class="w-full mt-6"
-                  />
+                    class="w-full mt-6" />
+                  <span class="text-danger text-sm">{{ errors.first('确认密码') }}</span>
 
                   <vs-button type="border" to="/pages/login" class="mt-6">登录</vs-button>
-                  <vs-button
-                    :disabled="!validateForm"
-                    class="float-right mt-6"
-                    @click="registerUser"
-                  >注册</vs-button>
+                  <vs-button :disabled="!validateForm" class="float-right mt-6" @click="registerUser">注册</vs-button>
                 </div>
               </div>
             </div>
@@ -76,26 +78,40 @@
 </template>
 
 <script>
+import 'swiper/dist/css/swiper.min.css'
+import { swiper, swiperSlide } from 'vue-awesome-swiper'
+import { slide } from '@/api/slide'
+
 export default {
+  components: {
+    swiper,
+    swiperSlide
+  },
   data() {
     return {
       phone: '',
       email: '',
       password: '',
       confirm_password: '',
-      isTermsConditionAccepted: true
+      isTermsConditionAccepted: true,
+      swiperOption: {
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev'
+        }
+      },
+      slideList: []
     }
   },
   computed: {
     validateForm() {
-      return (
-        this.phone != '' &&
-        this.email != '' &&
-        this.password != '' &&
-        this.confirm_password != '' &&
-        this.isTermsConditionAccepted === true
-      )
+      return !this.errors.any() && this.phone != '' && this.email != '' && this.password != '' && this.confirm_password != '' && this.isTermsConditionAccepted === true
     }
+  },
+  created() {
+    slide().then(res => {
+      this.slideList = res.data
+    })
   },
   methods: {
     registerUser() {
