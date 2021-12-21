@@ -4,10 +4,10 @@
 
 const path = require('path')
 
-let dev = "http://127.0.0.1";
-let haigen = "http://192.168.2.113:9000";
-let aliyun = "http://47.75.115.45:8091";
-let uploadServer = "http://47.106.158.72"
+const dev = 'http://127.0.0.1'
+const haigen = 'http://192.168.2.113:9000'
+const aliyun = 'http://47.75.115.45:8091'
+const uploadServer = 'http://47.106.158.72'
 
 module.exports = {
   dev: {
