@@ -268,13 +268,22 @@ export default {
     return {
       showDate: new Date(),
       disabledFrom: false,
-
+      // 查看模式
       calendarView: 'month',
-
+      // 添加弹出层
       activePromptAddEvent: false,
+      // 修改弹出层
       activePromptEditEvent: false,
+      // 事件
       simpleCalendarEvents: [],
-      form: {}
+      // 表单
+      form: {},
+      // 标签
+      calendarLabel: [
+        { text: 'Business', value: '2', color: 'success' },
+        { text: 'Work', value: '1', color: 'warning' },
+        { text: 'Personal', value: '3', color: 'danger' }
+      ]
     }
   },
   computed: {
@@ -285,7 +294,7 @@ export default {
       return { from: new Date(this.endDate) }
     },
     calendarLabels() {
-      return this.$store.state.calendar.calendarLabels
+      return this.calendarLabel
     },
     labelColor() {
       return label => {
@@ -311,11 +320,13 @@ export default {
     this.getListEvent()
   },
   methods: {
+    // 事件展示
     getListEvent() {
       listEvent().then(res => {
         this.simpleCalendarEvents = res.data
       })
     },
+    // 添加事件
     addEvent() {
       this.$vs.loading()
       this.form.startDate = this.convertUTCTimeToLocalTime(this.form.startDate)
@@ -338,10 +349,11 @@ export default {
         this.$vs.loading.close()
       })
     },
+    // 修改月份
     updateMonth(val) {
       this.showDate = this.$refs.calendar.getIncrementedPeriod(val)
-      console.log(this.showDate)
     },
+    // 清除
     clearFields() {
       this.form = {
         title: undefined,
@@ -371,6 +383,7 @@ export default {
       })
       this.activePromptEditEvent = true
     },
+    // 修改事件
     editEvent() {
       this.$vs.loading()
       this.form.startDate = this.convertUTCTimeToLocalTime(this.form.startDate)
@@ -393,6 +406,7 @@ export default {
         this.$vs.loading.close()
       })
     },
+    // 删除事件
     removeEvent() {
       this.$vs.loading()
       deleteEvent(this.form.id).then(res => {
@@ -413,13 +427,8 @@ export default {
       })
     },
     eventDragged(event, date) {
-      console.log(event)
-      console.log(date)
-      this.$store.dispatch('calendar/simpleCalendarEventDragged', {
-        event: event,
-        date: date
-      })
     },
+    // 格式化时间
     convertUTCTimeToLocalTime: function(UTCDateString) {
       if (!UTCDateString) {
         return '-'
