@@ -44,7 +44,7 @@ export default [{
 },
 {
   url: '/calendar/vue-simple-calendar',
-  name: 'Calendar',
+  name: '日历看板',
   slug: 'calendarSimpleCalendar',
   icon: 'CalendarIcon',
   i18n: 'SimpleCalendar'

@@ -129,7 +129,7 @@
                     </div>
                   </div>
                   <small class="mt-1 whitespace-no-wrap">
-                    {{ ntf.createTime }}
+                    {{ elapsedTime(ntf.createTime) }}
                   </small>
                 </li>
               </ul>
@@ -137,7 +137,7 @@
             <div
               class="checkout-footer fixed bottom-0 rounded-b-lg text-primary w-full p-2 font-semibold text-center border border-b-0 border-l-0 border-r-0 border-solid d-theme-border-grey-light cursor-pointer"
             >
-              <span>查看所有公告</span>
+              <span>下拉查看所有通知</span>
             </div>
           </vs-dropdown-menu>
         </vs-dropdown>
@@ -147,7 +147,7 @@
           <div class="text-right leading-tight hidden sm:block">
             <p class="font-semibold">{{ user_displayName }}</p>
             <!-- <small>{{ activeUserInfo.userRole }}</small> -->
-            <small>超级用户</small>
+            <!-- <small>超级用户</small> -->
           </div>
           <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
             <div class="con-img ml-3">
@@ -167,7 +167,7 @@
                   @click="$router.push('/profile')"
                 >
                   <feather-icon icon="UserIcon" svg-classes="w-4 h-4"/>
-                  <span class="ml-2">Profile</span>
+                  <span class="ml-2">个人主页</span>
                 </li>
                 <li
                   class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
@@ -182,7 +182,7 @@
                   @click="logout"
                 >
                   <feather-icon icon="LogOutIcon" svg-classes="w-4 h-4"/>
-                  <span class="ml-2">Logout</span>
+                  <span class="ml-2">退出</span>
                 </li>
               </ul>
             </vs-dropdown-menu>
@@ -368,15 +368,15 @@ export default {
       var years = timeDiff
 
       if (years > 0) {
-        return years + (years > 1 ? ' Years ' : ' Year ') + 'ago'
+        return years + (years > 1 ? ' 年 ' : ' 年 ') + '前'
       } else if (days > 0) {
-        return days + (days > 1 ? ' Days ' : ' Day ') + 'ago'
+        return days + (days > 1 ? ' 天 ' : ' 天 ') + '前'
       } else if (hours > 0) {
-        return hours + (hours > 1 ? ' Hrs ' : ' Hour ') + 'ago'
+        return hours + (hours > 1 ? ' 小时 ' : ' 小时 ') + '前'
       } else if (minutes > 0) {
-        return minutes + (minutes > 1 ? ' Mins ' : ' Min ') + 'ago'
+        return minutes + (minutes > 1 ? ' 分钟 ' : ' 分钟 ') + '前'
       } else if (seconds > 0) {
-        return seconds + (seconds > 1 ? `${seconds} sec ago` : 'just now')
+        return seconds + (seconds > 1 ? `${seconds} 秒前` : '刚刚')
       }
 
       return 'Just Now'
