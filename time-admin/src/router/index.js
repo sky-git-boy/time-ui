@@ -132,37 +132,6 @@ export const constantRouterMap = [
   },
 
   {
-    path: '/order',
-    component: Layout,
-    redirect: 'noRedirect',
-    alwaysShow: true,
-    name: '/order',
-    meta: {
-      title: '订单中心',
-      icon: 'list'
-    },
-    children: [{
-      path: 'orders',
-      component: () => import('@/views/order/orders/index'),
-      name: '/order/orders',
-      meta: {
-        title: '订单管理',
-        icon: 'clipboard'
-      }
-    },
-    {
-      path: 'summary',
-      component: () => import('@/views/order/summary/index'),
-      name: '/order/summary',
-      meta: {
-        title: '月度报表',
-        icon: 'chart'
-      }
-    }
-    ]
-  },
-
-  {
     path: '/portal',
     component: Layout,
     redirect: 'noRedirect',
