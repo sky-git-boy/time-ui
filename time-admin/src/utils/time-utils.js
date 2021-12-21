@@ -22,7 +22,7 @@ export function selectDictLabel(datas, value) {
   var actions = []
   Object.keys(datas).map((key) => {
     // eslint-disable-next-line
-    if (datas[key].dictValue == value) {
+    if (datas[key].dictValue === value || datas[key].dictValue == value) {
       actions.push(datas[key].dictLabel)
       return false
     }
