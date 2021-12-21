@@ -13,7 +13,6 @@
         class="theme-default"
         @click-date="openAddNewEvent"
         @click-event="openEditEvent"
-        @drop-on-date="eventDragged"
       >
         <div slot="header" class="mb-4">
           <div class="vx-row no-gutter">
@@ -98,8 +97,8 @@
 
     <!-- ADD EVENT -->
     <vs-prompt
-      :is-valid="validForm"
       :active.sync="activePromptAddEvent"
+      :model="form"
       class="calendar-event-dialog"
       title="Add Event"
       accept-text="Add Event"
@@ -107,10 +106,9 @@
     >
       <div class="calendar__label-container flex">
         <vs-chip
-          v-if="labelLocal != 'none'"
-          :class="'bg-' + labelColor(labelLocal)"
+          :class="'bg-' + labelColor(form.tags)"
           class="text-white"
-        >{{ labelLocal }}</vs-chip
+        >{{ labelText(form.tags) }}</vs-chip
         >
 
         <vs-dropdown
@@ -129,7 +127,7 @@
             <vs-dropdown-item
               v-for="(label, index) in calendarLabels"
               :key="index"
-              @click="labelLocal = label.value"
+              @click="form.tags = label.value"
             >
               <div
                 :class="'bg-' + label.color"
@@ -138,7 +136,7 @@
               <span>{{ label.text }}</span>
             </vs-dropdown-item>
 
-            <vs-dropdown-item @click="labelLocal = 'none'">
+            <vs-dropdown-item @click="form.tags = '0'">
               <div
                 class="h-3 w-3 mr-1 inline-block rounded-full mr-2 bg-primary"
               />
@@ -149,8 +147,7 @@
       </div>
 
       <vs-input
-        v-validate="'required'"
-        v-model="title"
+        v-model="form.title"
         name="event-name"
         class="w-full"
         label-placeholder="Event Title"
@@ -158,47 +155,43 @@
       <div class="my-4">
         <small class="date-label">Start Date</small>
         <datepicker
-          v-model="startDate"
+          v-model="form.startDate"
           :disabled="disabledFrom"
           name="start-date"
+          type="datetime"
+          value-format="yyyy-MM-dd HH:mm:ss"
         />
       </div>
       <div class="my-4">
         <small class="date-label">End Date</small>
         <datepicker
           :disabled-dates="disabledDatesTo"
-          v-model="endDate"
+          v-model="form.endDate"
           name="end-date"
+          type="datetime"
+          value-format="yyyy-MM-dd HH:mm:ss"
         />
       </div>
-      <vs-input
-        v-validate="'url'"
-        v-model="url"
-        :color="!errors.has('event-url') ? 'success' : 'danger'"
-        name="event-url"
-        class="w-full mt-6"
-        label-placeholder="Event URL"
-      />
     </vs-prompt>
 
     <!-- EDIT EVENT -->
     <vs-prompt
-      :is-valid="validForm"
       :active.sync="activePromptEditEvent"
+      :model="form"
       class="calendar-event-dialog"
       title="Edit Event"
       accept-text="Submit"
-      cancel-text="Remove"
+      cancel-text="Delete"
       button-cancel="border"
       @cancel="removeEvent"
       @accept="editEvent"
     >
       <div class="calendar__label-container flex">
         <vs-chip
-          v-if="labelLocal != 'none'"
-          :class="'bg-' + labelColor(labelLocal)"
+          v-if="form.tags != '0'"
+          :class="'bg-' + labelColor(form.tags)"
           class="text-white"
-        >{{ labelLocal }}</vs-chip
+        >{{ labelText(form.tags) }}</vs-chip
         >
 
         <vs-dropdown vs-custom-content class="ml-auto my-2 cursor-pointer">
@@ -212,7 +205,7 @@
             <vs-dropdown-item
               v-for="(label, index) in calendarLabels"
               :key="index"
-              @click="labelLocal = label.value"
+              @click="form.tags = label.value"
             >
               <div
                 :class="'bg-' + label.color"
@@ -221,7 +214,7 @@
               <span>{{ label.text }}</span>
             </vs-dropdown-item>
 
-            <vs-dropdown-item @click="labelLocal = 'none'">
+            <vs-dropdown-item @click="form.tags = '0'">
               <div
                 class="h-3 w-3 mr-1 inline-block rounded-full mr-2 bg-primary"
               />
@@ -232,8 +225,7 @@
       </div>
 
       <vs-input
-        v-validate="'required'"
-        v-model="title"
+        v-model="form.title"
         name="event-name"
         class="w-full"
         label-placeholder="Event Title"
@@ -242,7 +234,7 @@
         <small class="date-label">Start Date</small>
         <datepicker
           :disabled-dates="disabledDatesFrom"
-          v-model="startDate"
+          v-model="form.startDate"
           name="start-date"
         />
       </div>
@@ -250,18 +242,10 @@
         <small class="date-label">End Date</small>
         <datepicker
           :disabled-dates="disabledDatesTo"
-          v-model="endDate"
+          v-model="form.endDate"
           name="end-date"
         />
       </div>
-      <vs-input
-        v-validate="'url'"
-        v-model="url"
-        :color="!errors.has('event-url') ? 'success' : 'danger'"
-        name="event-url"
-        class="w-full mt-6"
-        label-placeholder="Event URL"
-      />
     </vs-prompt>
   </div>
 </template>
@@ -271,6 +255,8 @@ import { CalendarView, CalendarViewHeader } from 'vue-simple-calendar'
 require('vue-simple-calendar/static/css/default.css')
 
 import Datepicker from 'vuejs-datepicker'
+
+import { listEvent, getEventById, addEvent, deleteEvent, updateEvent } from '@/api/calendar'
 
 export default {
   components: {
@@ -282,32 +268,16 @@ export default {
     return {
       showDate: new Date(),
       disabledFrom: false,
-      id: 0,
-      title: '',
-      startDate: '',
-      endDate: '',
-      labelLocal: 'none',
 
-      url: '',
       calendarView: 'month',
 
       activePromptAddEvent: false,
-      activePromptEditEvent: false
+      activePromptEditEvent: false,
+      simpleCalendarEvents: [],
+      form: {}
     }
   },
   computed: {
-    simpleCalendarEvents() {
-      return this.$store.state.calendar.simpleCalendarEvents
-    },
-    validForm() {
-      return (
-        this.title != '' &&
-        this.startDate != '' &&
-        this.endDate != '' &&
-        Date.parse(this.endDate) - Date.parse(this.startDate) >= 0 &&
-        !this.errors.has('event-url')
-      )
-    },
     disabledDatesTo() {
       return { to: new Date(this.startDate) }
     },
@@ -319,35 +289,67 @@ export default {
     },
     labelColor() {
       return label => {
-        if (label == 'business') return 'success'
-        else if (label == 'work') return 'warning'
-        if (label == 'personal') return 'danger'
-        if (label == 'none') return 'primary'
+        if (label == '2') return 'success'
+        else if (label == '1') return 'warning'
+        if (label == '3') return 'danger'
+        if (label == '0') return 'primary'
+      }
+    },
+    labelText() {
+      return label => {
+        if (label == '2') return 'business'
+        else if (label == '1') return 'work'
+        if (label == '3') return 'personal'
+        if (label == '0') return 'none'
       }
     },
     windowWidth() {
       return this.$store.state.windowWidth
     }
   },
+  created() {
+    this.getListEvent()
+  },
   methods: {
+    getListEvent() {
+      listEvent().then(res => {
+        this.simpleCalendarEvents = res.data
+      })
+    },
     addEvent() {
-      const obj = {
-        title: this.title,
-        startDate: this.startDate,
-        endDate: this.endDate,
-        label: this.labelLocal,
-        url: this.url
-      }
-      obj.classes = 'event-' + this.labelColor(this.labelLocal)
-      this.$store.dispatch('calendar/addEventToSimpleCalendar', obj)
+      this.$vs.loading()
+      this.form.startDate = this.convertUTCTimeToLocalTime(this.form.startDate)
+      this.form.endDate = this.convertUTCTimeToLocalTime(this.form.endDate)
+      this.form.classes = 'event-' + this.labelColor(this.form.tags)
+      addEvent(this.form).then(res => {
+        this.getListEvent()
+        this.$vs.notify({
+          title: 'Success',
+          text: '添加成功',
+          color: 'success'
+        })
+        this.$vs.loading.close()
+      }).catch(e => {
+        this.$vs.notify({
+          title: 'Fail',
+          text: '添加失败',
+          color: 'danger'
+        })
+        this.$vs.loading.close()
+      })
     },
     updateMonth(val) {
       this.showDate = this.$refs.calendar.getIncrementedPeriod(val)
+      console.log(this.showDate)
     },
     clearFields() {
-      this.title = this.endDate = this.url = ''
-      this.id = 0
-      this.labelLocal = 'none'
+      this.form = {
+        title: undefined,
+        startDate: undefined,
+        endDate: undefined,
+        tags: '0',
+        classes: 'event-primary'
+      }
     },
     promptAddNewEvent(date) {
       this.disabledFrom = false
@@ -355,8 +357,8 @@ export default {
     },
     addNewEventDialog(date) {
       this.clearFields()
-      this.startDate = date
-      this.endDate = date
+      this.form.startDate = date
+      this.form.endDate = date
       this.activePromptAddEvent = true
     },
     openAddNewEvent(date) {
@@ -364,37 +366,78 @@ export default {
       this.addNewEventDialog(date)
     },
     openEditEvent(event) {
-      const e = this.$store.getters['calendar/simpleCalendareventById'](
-        event.id
-      )
-      this.id = e.id
-      this.title = e.title
-      this.startDate = e.startDate
-      this.endDate = e.endDate
-      this.url = e.url
-      this.labelLocal = e.label
+      getEventById(event.id).then(res => {
+        this.form = res.data
+      })
       this.activePromptEditEvent = true
     },
     editEvent() {
-      const obj = {
-        id: this.id,
-        title: this.title,
-        startDate: this.startDate,
-        endDate: this.endDate,
-        label: this.labelLocal,
-        url: this.url
-      }
-      obj.classes = 'event-' + this.labelColor(this.labelLocal)
-      this.$store.dispatch('calendar/editSimpleCalendarEvent', obj)
+      this.$vs.loading()
+      this.form.startDate = this.convertUTCTimeToLocalTime(this.form.startDate)
+      this.form.endDate = this.convertUTCTimeToLocalTime(this.form.endDate)
+      this.form.classes = 'event-' + this.labelColor(this.form.tags)
+      updateEvent(this.form).then(res => {
+        this.getListEvent()
+        this.$vs.notify({
+          title: 'Success',
+          text: '修改成功',
+          color: 'success'
+        })
+        this.$vs.loading.close()
+      }).catch(e => {
+        this.$vs.notify({
+          title: 'Fail',
+          text: '修改失败',
+          color: 'danger'
+        })
+        this.$vs.loading.close()
+      })
     },
     removeEvent() {
-      this.$store.dispatch('calendar/removeSimpleCalendarEvent', this.id)
+      this.$vs.loading()
+      deleteEvent(this.form.id).then(res => {
+        this.getListEvent()
+        this.$vs.notify({
+          title: 'Success',
+          text: '删除成功',
+          color: 'success'
+        })
+        this.$vs.loading.close()
+      }).catch(e => {
+        this.$vs.notify({
+          title: 'Fail',
+          text: '删除失败',
+          color: 'danger'
+        })
+        this.$vs.loading.close()
+      })
     },
     eventDragged(event, date) {
+      console.log(event)
+      console.log(date)
       this.$store.dispatch('calendar/simpleCalendarEventDragged', {
         event: event,
         date: date
       })
+    },
+    convertUTCTimeToLocalTime: function(UTCDateString) {
+      if (!UTCDateString) {
+        return '-'
+      }
+      function formatFunc(str) { // 格式化显示
+        return str > 9 ? str : '0' + str
+      }
+      var date2 = new Date(UTCDateString) // 这步是关键
+      var year = date2.getFullYear()
+      var mon = formatFunc(date2.getMonth() + 1)
+      var day = formatFunc(date2.getDate())
+      var hour = date2.getHours()
+      hour = hour >= 12 ? hour - 12 : hour
+      hour = formatFunc(hour)
+      var min = formatFunc(date2.getMinutes())
+      var sec = formatFunc(date2.getSeconds())
+      var dateStr = year + '-' + mon + '-' + day + ' ' + hour + ':' + min + ':' + sec
+      return dateStr
     }
   }
 }

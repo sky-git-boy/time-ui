@@ -10,28 +10,28 @@
       v-hammer:swipe.left="onSwipeLeft"
       ref="mainSidebar"
       :parent="parent"
-      :hiddenBackground="clickNotClose"
+      :hidden-background="clickNotClose"
       :reduce="reduce"
-      default-index="-1"
-      class="sidebarx main-menu-sidebar items-no-padding"
       v-model="isSidebarActive"
       :click-not-close="clickNotClose"
       :reduce-not-rebound="reduceNotRebound"
+      default-index="-1"
+      class="sidebarx main-menu-sidebar items-no-padding"
     >
       <div @mouseenter="sidebarMouseEntered" @mouseleave="sidebarMouseLeave">
         <div
-          class="header-sidebar flex items-end justify-between"
           slot="header"
+          class="header-sidebar flex items-end justify-between"
         >
           <div class="logo flex items-center">
             <div @click="$router.push('/tomato')">
-              <img :src="logo" alt="logo" class="w-10 mr-4" v-if="logo" />
+              <img v-if="logo" :src="logo" alt="logo" class="w-10 mr-4" >
             </div>
             <span
-              class="logo-text"
               v-show="isMouseEnter || !reduce"
               v-if="title"
-              >{{ title }}</span
+              class="logo-text"
+            >{{ title }}</span
             >
           </div>
           <div>
@@ -40,66 +40,66 @@
                 icon="XIcon"
                 class="m-0 cursor-pointer"
                 @click="$store.commit('TOGGLE_IS_SIDEBAR_ACTIVE', false)"
-              ></feather-icon>
+              />
             </template>
             <template v-else-if="!showCloseButton && !sidebarItemsMin">
               <feather-icon
+                v-show="!reduce"
+                id="btnSidebarToggler"
                 icon="DiscIcon"
                 class="mr-0 cursor-pointer"
                 svg-classes="stroke-current"
-                v-show="!reduce"
                 @click="toggleReduce(true)"
-                id="btnSidebarToggler"
-              ></feather-icon>
+              />
               <feather-icon
+                v-show="reduce"
+                id="btnSidebarToggler"
                 icon="CircleIcon"
                 class="mr-0 cursor-pointer"
                 svg-classes="stroke-current"
-                v-show="reduce"
                 @click="toggleReduce(false)"
-                id="btnSidebarToggler"
-              ></feather-icon>
+              />
             </template>
           </div>
         </div>
 
-        <div class="shadow-bottom" v-show="showShadowBottom"></div>
+        <div v-show="showShadowBottom" class="shadow-bottom"/>
 
         <VuePerfectScrollbar
           ref="mainSidebarPs"
-          class="scroll-area--main-sidebar pt-2"
           :settings="settings"
+          class="scroll-area--main-sidebar pt-2"
           @ps-scroll-y="psSectionScroll"
         >
           <template v-for="(sidebarItem, index) in sidebarItems">
             <!-- GROUP ITEM HEADER -->
             <span
-              :key="`header-${index}`"
               v-if="sidebarItem.header && !sidebarItemsMin"
+              :key="`header-${index}`"
               class="navigation-header truncate"
-              >{{ sidebarItem.header }}</span
+            >{{ sidebarItem.header }}</span
             >
             <template v-else-if="!sidebarItem.header">
               <!-- IF IT'S SINGLE ITEM -->
               <vx-sidebar-item
+                v-if="!sidebarItem.submenu"
                 ref="sidebarLink"
                 :key="`sidebarItem-${index}`"
-                v-if="!sidebarItem.submenu"
                 :index="index"
                 :to="sidebarItem.slug != 'external' ? sidebarItem.url : ''"
                 :href="sidebarItem.slug == 'external' ? sidebarItem.url : ''"
                 :icon="sidebarItem.icon"
                 :target="sidebarItem.target"
-                :isDisabled="sidebarItem.isDisabled"
+                :is-disabled="sidebarItem.isDisabled"
               >
                 <span v-show="!sidebarItemsMin" class="truncate">{{
                   sidebarItem.name
                 }}</span>
                 <vs-chip
-                  class="ml-auto"
-                  :color="sidebarItem.tagColor"
                   v-if="sidebarItem.tag && (isMouseEnter || !reduce)"
-                  >{{ sidebarItem.tag }}</vs-chip
+                  :color="sidebarItem.tagColor"
+                  class="ml-auto"
+                >{{ sidebarItem.tag }}</vs-chip
                 >
               </vx-sidebar-item>
 
@@ -108,11 +108,11 @@
                 <vx-sidebar-group
                   ref="sidebarGrp"
                   :key="`group-${index}`"
-                  :openHover="openGroupHover"
+                  :open-hover="openGroupHover"
                   :group="sidebarItem"
-                  :groupIndex="index"
+                  :group-index="index"
                   :open="isGroupActive(sidebarItem)"
-                ></vx-sidebar-group>
+                />
               </template>
             </template>
           </template>
@@ -122,19 +122,24 @@
     <div
       v-hammer:swipe.right="onSwipeRightSidebarSwipeArea"
       v-if="!isSidebarActive"
-      class="sidebar-swipe-area"
       id="sidebar-swipe-area"
-    ></div>
+      class="sidebar-swipe-area"
+    />
   </div>
 </template>
 
 <script>
-import VuePerfectScrollbar from "vue-perfect-scrollbar";
-import VxSidebarGroup from "./VxSidebarGroup.vue";
-import VxSidebarItem from "./VxSidebarItem.vue";
+import VuePerfectScrollbar from 'vue-perfect-scrollbar'
+import VxSidebarGroup from './VxSidebarGroup.vue'
+import VxSidebarItem from './VxSidebarItem.vue'
 
 export default {
-  name: "vx-sidebar",
+  name: 'VxSidebar',
+  components: {
+    VxSidebarGroup,
+    VxSidebarItem,
+    VuePerfectScrollbar
+  },
   props: {
     sidebarItems: {
       type: Array,
@@ -169,150 +174,134 @@ export default {
       wheelSpeed: 1,
       swipeEasing: true
     },
-    windowWidth: window.innerWidth, //width of windows
+    windowWidth: window.innerWidth, // width of windows
     showShadowBottom: false
   }),
   computed: {
     isSidebarActive: {
       get() {
-        return this.$store.state.isSidebarActive;
+        return this.$store.state.isSidebarActive
       },
       set(val) {
-        this.$store.commit("TOGGLE_IS_SIDEBAR_ACTIVE", val);
+        this.$store.commit('TOGGLE_IS_SIDEBAR_ACTIVE', val)
       }
     },
     reduceSidebar() {
-      return Boolean(this.reduce && this.reduceButton);
+      return Boolean(this.reduce && this.reduceButton)
     },
     reduceButton: {
       get() {
-        return this.$store.state.reduceButton;
+        return this.$store.state.reduceButton
       },
       set(val) {
-        this.$store.commit("TOGGLE_REDUCE_BUTTON", val);
+        this.$store.commit('TOGGLE_REDUCE_BUTTON', val)
       }
     },
     sidebarItemsMin() {
-      return this.$store.state.sidebarItemsMin;
+      return this.$store.state.sidebarItemsMin
     },
     isGroupActive() {
       return sidebarItem => {
-        const path = this.$route.fullPath;
-        let open = false;
-        let func = function(sidebarItem) {
+        const path = this.$route.fullPath
+        let open = false
+        const func = function(sidebarItem) {
           if (sidebarItem.submenu) {
             sidebarItem.submenu.forEach(item => {
               if (path == item.url) {
-                open = true;
+                open = true
               } else if (item.submenu) {
-                func(item);
+                func(item)
               }
-            });
+            })
           }
-        };
-        func(sidebarItem);
-        return open;
-      };
+        }
+        func(sidebarItem)
+        return open
+      }
     }
   },
   watch: {
     reduce(val) {
       if (val == true) {
-        this.$store.dispatch("updateSidebarWidth", "reduced");
+        this.$store.dispatch('updateSidebarWidth', 'reduced')
       } else {
-        this.$store.dispatch("updateSidebarWidth", "default");
+        this.$store.dispatch('updateSidebarWidth', 'default')
       }
 
       setTimeout(function() {
-        window.dispatchEvent(new Event("resize"));
-      }, 100);
+        window.dispatchEvent(new Event('resize'))
+      }, 100)
     },
     reduceButton() {
-      this.setSidebarWidth();
+      this.setSidebarWidth()
     },
     $route() {
-      if (this.isSidebarActive && this.showCloseButton)
-        this.$store.commit("TOGGLE_IS_SIDEBAR_ACTIVE", false);
+      if (this.isSidebarActive && this.showCloseButton) { this.$store.commit('TOGGLE_IS_SIDEBAR_ACTIVE', false) }
     }
-  },
-  methods: {
-    sidebarMouseEntered() {
-      if (this.reduce) this.$store.commit("UPDATE_SIDEBAR_ITEMS_MIN", false);
-      this.isMouseEnter = true;
-    },
-    sidebarMouseLeave() {
-      if (this.reduce) {
-        this.$store.commit("UPDATE_SIDEBAR_ITEMS_MIN", true);
-      }
-      this.isMouseEnter = false;
-    },
-    toggleReduce(val) {
-      this.reduceButton = val;
-      this.setSidebarWidth();
-    },
-    handleWindowResize(event) {
-      this.windowWidth = event.currentTarget.innerWidth;
-      this.setSidebarWidth();
-    },
-    setSidebarWidth() {
-      if (this.windowWidth < 1200) {
-        if (this.windowWidth < 992)
-          this.$store.commit("UPDATE_WINDOW_BREAKPOINT", "md");
-        else this.$store.commit("UPDATE_WINDOW_BREAKPOINT", "lg");
-
-        this.$store.commit("TOGGLE_IS_SIDEBAR_ACTIVE", false);
-        if (this.reduceButton) this.reduce = false;
-        // this.reduceButton = false;
-        this.showCloseButton = true;
-        this.clickNotClose = false;
-        this.$store.dispatch("updateSidebarWidth", "no-sidebar");
-        this.$store.commit("UPDATE_SIDEBAR_ITEMS_MIN", false);
-      } else {
-        this.$store.commit("UPDATE_WINDOW_BREAKPOINT", "xl");
-        if (this.reduceButton) this.reduce = true;
-        else this.reduce = false;
-
-        this.$store.commit("TOGGLE_IS_SIDEBAR_ACTIVE", true);
-        if (this.reduceButton && !this.isMouseEnter)
-          this.$store.commit("UPDATE_SIDEBAR_ITEMS_MIN", true);
-        else this.$store.commit("UPDATE_SIDEBAR_ITEMS_MIN", false);
-
-        this.clickNotClose = true;
-        this.showCloseButton = false;
-        if (this.reduceSidebar)
-          this.$store.dispatch("updateSidebarWidth", "reduced");
-        else this.$store.dispatch("updateSidebarWidth", "default");
-      }
-    },
-    psSectionScroll() {
-      if (this.$refs.mainSidebarPs.$el.scrollTop > 0)
-        this.showShadowBottom = true;
-      else this.showShadowBottom = false;
-    },
-    onSwipeLeft() {
-      if (this.isSidebarActive && this.showCloseButton)
-        this.isSidebarActive = false;
-    },
-    onSwipeRightSidebarSwipeArea() {
-      if (!this.isSidebarActive && this.showCloseButton)
-        this.isSidebarActive = true;
-    }
-  },
-  components: {
-    VxSidebarGroup,
-    VxSidebarItem,
-    VuePerfectScrollbar
   },
   mounted() {
     this.$nextTick(() => {
-      window.addEventListener("resize", this.handleWindowResize);
-    });
-    this.setSidebarWidth();
+      window.addEventListener('resize', this.handleWindowResize)
+    })
+    this.setSidebarWidth()
   },
   beforeDestroy() {
-    window.removeEventListener("resize", this.handleWindowResize);
+    window.removeEventListener('resize', this.handleWindowResize)
+  },
+  methods: {
+    sidebarMouseEntered() {
+      if (this.reduce) this.$store.commit('UPDATE_SIDEBAR_ITEMS_MIN', false)
+      this.isMouseEnter = true
+    },
+    sidebarMouseLeave() {
+      if (this.reduce) {
+        this.$store.commit('UPDATE_SIDEBAR_ITEMS_MIN', true)
+      }
+      this.isMouseEnter = false
+    },
+    toggleReduce(val) {
+      this.reduceButton = val
+      this.setSidebarWidth()
+    },
+    handleWindowResize(event) {
+      this.windowWidth = event.currentTarget.innerWidth
+      this.setSidebarWidth()
+    },
+    setSidebarWidth() {
+      if (this.windowWidth < 1200) {
+        if (this.windowWidth < 992) { this.$store.commit('UPDATE_WINDOW_BREAKPOINT', 'md') } else this.$store.commit('UPDATE_WINDOW_BREAKPOINT', 'lg')
+
+        this.$store.commit('TOGGLE_IS_SIDEBAR_ACTIVE', false)
+        if (this.reduceButton) this.reduce = false
+        // this.reduceButton = false;
+        this.showCloseButton = true
+        this.clickNotClose = false
+        this.$store.dispatch('updateSidebarWidth', 'no-sidebar')
+        this.$store.commit('UPDATE_SIDEBAR_ITEMS_MIN', false)
+      } else {
+        this.$store.commit('UPDATE_WINDOW_BREAKPOINT', 'xl')
+        if (this.reduceButton) this.reduce = true
+        else this.reduce = false
+
+        this.$store.commit('TOGGLE_IS_SIDEBAR_ACTIVE', true)
+        if (this.reduceButton && !this.isMouseEnter) { this.$store.commit('UPDATE_SIDEBAR_ITEMS_MIN', true) } else this.$store.commit('UPDATE_SIDEBAR_ITEMS_MIN', false)
+
+        this.clickNotClose = true
+        this.showCloseButton = false
+        if (this.reduceSidebar) { this.$store.dispatch('updateSidebarWidth', 'reduced') } else this.$store.dispatch('updateSidebarWidth', 'default')
+      }
+    },
+    psSectionScroll() {
+      if (this.$refs.mainSidebarPs.$el.scrollTop > 0) { this.showShadowBottom = true } else this.showShadowBottom = false
+    },
+    onSwipeLeft() {
+      if (this.isSidebarActive && this.showCloseButton) { this.isSidebarActive = false }
+    },
+    onSwipeRightSidebarSwipeArea() {
+      if (!this.isSidebarActive && this.showCloseButton) { this.isSidebarActive = true }
+    }
   }
-};
+}
 </script>
 
 <style lang="scss">

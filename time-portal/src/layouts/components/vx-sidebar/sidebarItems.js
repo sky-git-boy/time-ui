@@ -43,11 +43,11 @@ export default [{
   i18n: 'stats'
 },
 {
-  url: '/calendar/vue-simple-calendar',
+  url: '/vue-fullcalendar',
   name: '日历看板',
-  slug: 'calendarSimpleCalendar',
+  slug: 'calendarFullCalendar',
   icon: 'CalendarIcon',
-  i18n: 'SimpleCalendar'
+  i18n: 'FullCalendar'
 },
 {
   url: '/music',

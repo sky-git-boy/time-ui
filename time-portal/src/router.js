@@ -54,17 +54,9 @@ const router = new Router({
         }
       },
       {
-        path: '/calendar/vue-fullcalendar',
+        path: '/vue-fullcalendar',
         name: 'calendarFullCalendar',
         component: () => import('./views/calendar/FullCalendar.vue'),
-        meta: {
-          rule: 'editor'
-        }
-      },
-      {
-        path: '/calendar/vue-simple-calendar',
-        name: 'calendarSimpleCalendar',
-        component: () => import('./views/calendar/SimpleCalendar.vue'),
         meta: {
           rule: 'editor'
         }
