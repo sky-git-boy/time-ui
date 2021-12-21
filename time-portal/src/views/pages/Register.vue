@@ -95,6 +95,7 @@ export default {
       confirm_password: '',
       isTermsConditionAccepted: true,
       swiperOption: {
+        autoplay: true,
         navigation: {
           nextEl: '.swiper-button-next',
           prevEl: '.swiper-button-prev'
@@ -109,7 +110,10 @@ export default {
     }
   },
   created() {
-    slide().then(res => {
+    const params = {
+      status: '0'
+    }
+    slide(params).then(res => {
       this.slideList = res.data
     })
   },
