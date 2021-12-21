@@ -1,12 +1,12 @@
-/*=========================================================================================
+/* =========================================================================================
   File Name: store.js
   Description: Vuex store
 ==========================================================================================*/
 
 import Vue from 'vue'
 import Vuex from 'vuex'
-import mutations from "./mutations"
-import actions from "./actions"
+import mutations from './mutations'
+import actions from './actions'
 import state from './state'
 Vue.use(Vuex)
 import moduleCalendar from './calendar/moduleCalendar.js'
@@ -24,30 +24,30 @@ export default new Vuex.Store({
     formatMin: (state) => {
       const {
         min
-      } = state.time;
-      let strMin = '';
+      } = state.time
+      let strMin = ''
       if (min < 10 && min > -1) {
-        strMin = `0${min}`;
+        strMin = `0${min}`
       } else if (min >= 10) {
-        strMin = `${min}`;
+        strMin = `${min}`
       } else {
-        strMin = '00';
+        strMin = '00'
       }
-      return strMin;
+      return strMin
     },
     // 格式化秒
     formatSec: (state) => {
       const {
         sec
-      } = state.time;
-      let strSec = '';
+      } = state.time
+      let strSec = ''
       if (sec < 10 && sec >= 0) {
-        strSec = `0${sec}`;
+        strSec = `0${sec}`
       } else {
-        strSec = `${sec}`;
+        strSec = `${sec}`
       }
-      return strSec;
-    },
+      return strSec
+    }
   },
   mutations,
   state,
@@ -55,7 +55,7 @@ export default new Vuex.Store({
   modules: {
     calendar: moduleCalendar,
     todo: moduleTodo,
-    auth: auth,
+    auth: auth
   },
   strict: process.env.NODE_ENV !== 'production'
 })
