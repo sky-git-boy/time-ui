@@ -179,7 +179,7 @@
                 <vs-divider class="m-1"/>
                 <li
                   class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
-                  @click="logout()"
+                  @click="logout"
                 >
                   <feather-icon icon="LogOutIcon" svg-classes="w-4 h-4"/>
                   <span class="ml-2">Logout</span>
@@ -321,69 +321,69 @@ export default {
         return this.category[3]
       }
       return this.category[4]
+    },
+    logout() {
+      removeToken()
+      localStorage.removeItem('userInfo')
+      this.$router.push('/pages/login').catch(() => {})
+    },
+    showSidebar() {
+      this.$store.commit('TOGGLE_IS_SIDEBAR_ACTIVE', true)
+    },
+    selected(item) {
+      this.$router.push(item.url)
+      this.showFullSearch = false
+    },
+    actionClicked(item) {
+      // e.stopPropogation();
+      this.$store.dispatch('updateStarredPage', {
+        index: item.index,
+        val: !item.highlightAction
+      })
+    },
+    showNavbarSearch() {
+      this.showFullSearch = true
+    },
+    showSearchbar() {
+      this.showFullSearch = true
+    },
+    elapsedTime(startTime) {
+      const x = new Date(startTime)
+      const now = new Date()
+      var timeDiff = now - x
+      timeDiff /= 1000
+
+      var seconds = Math.round(timeDiff)
+      timeDiff = Math.floor(timeDiff / 60)
+
+      var minutes = Math.round(timeDiff % 60)
+      timeDiff = Math.floor(timeDiff / 60)
+
+      var hours = Math.round(timeDiff % 24)
+      timeDiff = Math.floor(timeDiff / 24)
+
+      var days = Math.round(timeDiff % 365)
+      timeDiff = Math.floor(timeDiff / 365)
+
+      var years = timeDiff
+
+      if (years > 0) {
+        return years + (years > 1 ? ' Years ' : ' Year ') + 'ago'
+      } else if (days > 0) {
+        return days + (days > 1 ? ' Days ' : ' Day ') + 'ago'
+      } else if (hours > 0) {
+        return hours + (hours > 1 ? ' Hrs ' : ' Hour ') + 'ago'
+      } else if (minutes > 0) {
+        return minutes + (minutes > 1 ? ' Mins ' : ' Min ') + 'ago'
+      } else if (seconds > 0) {
+        return seconds + (seconds > 1 ? `${seconds} sec ago` : 'just now')
+      }
+
+      return 'Just Now'
+    },
+    outside: function() {
+      this.showBookmarkPagesDropdown = false
     }
-  },
-  logout() {
-    removeToken()
-    localStorage.removeItem('userInfo')
-    this.$router.push('/pages/login').catch(() => {})
-  },
-  showSidebar() {
-    this.$store.commit('TOGGLE_IS_SIDEBAR_ACTIVE', true)
-  },
-  selected(item) {
-    this.$router.push(item.url)
-    this.showFullSearch = false
-  },
-  actionClicked(item) {
-    // e.stopPropogation();
-    this.$store.dispatch('updateStarredPage', {
-      index: item.index,
-      val: !item.highlightAction
-    })
-  },
-  showNavbarSearch() {
-    this.showFullSearch = true
-  },
-  showSearchbar() {
-    this.showFullSearch = true
-  },
-  elapsedTime(startTime) {
-    const x = new Date(startTime)
-    const now = new Date()
-    var timeDiff = now - x
-    timeDiff /= 1000
-
-    var seconds = Math.round(timeDiff)
-    timeDiff = Math.floor(timeDiff / 60)
-
-    var minutes = Math.round(timeDiff % 60)
-    timeDiff = Math.floor(timeDiff / 60)
-
-    var hours = Math.round(timeDiff % 24)
-    timeDiff = Math.floor(timeDiff / 24)
-
-    var days = Math.round(timeDiff % 365)
-    timeDiff = Math.floor(timeDiff / 365)
-
-    var years = timeDiff
-
-    if (years > 0) {
-      return years + (years > 1 ? ' Years ' : ' Year ') + 'ago'
-    } else if (days > 0) {
-      return days + (days > 1 ? ' Days ' : ' Day ') + 'ago'
-    } else if (hours > 0) {
-      return hours + (hours > 1 ? ' Hrs ' : ' Hour ') + 'ago'
-    } else if (minutes > 0) {
-      return minutes + (minutes > 1 ? ' Mins ' : ' Min ') + 'ago'
-    } else if (seconds > 0) {
-      return seconds + (seconds > 1 ? `${seconds} sec ago` : 'just now')
-    }
-
-    return 'Just Now'
-  },
-  outside: function() {
-    this.showBookmarkPagesDropdown = false
   }
 }
 
