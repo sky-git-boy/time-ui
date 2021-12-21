@@ -33,49 +33,13 @@
     <div>
       <h4 style="padding: 0 15px 20px;"><b>动态</b></h4>
       <ul class="activity-timeline">
-        <li>
-          <div class="timeline-icon bg-primary">
-            <feather-icon icon="PlusIcon" svg-classes="text-white stroke-current w-5 h-5"/>
+        <li v-for="(item, index) in logList" :key="index">
+          <div :class="getIconClass(item.businessType)">
+            <feather-icon :icon="getIcon(item.businessType)" svg-classes="text-white stroke-current w-5 h-5"/>
           </div>
           <div class="timeline-info info">
-            <p class="font-semibold">Client Meeting</p>
-            <small class="text-grey activity-e-time">25 mins ago</small>
-          </div>
-        </li>
-        <li>
-          <div class="timeline-icon bg-warning">
-            <feather-icon icon="AlertCircleIcon" svg-classes="text-white stroke-current w-5 h-5"/>
-          </div>
-          <div class="timeline-info info">
-            <p class="font-semibold">Email Newsletter</p>
-            <small class="text-grey activity-e-time">15 days ago</small>
-          </div>
-        </li>
-        <li>
-          <div class="timeline-icon bg-danger">
-            <feather-icon icon="CheckIcon" svg-classes="text-white stroke-current w-5 h-5"/>
-          </div>
-          <div class="timeline-info info">
-            <p class="font-semibold">Plan Webinar</p>
-            <small class="text-grey activity-e-time">20 days ago</small>
-          </div>
-        </li>
-        <li>
-          <div class="timeline-icon bg-success">
-            <feather-icon icon="CheckIcon" svg-classes="text-white stroke-current w-5 h-5"/>
-          </div>
-          <div class="timeline-info info">
-            <p class="font-semibold">Launch Website</p>
-            <small class="text-grey activity-e-time">25 days ago</small>
-          </div>
-        </li>
-        <li>
-          <div class="timeline-icon bg-primary">
-            <feather-icon icon="CheckIcon" svg-classes="text-white stroke-current w-5 h-5"/>
-          </div>
-          <div class="timeline-info info">
-            <p class="font-semibold">Marketing</p>
-            <small class="text-grey activity-e-time">28 days ago</small>
+            <p class="font-semibold">{{ item.title }}</p>
+            <small class="text-grey activity-e-time">{{ item.operTime }}</small>
           </div>
         </li>
       </ul>
@@ -91,8 +55,13 @@ import { operInfo } from '@/api/operLog'
 export default {
   data() {
     return {
+      // 全年完成数
       blogContributeCount: [],
+      // 未办列表
       taskList: [],
+      // 动态
+      logList: [],
+      // 查询参数
       queryParams: { status: '0' }
     }
   },
@@ -124,8 +93,32 @@ export default {
   methods: {
     opreLogList() {
       operInfo().then(res => {
-
+        console.log(res)
+        this.logList = res
+        console.log(this.logList)
       })
+    },
+    // 获取操作图标
+    getIcon(businessType) {
+      if (businessType == '0') { // 其它
+        return 'AlertCircleIcon'
+      } else if (businessType == '1') { // 新增
+        return 'PlusIcon'
+      } else if (businessType == '2') { // 删除
+        return 'DeleteIcon'
+      }
+      return 'CheckIcon' // 修改
+    },
+    // 获取操作样式
+    getIconClass(businessType) {
+      if (businessType == '0') { // 其它
+        return 'timeline-icon bg-primary'
+      } else if (businessType == '1') { // 新增
+        return 'timeline-icon bg-warning'
+      } else if (businessType == '2') { // 删除
+        return 'timeline-icon bg-danger'
+      }
+      return 'timeline-icon bg-success' // 修改
     },
     // 加载图表
     initDate: function() {

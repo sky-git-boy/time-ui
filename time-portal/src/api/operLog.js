@@ -1,10 +1,9 @@
 import request from '@/utils/request'
 
 // todo看板
-export function operInfo(query) {
+export function operInfo() {
   return request({
-    url: '/admin/operLog/listForPage',
-    method: 'get',
-    params: query
+    url: '/admin/operLog/memberGetLog',
+    method: 'get'
   })
 }
