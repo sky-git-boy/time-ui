@@ -166,7 +166,7 @@ export const constantRouterMap = [
         name: '/portal/slide',
         meta: {
           title: '轮播图管理',
-          icon: 'message'
+          icon: 'education'
         }
       }
     ]
