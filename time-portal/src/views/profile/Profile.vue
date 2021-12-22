@@ -79,12 +79,12 @@ export default {
     }
   },
   mounted() {
-    setTimeout(this.initDate, 500)
-  },
-  created() {
     doneCount().then(res => {
       this.blogContributeCount = res.data
+      this.initDate()
     })
+  },
+  created() {
     getList(this.queryParams).then(res => {
       this.taskList = res.data
     })
@@ -93,9 +93,7 @@ export default {
   methods: {
     opreLogList() {
       operInfo().then(res => {
-        console.log(res)
         this.logList = res
-        console.log(this.logList)
       })
     },
     // 获取操作图标
@@ -105,7 +103,7 @@ export default {
       } else if (businessType == '1') { // 新增
         return 'PlusIcon'
       } else if (businessType == '2') { // 删除
-        return 'DeleteIcon'
+        return 'TrashIcon'
       }
       return 'CheckIcon' // 修改
     },
