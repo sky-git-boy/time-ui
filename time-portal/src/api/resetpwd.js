@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 // 发送重置密码验证码
-export function sendRegisterMail(phone) {
+export function sendResetMail(phone) {
   return request({
     url: '/member/reset/sendResetMail',
     method: 'post',

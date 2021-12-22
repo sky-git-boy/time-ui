@@ -83,7 +83,7 @@
 import 'swiper/dist/css/swiper.min.css'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 import { slide } from '@/api/slide'
-import { sendRegisterMail, resetPwd } from '@/api/resetpwd'
+import { sendResetMail, resetPwd } from '@/api/resetpwd'
 import router from '@/router'
 
 export default {
@@ -165,7 +165,7 @@ export default {
         const data = {
           phone: this.phone
         }
-        sendRegisterMail(data).then(res => {
+        sendResetMail(data).then(res => {
           if (res.code == 200) {
             this.countDowm()
           } else {

@@ -21,6 +21,16 @@
                 </div>
                 <div class="clearfix">
                   <vs-input
+                    v-validate="'required|alpha_dash|min:3'"
+                    v-model="userName"
+                    data-vv-validate-on="blur"
+                    label-placeholder="用户名"
+                    name="用户名"
+                    placeholder="用户名"
+                    class="w-full" />
+                  <span class="text-danger text-sm">{{ errors.first('用户名') }}</span>
+
+                  <vs-input
                     v-validate="'required|alpha_dash|min:11'"
                     v-model="phone"
                     data-vv-validate-on="blur"
@@ -40,6 +50,20 @@
                     placeholder="邮箱"
                     class="w-full mt-6" />
                   <span class="text-danger text-sm">{{ errors.first('邮箱') }}</span>
+
+                  <div class="flex">
+                    <vs-input
+                      v-model="yzm"
+                      data-vv-validate-on="blur"
+                      name="验证码"
+                      type="yzm"
+                      label-placeholder="验证码"
+                      placeholder="验证码"
+                      class="w-3/5 mt-6"/>
+                    <vs-button :disabled="sendFlag" class="w-2/5 mt-6" @click="handleSend">
+                      {{ buttonText }}
+                    </vs-button>
+                  </div>
 
                   <vs-input
                     v-validate="'required|min:6|max:10'"
@@ -81,6 +105,8 @@
 import 'swiper/dist/css/swiper.min.css'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 import { slide } from '@/api/slide'
+import { sendRegisterMail, register } from '@/api/register'
+import router from '@/router'
 
 export default {
   components: {
@@ -89,11 +115,20 @@ export default {
   },
   data() {
     return {
+      // 表单参数
+      userName: '',
       phone: '',
       email: '',
+      yzm: '',
+      buttonText: '发送验证码',
       password: '',
       confirm_password: '',
+
       isTermsConditionAccepted: true,
+      // 验证码有效时间
+      wait: 120,
+      sendFlag: false,
+      // 轮播图配置参数
       swiperOption: {
         autoplay: true,
         navigation: {
@@ -101,12 +136,13 @@ export default {
           prevEl: '.swiper-button-prev'
         }
       },
+      // 轮播图列表
       slideList: []
     }
   },
   computed: {
     validateForm() {
-      return !this.errors.any() && this.phone != '' && this.email != '' && this.password != '' && this.confirm_password != '' && this.isTermsConditionAccepted === true
+      return !this.errors.any() && this.phone != '' && this.yzm != '' && this.userName != '' && this.email != '' && this.password != '' && this.confirm_password != '' && this.isTermsConditionAccepted === true
     }
   },
   created() {
@@ -124,16 +160,33 @@ export default {
         this.notifyAlreadyLogedIn()
         return
       }
-      const payload = {
-        userDetails: {
-          email: this.email,
-          password: this.password,
-          phone: this.phone
-        },
-        notify: this.$vs.notify
+      const data = {
+        userName: this.userName,
+        phone: this.phone,
+        password: this.password,
+        yzm: this.yzm,
+        email: this.email
       }
-      this.$store.dispatch('auth/registerUser', payload)
+      register(data).then(res => {
+        if (res.code == 200) {
+          this.$vs.notify({
+            title: 'Success',
+            text: '注册成功',
+            color: 'success'
+          })
+          router.push({
+            path: '/pages/login'
+          })
+        }
+      }).catch(e => {
+        this.$vs.notify({
+          title: 'Fail',
+          text: '注册失败',
+          color: 'danger'
+        })
+      })
     },
+
     notifyAlreadyLogedIn() {
       this.$vs.notify({
         title: 'Login Attempt',
@@ -142,6 +195,38 @@ export default {
         icon: 'icon-alert-circle',
         color: 'warning'
       })
+    },
+    // 倒计时
+    countDowm() {
+      if (this.wait == 0) {
+        this.sendFlag = false
+        this.buttonText = '发送验证码'
+        this.wait = 120
+      } else {
+        this.sendFlag = true
+        this.buttonText = this.wait + 's'
+        this.wait--
+        setTimeout(this.countDowm, 1000)
+      }
+    },
+    // 发送验证码
+    handleSend() {
+      if (this.phone !== '') {
+        const data = {
+          phone: this.phone
+        }
+        sendRegisterMail(data).then(res => {
+          if (res.code == 200) {
+            this.countDowm()
+          } else {
+            this.$vs.notify({
+              title: 'Fail',
+              text: '消息发送失败',
+              color: 'danger'
+            })
+          }
+        })
+      }
     }
   }
 }
