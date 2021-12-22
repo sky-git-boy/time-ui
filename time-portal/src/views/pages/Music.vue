@@ -1,39 +1,59 @@
 <template>
   <div class="bg-box">
-    <div :style="{ backgroundImage: 'url(' + noise.content.picurl + ')' }" class="bg"/>
+    <div :style="{ backgroundImage: 'url(' + noiseList[index].picUrl + ')' }" class="bg"/>
     <div class="content">
-      <WhiteNoise :noise="noise" @togle-noise-play="toggleNoisePlay($event)"/>
+      <vs-button type="line" color="primary" @click="handleLeft">
+        <feather-icon icon="ChevronLeftIcon" />
+      </vs-button>
+      <div
+        :class="isPlay ? 'active outer' : 'outer'"
+        :style="{ backgroundImage: 'url(' + noiseList[index].picUrl + ')' }"
+        @click="togglePlay"
+      >
+        <div class="inner">
+          <audio id="myAudio" :src="noiseList[index].musicUrl"/>
+        </div>
+      </div>
+      <vs-button type="line" color="primary" @click="handleRight">
+        <feather-icon icon="ChevronRightIcon" />
+      </vs-button>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
-import WhiteNoise from '@/components/music/WhiteNoise.vue'
-
+import { getNoiseList } from '@/api/noise'
 export default {
   name: 'Music',
-  components: {
-    WhiteNoise
-  },
   data() {
-    return {}
+    return {
+      index: 0,
+      // 播放标识
+      isPlay: false,
+      // 白噪音列表
+      noiseList: []
+    }
   },
-  computed: {
-    ...mapState(['noise'])
-  },
-  mounted() {
-    this.loadWhiteNoise()
+  created() {
+    getNoiseList().then(res => {
+      this.noiseList = res.data
+    })
   },
   methods: {
-    ...mapMutations(['playOrPauseNoise', 'loadWhiteNoise']),
-
-    toggleNoisePlay(e) {
-      this.playOrPauseNoise({ isPlay: e })
+    togglePlay() {
+      if (!this.isPlay) {
+        document.getElementById('myAudio').play()
+        this.isPlay = true
+      } else {
+        document.getElementById('myAudio').load()
+        this.isPlay = false
+      }
     },
-
-    toggleNoiseMusic() {
-      this.playOrPauseNoise({ isPlay: false })
+    handleLeft() {
+      if (this.index > 0) { this.index-- }
+    },
+    handleRight() {
+      if (this.index < this.noiseList.length) { this.index++ }
     }
   }
 }
@@ -41,6 +61,49 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/assets/scss/vuesax/tomato/config.scss";
+.outer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 240px;
+  height: 240px;
+  background-color: $cl-aux2;
+  background-size: cover;
+  border-radius: 50%;
+  border: 12px solid $cl-aux1;
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  &.active {
+    animation: rotate 6s linear 0.2s infinite;
+  }
+
+  .inner {
+    width: 18px;
+    height: 18px;
+    border: 3px solid $cl-aux1;
+    background-color: $cl-font3;
+    border-radius: 50%;
+  }
+}
+
+select {
+  background: transparent;
+  outline: none;
+  border: none;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 
 .bg-box {
   position: relative;

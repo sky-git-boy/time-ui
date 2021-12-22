@@ -1,7 +1,7 @@
 <template>
   <div
     :class="isPlay ? 'active outer' : 'outer'"
-    :style="{ backgroundImage: 'url(' + noise.content.picurl + ')' }"
+    :style="{ backgroundImage: 'url(' + noiseList[0].picUrl + ')' }"
     @click="togglePlay"
   >
     <div class="inner"/>
@@ -9,6 +9,8 @@
 </template>
 
 <script>
+import { getNoiseList } from '@/api/noise'
+
 export default {
   name: 'WhiteNoise',
   props: {
@@ -18,8 +20,16 @@ export default {
   },
   data() {
     return {
-      isPlay: false
+      isPlay: false,
+      noiseList: []
     }
+  },
+  created() {
+    getNoiseList().then(res => {
+      console.log(res.data)
+      this.noiseList = res.data
+      console.log(this.noiseList)
+    })
   },
   methods: {
     togglePlay() {
