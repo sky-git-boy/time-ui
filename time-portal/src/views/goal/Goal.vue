@@ -12,7 +12,7 @@ export default {
     return {
       dataJson: [
         {
-          'name': '2022年计划',
+          'name': '2021年计划',
           'left': false,
           'children': []
         }
@@ -31,7 +31,7 @@ export default {
   methods: {
     getGoalOne() {
       getGoal().then(res => {
-        if (res.data.dataJson !== undefined) {
+        if (res.data !== null && res.data.dataJson !== undefined) {
           this.dataJson[0] = JSON.parse(res.data.dataJson)
         }
         this.initSuccess = true
