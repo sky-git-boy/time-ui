@@ -26,7 +26,7 @@ export default {
   },
   created() {
     this.getGoalOne()
-    setInterval(this.handleUpdate, 5000)
+    setInterval(this.handleUpdate, 10000)
   },
   methods: {
     getGoalOne() {
