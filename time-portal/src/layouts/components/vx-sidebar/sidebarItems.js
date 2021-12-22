@@ -50,10 +50,24 @@ export default [{
   i18n: 'FullCalendar'
 },
 {
+  url: '/goal',
+  name: '目标脑图',
+  slug: 'goal',
+  icon: 'SendIcon',
+  i18n: 'goal'
+},
+{
   url: '/music',
   name: '白噪音',
   slug: 'music',
   icon: 'MusicIcon',
   i18n: 'music'
+},
+{
+  url: '/tomato',
+  name: '番茄钟',
+  slug: 'tomato',
+  icon: 'ClockIcon',
+  i18n: 'tomato'
 }
 ]

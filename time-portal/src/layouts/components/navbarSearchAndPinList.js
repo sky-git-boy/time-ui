@@ -3,7 +3,7 @@ export default {
   highlightColor: 'warning',
   data: [{
     index: 1,
-    label: 'TodoList',
+    label: 'Todo看板',
     url: '/todo-list',
     labelIcon: 'BarChart2Icon',
     highlightAction: true
@@ -17,23 +17,30 @@ export default {
   },
   {
     index: 3,
-    label: 'Diary',
+    label: '日志',
     url: '/diary',
     labelIcon: 'Edit2Icon',
     highlightAction: true
   },
   {
     index: 4,
-    label: 'Stats',
+    label: '统计',
     url: '/stats',
     labelIcon: 'PieChartIcon',
     highlightAction: true
   },
   {
     index: 5,
-    label: 'Calendar',
+    label: '日历看板',
     url: '/calendar/vue-simple-calendar',
     labelIcon: 'CalendarIcon',
+    highlightAction: true
+  },
+  {
+    index: 6,
+    label: '目标脑图',
+    url: '/goal',
+    labelIcon: 'SendIcon',
     highlightAction: true
   }
   ]
