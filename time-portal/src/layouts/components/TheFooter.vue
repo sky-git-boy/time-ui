@@ -5,7 +5,7 @@
 ========================================================================================== -->
 
 <template>
-  <footer class="the-footer flex-wrap justify-between" :class="classes">
+  <footer :class="classes" class="the-footer flex-wrap justify-between">
     <span>THE TIME MANAGER SYSTEM</span>
     <span class="md:flex hidden items-center">
       <span>CREATR BY SKY</span>
@@ -15,11 +15,11 @@
 
 <script>
 export default {
-  name: "the-footer",
+  name: 'TheFooter',
   props: {
     classes: {
       type: String
     }
   }
-};
+}
 </script>

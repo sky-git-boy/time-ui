@@ -153,7 +153,7 @@
             <div class="con-img ml-3">
               <img
                 key="localImg"
-                :src="require(`@/assets/images/portrait/small/avatar-s-5.png`)"
+                :src="activeUserImg"
                 alt="user-img"
                 width="40"
                 height="40"
@@ -291,12 +291,12 @@ export default {
 
     // PROFILE
     user_displayName() {
-      return 'SKY'
-      // return JSON.parse(localStorage.getItem('userInfo')).displayName
+      // return 'SKY'
+      return JSON.parse(localStorage.getItem('userInfo')).displayName
     },
     activeUserImg() {
-      return null
-      // return JSON.parse(localStorage.getItem('userInfo')).photoURL || this.$store.state.AppActiveUser.img;
+      // return null
+      return JSON.parse(localStorage.getItem('userInfo')).photoURL || this.$store.state.AppActiveUser.img
     }
   },
   watch: {
