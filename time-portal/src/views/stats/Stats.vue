@@ -1,177 +1,328 @@
 <template>
-  <div id="simple-calendar-app">
-    <div class="vx-card" style="padding: 25px">
-      <div slot="header" class="mb-4">
-        <div class="no-gutter">
-          <div class="w-full flex justify-center">
-            <vs-tabs alignment="center">
-              <vs-tab label="总览">
-                <vs-row style="padding-top: 15px">
-                  <vs-col type="flex" vs-w="6">
-                    <vs-card style="height: 285px"/>
-                  </vs-col>
-                  <vs-col vs-w="6">
-                    <vs-card>
-                      <vue-apex-charts :options="lineChartSimple.chartOptions" :series="lineChartSimple.series" type="line" height="250px"/>
-                    </vs-card>
-                  </vs-col>
-                </vs-row>
-                <vs-row style="padding-top: 15px">
-                  <vs-col type="flex" vs-w="6">
-                    <vs-card>
-                      <vue-apex-charts :options="columnChart.chartOptions" :series="columnChart.series" type="bar" height="237px"/>
-                    </vs-card>
-                  </vs-col>
-                  <vs-col vs-w="6">
-                    <vs-card>
-                      <vue-apex-charts :options="pieChart.chartOptions" :series="pieChart.series" type="pie" height="250px"/>
-                    </vs-card>
-                  </vs-col>
-                </vs-row>
-              </vs-tab>
-              <vs-tab label="任务">
-                <vs-row style="padding-top: 15px">
-                  <vs-col type="flex" vs-w="6">
-                    <vs-card style="height: 285px"/>
-                  </vs-col>
-                  <vs-col vs-w="6">
-                    <vs-card>
-                      <vue-apex-charts :options="lineChartSimple.chartOptions" :series="lineChartSimple.series" type="line" height="250px"/>
-                    </vs-card>
-                  </vs-col>
-                </vs-row>
-                <vs-row style="padding-top: 15px">
-                  <vs-col type="flex" vs-w="6">
-                    <vs-card>
-                      <vue-apex-charts :options="columnChart.chartOptions" :series="columnChart.series" type="bar" height="237px"/>
-                    </vs-card>
-                  </vs-col>
-                  <vs-col vs-w="6">
-                    <vs-card>
-                      <vue-apex-charts :options="pieChart.chartOptions" :series="pieChart.series" type="pie" height="250px"/>
-                    </vs-card>
-                  </vs-col>
-                </vs-row>
-              </vs-tab>
-            </vs-tabs>
-          </div>
-        </div>
-      </div>
+  <div class="vx-card mb-4 no-gutter w-full justify-center" style="padding: 25px">
+    <vs-tabs alignment="center">
+      <vs-tab label="总览" @click="handleClick1(0)"/>
+      <vs-tab label="任务" @click="handleClick2(1)"/>
+    </vs-tabs>
+    <div v-show="!flag">
+      <vs-card>
+        <div id="mixChart" />
+      </vs-card>
+    </div>
+    <div v-show="flag">
+      <vs-row style="padding-top: 15px">
+        <vs-col type="flex" vs-w="6">
+          <vx-card class="text-center bg-primary-gradient greet-user" style="height: 272px">
+            <img src="@/assets/images/elements/decore-left.png" class="decore-left" alt="Decore Left" width="200" >
+            <img src="@/assets/images/elements/decore-right.png" class="decore-right" alt="Decore Right" width="175">
+            <feather-icon icon="AwardIcon" class="p-6 mb-8 bg-primary inline-flex rounded-full text-white shadow" svg-classes="h-8 w-8"/>
+            <h1 class="mb-6 text-white">{{ user_displayName }},</h1>
+            <p class="xl:w-3/4 lg:w-4/5 md:w-2/3 w-4/5 mx-auto text-white">您已经完成 <strong>{{ pieData[2] }}件</strong> 待办任务！！！ </p>
+            <p class="xl:w-3/4 lg:w-4/5 md:w-2/3 w-4/5 mx-auto text-white">延长生命最好的办法，是从夜里偷取一个小时，来弥补白天的不够。</p>
+          </vx-card>
+        </vs-col>
+        <vs-col vs-w="6">
+          <vs-card>
+            <div id="lineChart" />
+          </vs-card>
+        </vs-col>
+      </vs-row>
+      <vs-row style="padding-top: 15px">
+        <vs-col type="flex" vs-w="6">
+          <vs-card>
+            <div id="columnChart" />
+          </vs-card>
+        </vs-col>
+        <vs-col vs-w="6">
+          <vs-card>
+            <div id="pieChart" />
+          </vs-card>
+        </vs-col>
+      </vs-row>
     </div>
   </div>
 </template>
 
 <script>
-import VueApexCharts from 'vue-apexcharts'
+import ApexCharts from 'apexcharts'
+import { getPieChart, getColumnChart, getLineChartSimple, getMixedChart } from '@/api/stat'
 
 export default {
-  components: {
-    VueApexCharts
-  },
   data() {
     return {
-      themeColors: ['#FF9F43', '#28C76F', '#EA5455', '#87ceeb', '#7367F0'],
-      lineChartSimple: {
+      lineData: [],
+      lineDays: [],
+
+      pieData: [],
+
+      columnData: [],
+      columnDays: [],
+
+      months: [],
+      taskCountM: [],
+      eventCountM: [],
+      journalCountM: [],
+
+      flag: false,
+      click1Count: 0,
+      click2Count: 0
+    }
+  },
+  computed: {
+    // PROFILE
+    user_displayName() {
+      return JSON.parse(localStorage.getItem('userInfo')).displayName
+    }
+  },
+  mounted() {
+    getMixedChart().then(res => {
+      this.months = res.data.months
+      this.taskCountM = res.data.taskCountM
+      this.eventCountM = res.data.eventCountM
+      this.journalCountM = res.data.journalCountM
+      this.initMixChart()
+    }).catch(e => {
+      this.initMixChart()
+    })
+  },
+  created() {
+    getLineChartSimple().then(res => {
+      this.lineData = res.data.count
+      this.lineDays = res.data.days
+    })
+    getPieChart().then(res => {
+      this.pieData = res.data.statusCount
+    })
+    getColumnChart().then(res => {
+      this.columnData = res.data.count
+      this.columnDays = res.data.days
+    })
+  },
+  methods: {
+    initMixChart() {
+      var options = {
         series: [{
-          name: 'Desktops',
-          data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
+          name: '个人任务',
+          type: 'column',
+          data: this.taskCountM
+        }, {
+          name: '每日自省',
+          type: 'area',
+          data: this.journalCountM
+        }, {
+          name: '日历事件',
+          type: 'line',
+          data: this.eventCountM
         }],
-        chartOptions: {
-          chart: {
-            height: 350,
-            zoom: {
-              enabled: false
-            }
-          },
-          dataLabels: {
-            enabled: false
-          },
-          stroke: {
-            curve: 'straight'
-          },
-          title: {
-            text: '最近已完成趋势',
-            align: 'left'
-          },
-          grid: {
-            row: {
-              colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
-              opacity: 0.5
-            }
-          },
-          xaxis: {
-            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep']
+        chart: {
+          height: 500,
+          type: 'line',
+          stacked: false
+        },
+        stroke: {
+          width: [0, 2, 5],
+          curve: 'smooth'
+        },
+        plotOptions: {
+          bar: {
+            columnWidth: '50%'
           }
-        }
-      },
-      pieChart: {
-        series: [44, 55, 13, 43],
-        chartOptions: {
-          labels: ['Team A', 'Team B', 'Team C', 'Team D'],
-          colors: this.themeColors,
-          responsive: [{
-            breakpoint: 480,
-            options: {
-              chart: {
-                width: 200
-              },
-              legend: {
-                position: 'bottom'
-              }
-            }
-          }]
-        }
-      },
-      columnChart: {
-        series: [{
-          name: 'Net Profit',
-          data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
-        }],
-        chartOptions: {
-          colors: this.themeColors,
-          plotOptions: {
-            bar: {
-              horizontal: false,
-              endingShape: 'rounded',
-              columnWidth: '55%'
-            }
-          },
-          dataLabels: {
-            enabled: false
-          },
-          stroke: {
-            show: true,
-            width: 2,
-            colors: ['transparent']
-          },
+        },
 
-          xaxis: {
-            categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct']
+        fill: {
+          opacity: [0.85, 0.25, 1],
+          gradient: {
+            inverseColors: false,
+            shade: 'light',
+            type: 'vertical',
+            opacityFrom: 0.85,
+            opacityTo: 0.55,
+            stops: [0, 100, 100, 100]
+          }
+        },
+        labels: this.months,
+        markers: {
+          size: 0
+        },
+        xaxis: {
+          type: 'datetime'
+        },
+        yaxis: {
+          title: {
+            text: ''
           },
-          yaxis: {
-            title: {
-              text: '$ (thousands)'
-            }
-          },
-          fill: {
-            opacity: 1
-
-          },
-          tooltip: {
-            y: {
-              formatter: function(val) {
-                return '$ ' + val + ' thousands'
+          min: 0
+        },
+        tooltip: {
+          shared: true,
+          intersect: false,
+          y: {
+            formatter: function(y) {
+              if (typeof y !== 'undefined') {
+                return y.toFixed(0)
               }
+              return y
             }
           }
         }
       }
 
+      var chart = new ApexCharts(document.querySelector('#mixChart'), options)
+      chart.render()
+    },
+
+    initLineChart() {
+      var options = {
+        series: [{
+          name: '完成数',
+          data: this.lineData
+        }],
+        chart: {
+          height: 240,
+          type: 'line',
+          zoom: {
+            enabled: false
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          curve: 'straight'
+        },
+        title: {
+          text: '最近已完成趋势',
+          align: 'left'
+        },
+        grid: {
+          row: {
+            colors: ['#f3f3f3', 'transparent'],
+            opacity: 1
+          }
+        },
+        xaxis: {
+          categories: this.lineDays
+        }
+      }
+      var chart = new ApexCharts(document.querySelector('#lineChart'), options)
+      chart.render()
+    },
+
+    initPieChart() {
+      var options = {
+        series: this.pieData,
+        chart: {
+          height: 260,
+          width: 380,
+          type: 'pie'
+        },
+        title: {
+          text: '各状态数',
+          align: 'left'
+        },
+        labels: ['待办', '进行中', '已完成', '已过期'],
+        responsive: [{
+          breakpoint: 380,
+          options: {
+            chart: {
+              width: 380
+            },
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }]
+      }
+      var chart = new ApexCharts(document.querySelector('#pieChart'), options)
+      chart.render()
+    },
+
+    initColumnChart() {
+      var options = {
+        series: [{
+          name: '任务数',
+          data: this.columnData
+        }],
+        chart: {
+          type: 'bar',
+          height: 250
+        },
+        plotOptions: {
+          bar: {
+            horizontal: false,
+            columnWidth: '55%',
+            endingShape: 'rounded'
+          }
+        },
+        title: {
+          text: '近七日任务数',
+          align: 'left'
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          show: true,
+          width: 2,
+          colors: ['transparent']
+        },
+        xaxis: {
+          categories: this.columnDays
+        },
+        fill: {
+          opacity: 1
+        },
+        tooltip: {
+          y: {
+            formatter: function(val) {
+              return val
+            }
+          }
+        }
+      }
+
+      var chart = new ApexCharts(document.querySelector('#columnChart'), options)
+      chart.render()
+    },
+
+    handleClick1() {
+      this.flag = false
+      if (this.click1Count == 0) {
+        this.initMixChart()
+        this.click1Count++
+      }
+    },
+    handleClick2() {
+      this.flag = true
+      if (this.click2Count == 0) {
+        this.initLineChart()
+        this.initPieChart()
+        this.initColumnChart()
+        this.click2Count++
+      }
     }
-  },
-  computed: {
-  },
-  methods: {
   }
 }
 </script>
+
+<style lang="scss">
+  .greet-user{
+    position: relative;
+    .decore-left{
+      position: absolute;
+      left:0;
+      top: 0;
+    }
+    .decore-right{
+      position: absolute;
+      right:0;
+      top: 0;
+    }
+  }
+
+  @media(max-width: 576px) {
+    .decore-left, .decore-right{
+      width: 140px;
+    }
+  }
+</style>
