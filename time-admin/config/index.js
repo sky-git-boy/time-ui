@@ -20,7 +20,12 @@ module.exports = {
         secure: true,
         changeOrigin: true
       },
-      '/user/*': {
+      '/member/*': {
+        target: dev,
+        secure: true,
+        changeOrigin: true
+      },
+      '/statistic/*': {
         target: dev,
         secure: true,
         changeOrigin: true

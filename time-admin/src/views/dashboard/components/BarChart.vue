@@ -6,6 +6,7 @@
 import echarts from 'echarts'
 require('echarts/theme/macarons') // echarts theme
 import resize from './mixins/resize'
+import { getBarChart } from '@/api/stat'
 
 const animationDuration = 6000
 
@@ -27,12 +28,20 @@ export default {
   },
   data() {
     return {
-      chart: null
+      chart: null,
+      days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      operCount: [79, 52, 200, 334, 390, 330, 220]
     }
   },
   mounted() {
     this.$nextTick(() => {
-      this.initChart()
+      getBarChart().then(res => {
+        this.days = res.data.days
+        this.operCount = res.data.operCount
+        this.initChart()
+      }).catch(e => {
+        this.initChart()
+      })
     })
   },
   beforeDestroy() {
@@ -62,7 +71,7 @@ export default {
         },
         xAxis: [{
           type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          data: this.days,
           axisTick: {
             alignWithLabel: true
           }
@@ -78,21 +87,7 @@ export default {
           type: 'bar',
           stack: 'vistors',
           barWidth: '60%',
-          data: [79, 52, 200, 334, 390, 330, 220],
-          animationDuration
-        }, {
-          name: 'pageB',
-          type: 'bar',
-          stack: 'vistors',
-          barWidth: '60%',
-          data: [80, 52, 200, 334, 390, 330, 220],
-          animationDuration
-        }, {
-          name: 'pageC',
-          type: 'bar',
-          stack: 'vistors',
-          barWidth: '60%',
-          data: [30, 52, 200, 334, 390, 330, 220],
+          data: this.operCount,
           animationDuration
         }]
       })

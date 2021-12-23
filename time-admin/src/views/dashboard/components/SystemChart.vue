@@ -6,7 +6,7 @@
 import echarts from 'echarts'
 require('echarts/theme/macarons') // echarts theme
 import resize from './mixins/resize'
-import { getPieChart } from '@/api/stat'
+import { getSystemChart } from '@/api/stat'
 
 export default {
   mixins: [resize],
@@ -26,18 +26,18 @@ export default {
   },
   data() {
     return {
-      taskCount: 0,
-      journalCount: 0,
-      evenCount: 0,
+      noticeCount: 0,
+      slideCount: 0,
+      musicCount: 0,
       chart: null
     }
   },
   mounted() {
     this.$nextTick(() => {
-      getPieChart().then(res => {
-        this.taskCount = res.data.taskCount
-        this.journalCount = res.data.journalCount
-        this.evenCount = res.data.evenCount
+      getSystemChart().then(res => {
+        this.noticeCount = res.data.noticeCount
+        this.slideCount = res.data.slideCount
+        this.musicCount = res.data.musicCount
         this.initChart()
       }).catch(e => {
         this.initChart()
@@ -63,7 +63,7 @@ export default {
         legend: {
           left: 'center',
           bottom: '10',
-          data: ['任务', '自省', '事件']
+          data: ['公告', '轮播图', '白噪音']
         },
         series: [
           {
@@ -73,9 +73,9 @@ export default {
             radius: [15, 95],
             center: ['50%', '38%'],
             data: [
-              { value: this.taskCount, name: '任务' },
-              { value: this.journalCount, name: '自省' },
-              { value: this.evenCount, name: '事件' }
+              { value: this.noticeCount, name: '公告' },
+              { value: this.slideCount, name: '轮播图' },
+              { value: this.musicCount, name: '白噪音' }
             ],
             animationEasing: 'cubicInOut',
             animationDuration: 2600
