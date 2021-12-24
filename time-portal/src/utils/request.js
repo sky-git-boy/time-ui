@@ -3,7 +3,7 @@ import router from '@/router'
 import { getToken } from '@/utils/auth'
 
 const request = axios.create({
-  baseURL: 'http://localhost',
+  baseURL: 'http://time-server',
   timeout: 20000
 })
 

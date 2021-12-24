@@ -4,10 +4,7 @@
 
 const path = require('path')
 
-const dev = 'http://127.0.0.1'
-const haigen = 'http://192.168.2.113:9000'
-const aliyun = 'http://47.75.115.45:8091'
-const uploadServer = 'http://47.106.158.72'
+const dev = 'http://time-server'
 
 module.exports = {
   dev: {
@@ -33,7 +30,7 @@ module.exports = {
     },
 
     // Various Dev Server settings
-    host: 'localhost', // can be overwritten by process.env.HOST
+    host: 'time-server', // can be overwritten by process.env.HOST
     port: 9528, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: true,
     errorOverlay: true,

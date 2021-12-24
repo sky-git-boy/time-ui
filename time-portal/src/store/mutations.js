@@ -11,14 +11,6 @@ import {
   CHANGE_STATUS_TO_STOP,
   CHANGE_STATUS_TO_END,
   CHANGE_CURRENT_TIME,
-  SAVE_SONG,
-  UPDATE_PROPRESS,
-  PLAYER_READY_STATE,
-  CLEAR_AUDIO,
-  PLAY_OR_PAUSE,
-  UPDATE_SONG,
-  LOAD_WHITE_NOISE,
-  PLAY_OR_PAUSE_NOISE,
   INIT_TOMATO
 } from './mutations-types'
 
@@ -159,60 +151,6 @@ const mutations = {
   },
   [CHANGE_STATUS_TO_END](state) {
     state.time.status = 4
-  },
-
-  /**
-   * 以下为歌曲页面
-   */
-  // 保存歌曲，并获得歌曲在list中的索引
-  [SAVE_SONG](state, payload) {
-    const index = state.song.list.push(payload.res)
-    state.song.currSong.index = index - 1
-    state.song.audio = payload.audio
-  },
-  // 更新歌曲
-  [UPDATE_SONG](state, payload) {
-    state.song.currSong.index = payload.index
-    state.song.audio = payload.audio
-  },
-  // 设置播放器准备状态
-  [PLAYER_READY_STATE](state, payload) {
-    state.song.currSong.readyState = payload
-  },
-  // 更新进度条
-  [UPDATE_PROPRESS](state) {
-    state.song.currSong.currentTime = state.song.audio.currentTime
-    state.song.currSong.duration = state.song.audio.duration
-  },
-  // 清除audio
-  [CLEAR_AUDIO](state) {
-    state.song.currSong.isPlay = false
-    state.song.audio.src = ''
-  },
-  // 播放与暂停
-  [PLAY_OR_PAUSE](state, payload) {
-    if (payload.isPlay) {
-      state.song.audio.play()
-      state.song.currSong.isPlay = true
-    } else {
-      state.song.audio.pause()
-      state.song.currSong.isPlay = false
-    }
-  },
-  // 装填白噪声
-  [LOAD_WHITE_NOISE](state) {
-    const noise = state.sidebar.setting.whiteNoise
-    const noiseIndex = noise.items.findIndex((item) => item.name === noise.defaultSelect)
-    state.noise.content = JSON.parse(JSON.stringify(noise.items[noiseIndex]))
-    state.noise.audio.src = state.noise.content.url
-    state.noise.audio.loop = true
-  },
-  [PLAY_OR_PAUSE_NOISE](state, payload) {
-    if (payload.isPlay) {
-      state.noise.audio.play()
-    } else {
-      state.noise.audio.pause()
-    }
   }
 }
 
