@@ -110,7 +110,7 @@
                 :file-list="fileList"
                 :on-success="handleUploadSuccess"
                 :on-error="handleUploadError"
-                action="admin/upload/image"
+                :action="uploadPath"
                 accept="image/*"
                 name="file"
                 list-type="picture"
