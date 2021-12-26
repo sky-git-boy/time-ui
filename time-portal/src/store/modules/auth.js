@@ -37,9 +37,10 @@ const actions = {
                 email: data.email,
                 photoURL: data.picture
               }))
+              resolve(response)
+            }).catch(e => {
+              reject({ message: e.message })
             })
-
-            resolve(response)
           } else {
             reject({ message: '密码或手机号错误！！！' })
           }
