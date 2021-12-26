@@ -3,7 +3,7 @@
     <!--使用draggable组件-->
     <div class="board">
       <!-- 待办 -->
-      <div class="board-column pa-2">
+      <div class="board-column pa-2" style="margin-right: 46px;">
         <div class="flex">
           <div>
             <h5 class="text-lg">待办</h5>
@@ -67,7 +67,7 @@
       </div>
 
       <!-- 进行中 -->
-      <div class="board-column pa-2">
+      <div class="board-column pa-2" style="margin-right: 46px;">
         <div class="flex">
           <div>
             <h5 class="text-lg">进行中</h5>
@@ -131,7 +131,7 @@
       </div>
 
       <!-- 已完成 -->
-      <div class="board-column pa-2">
+      <div class="board-column pa-2" style="margin-right: 46px;">
         <div class="flex">
           <div>
             <h5 class="text-lg">已完成</h5>
@@ -154,6 +154,67 @@
         >
           <transition-group id="2" class="board-group">
             <div v-for="item in doneArr" :key="item.taskId" class="item">
+              <div class="vx-row flex">
+                <div class="font-weight-bold todo-title">{{ item.title }}</div>
+                <div>
+                  <button type="button">
+                    <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
+                      <feather-icon
+                        :svg-classes="['w-5', 'h-5']"
+                        icon="MoreVerticalIcon"
+                        class="cursor-pointer moreIcon"
+                      />
+                      <vs-dropdown-menu class="vx-navbar-dropdown">
+                        <ul style="min-width: 6rem">
+                          <li
+                            class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
+                            @click="handleUpdate(item.taskId)"
+                          >
+                            <feather-icon icon="EditIcon" svg-classes="w-3 h-3"/>
+                            <span class="ml-3">编辑</span>
+                          </li>
+                          <li
+                            class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
+                            @click="handleDel(item.taskId)"
+                          >
+                            <feather-icon icon="DeleteIcon" svg-classes="w-3 h-3"/>
+                            <span class="ml-3">删除</span>
+                          </li>
+                        </ul>
+                      </vs-dropdown-menu>
+                    </vs-dropdown>
+                  </button>
+                </div>
+              </div>
+              <div class="vx-row">
+                <div class="font-desc">{{ item.description }}</div>
+              </div>
+            </div>
+          </transition-group>
+        </draggable>
+      </div>
+
+      <!-- 已过期 -->
+      <div class="board-column pa-2">
+        <div class="flex">
+          <div>
+            <h5 class="text-lg">已过期</h5>
+          </div>
+        </div>
+
+        <draggable
+          v-model="expireArr"
+          group="site"
+          animation="300"
+          drag-class="dragClass"
+          ghost-class="ghostClass"
+          chosen-class="chosenClass"
+          @change="onChange"
+          @start="onStart"
+          @end="onEnd"
+        >
+          <transition-group id="3" class="board-group">
+            <div v-for="item in expireArr" :key="item.taskId" class="item">
               <div class="vx-row flex">
                 <div class="font-weight-bold todo-title">{{ item.title }}</div>
                 <div>
@@ -312,7 +373,9 @@ export default {
       // 进行中
       doingArr: [],
       // 已完成
-      doneArr: []
+      doneArr: [],
+      // 已过期
+      expireArr: []
     }
   },
   created() {
@@ -326,6 +389,9 @@ export default {
         this.todoArr = res.data.todo
         this.doingArr = res.data.doing
         this.doneArr = res.data.done
+        this.expireArr = res.data.expire
+        this.$vs.loading.close()// 关闭遮罩
+      }).catch(e => {
         this.$vs.loading.close()// 关闭遮罩
       })
     },
@@ -398,7 +464,6 @@ export default {
       } else {
         this.dragTaskId = evt.added.element.taskId
       }
-      console.log(this.dragTaskId)
     },
     // 开始拖拽事件
     onStart() {
@@ -514,21 +579,20 @@ button {
   background-image: none !important;
 }
 .board-column {
-  width: 30%;
+  width: 22%;
   flex: 1;
   padding: 10px;
   border-radius: 5px;
   float: left;
-  margin-right: 30px;
   position: relative;
   display: flex;
   flex-direction: column;
   min-width: 180px;
 }
-
+/*
 .v-application .pa-2 {
   padding: 16px !important;
-}
+} */
 
 .item {
   width: 100% !important;

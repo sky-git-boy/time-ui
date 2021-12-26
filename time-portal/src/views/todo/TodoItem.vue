@@ -23,6 +23,13 @@
             />
             <span>{{ tags.text }}</span>
           </vs-chip>
+          <vs-chip v-if="todoItem.status == '3'">
+            <div
+              :class="'bg-danger'"
+              class="h-2 w-2 rounded-full mr-1"
+            />
+            <span style="color: #F00">已过期</span>
+          </vs-chip>
         </div>
       </div>
 
