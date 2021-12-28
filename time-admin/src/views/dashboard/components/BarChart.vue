@@ -83,7 +83,7 @@ export default {
           }
         }],
         series: [{
-          name: 'pageA',
+          name: '操作数',
           type: 'bar',
           stack: 'vistors',
           barWidth: '60%',
