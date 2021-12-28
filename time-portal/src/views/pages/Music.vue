@@ -56,10 +56,10 @@ export default {
       if (this.index < this.noiseList.length) { this.index++ }
     },
     getNoiseMusic() {
-      return this.noiseList[this.index] === undefined ? 'https://personal-time.oss-cn-shenzhen.aliyuncs.com/noice/bigsurf.mp3' : this.noiseList[this.index].musicUrl
+      return this.noiseList[this.index] === undefined ? '' : this.noiseList[this.index].musicUrl
     },
     getNoisePic() {
-      return this.noiseList[this.index] === undefined ? 'https://personal-time.oss-cn-shenzhen.aliyuncs.com/img/bigsurf.jpg' : this.noiseList[this.index].picUrl
+      return this.noiseList[this.index] === undefined ? '' : this.noiseList[this.index].picUrl
     }
   }
 }
