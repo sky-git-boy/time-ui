@@ -106,7 +106,7 @@ export default {
           type: 'column',
           data: this.taskCountM
         }, {
-          name: '每日自省',
+          name: '个人日记',
           type: 'area',
           data: this.journalCountM
         }, {

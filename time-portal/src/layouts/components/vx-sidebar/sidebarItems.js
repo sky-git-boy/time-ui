@@ -30,7 +30,7 @@ export default [{
 },
 {
   url: '/diary',
-  name: '每日自省',
+  name: '个人日记',
   slug: 'diary',
   icon: 'Edit2Icon',
   i18n: 'diary'
@@ -51,7 +51,7 @@ export default [{
 },
 {
   url: '/goal',
-  name: '目标脑图',
+  name: '自我规划',
   slug: 'goal',
   icon: 'SendIcon',
   i18n: 'goal'

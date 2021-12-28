@@ -3,7 +3,7 @@
     <!--使用draggable组件-->
     <div class="board">
       <!-- 待办 -->
-      <div class="board-column pa-2" style="margin-right: 46px;">
+      <div class="board-column pa-2" style="margin-right: 45px;">
         <div class="flex">
           <div>
             <h5 class="text-lg">待办</h5>
@@ -67,7 +67,7 @@
       </div>
 
       <!-- 进行中 -->
-      <div class="board-column pa-2" style="margin-right: 46px;">
+      <div class="board-column pa-2" style="margin-right: 44px;">
         <div class="flex">
           <div>
             <h5 class="text-lg">进行中</h5>
@@ -131,7 +131,7 @@
       </div>
 
       <!-- 已完成 -->
-      <div class="board-column pa-2" style="margin-right: 46px;">
+      <div class="board-column pa-2" style="margin-right: 43px;">
         <div class="flex">
           <div>
             <h5 class="text-lg">已完成</h5>

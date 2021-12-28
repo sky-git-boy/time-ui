@@ -121,7 +121,7 @@ export default {
       // 查询条件
       queryParams: {
         pageNum: 1,
-        pageSize: 4,
+        pageSize: 8,
         title: undefined
       }
     }

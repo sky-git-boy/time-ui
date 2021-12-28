@@ -38,7 +38,7 @@ export default {
   },
   {
     index: 6,
-    label: '目标脑图',
+    label: '自我规划',
     url: '/goal',
     labelIcon: 'SendIcon',
     highlightAction: true
