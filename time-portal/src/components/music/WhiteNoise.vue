@@ -26,9 +26,7 @@ export default {
   },
   created() {
     getNoiseList().then(res => {
-      console.log(res.data)
       this.noiseList = res.data
-      console.log(this.noiseList)
     })
   },
   methods: {

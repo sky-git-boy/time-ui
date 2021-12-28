@@ -1,17 +1,17 @@
 <template>
   <div class="bg-box">
-    <div :style="{ backgroundImage: 'url(' + noiseList[index].picUrl + ')' }" class="bg"/>
+    <div :style="{ backgroundImage: 'url(' + getNoisePic() + ')' }" class="bg"/>
     <div class="content">
       <vs-button type="line" color="primary" @click="handleLeft">
         <feather-icon icon="ChevronLeftIcon" />
       </vs-button>
       <div
         :class="isPlay ? 'active outer' : 'outer'"
-        :style="{ backgroundImage: 'url(' + noiseList[index].picUrl + ')' }"
+        :style="{ backgroundImage: 'url(' + getNoisePic() + ')' }"
         @click="togglePlay"
       >
         <div class="inner">
-          <audio id="myAudio" :src="noiseList[index].musicUrl"/>
+          <audio id="myAudio" :src="getNoiseMusic()"/>
         </div>
       </div>
       <vs-button type="line" color="primary" @click="handleRight">
@@ -31,7 +31,7 @@ export default {
       // 播放标识
       isPlay: false,
       // 白噪音列表
-      noiseList: []
+      noiseList: {}
     }
   },
   created() {
@@ -54,6 +54,12 @@ export default {
     },
     handleRight() {
       if (this.index < this.noiseList.length) { this.index++ }
+    },
+    getNoiseMusic() {
+      return this.noiseList[this.index] === undefined ? 'https://personal-time.oss-cn-shenzhen.aliyuncs.com/noice/bigsurf.mp3' : this.noiseList[this.index].musicUrl
+    },
+    getNoisePic() {
+      return this.noiseList[this.index] === undefined ? 'https://personal-time.oss-cn-shenzhen.aliyuncs.com/img/bigsurf.jpg' : this.noiseList[this.index].picUrl
     }
   }
 }
