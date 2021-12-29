@@ -26,17 +26,17 @@ const actions = {
             const refreshToken = data.refreshToken
             setUserToken(token, accessTime, refreshToken)
 
-            // Navigate User to homepage
-            router.push(router.currentRoute.query.to || '/')
-
             // Update user details
             getUserInfo(phone).then(res => {
               const data = res.data
+              debugger
               localStorage.setItem('userInfo', JSON.stringify({
                 displayName: data.userName,
                 email: data.email,
                 photoURL: data.picture
               }))
+              // Navigate User to homepage
+              router.push(router.currentRoute.query.to || '/')
               resolve(response)
             }).catch(e => {
               reject({ message: e.message })
