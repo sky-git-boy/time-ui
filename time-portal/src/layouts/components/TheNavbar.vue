@@ -171,6 +171,13 @@
                 </li>
                 <li
                   class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
+                  @click="$router.push('/plus-user')"
+                >
+                  <feather-icon icon="AwardIcon" svg-classes="w-4 h-4"/>
+                  <span class="ml-2">Plus 会员</span>
+                </li>
+                <li
+                  class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
                   @click="$router.push('/todo')"
                 >
                   <feather-icon icon="CheckSquareIcon" svg-classes="w-4 h-4"/>
