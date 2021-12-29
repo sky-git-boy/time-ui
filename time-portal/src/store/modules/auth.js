@@ -29,7 +29,6 @@ const actions = {
             // Update user details
             getUserInfo(phone).then(res => {
               const data = res.data
-              debugger
               localStorage.setItem('userInfo', JSON.stringify({
                 displayName: data.userName,
                 email: data.email,
