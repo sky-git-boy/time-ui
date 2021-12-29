@@ -18,7 +18,7 @@
             </router-link>
           </li>
           <li class="link-type">
-            <a href="https://gitee.com/sukeyu/">随便看看</a>
+            <a href="#" @click="reLogin">重新登录</a>
           </li>
           <li><a href="#" @click.prevent="dialogVisible=true">点我看图</a></li>
         </ul>
@@ -52,6 +52,12 @@ export default {
       } else {
         this.$router.go(-2)
       }
+    },
+    async reLogin() {
+      await this.$store.dispatch('LogOut').then(() => {
+        location.reload()// In order to re-instantiate the vue-router object to avoid bugs
+      })
+      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     }
   }
 }
