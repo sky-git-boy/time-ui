@@ -197,7 +197,6 @@
         <el-table-column label="角色名称" align="center" prop="roleName" />
         <el-table-column label="权限编码" align="center" prop="roleCode" />
         <el-table-column label="备注" align="center" prop="remark" />
-        <el-table-column label="创建时间" align="center" prop="createTime" />
       </el-table>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="handleSaveRoleUserSubmit">确 定</el-button>
@@ -210,7 +209,7 @@
 
 <script>
 import { listUserForPage, addUser, updateUser, getUserById, deleteUserByIds, resetPwd } from '@/api/system/user'
-
+import { selectAllRole, getRoleIdsByUserId, saveRoleUser } from '@/api/system/role'
 export default {
   // 定义页面数据
   data() {
@@ -426,7 +425,26 @@ export default {
 
     // 打开分配角色的弹出层
     handleSelectRole(row) {
-
+      this.selectRoleOpen = true
+      this.title = '分配角色'
+      this.currentUserId = row.userId || this.ids[0]
+      const tx = this
+      selectAllRole().then(res => {
+        tx.roleTableList = res.data
+        this.$nextTick(() => {
+          // 根据当前用户查找之前拥有的角色IDS
+          getRoleIdsByUserId(tx.currentUserId).then(res2 => {
+            res2.data.filter(r1 => {
+              tx.roleTableList.filter(r2 => {
+                if (r1 === r2.roleId) {
+                  // 选中表格checkbox
+                  tx.$refs.roleListTable.toggleRowSelection(r2, true)
+                }
+              })
+            })
+          })
+        })
+      })
     },
     cancelRoleUser() {
       this.selectRoleOpen = false
@@ -437,7 +455,12 @@ export default {
     },
     // 保存用户和角色之间的关系
     handleSaveRoleUserSubmit() {
-
+      saveRoleUser(this.currentUserId, this.roleIds).then(res => {
+        this.msgSuccess('分配成功')
+        this.selectRoleOpen = false
+      }).catch(function() {
+        this.msgError('分配失败')
+      })
     }
   }
 }
