@@ -120,6 +120,11 @@ const router = new Router({
       path: '/pages/error-401',
       name: 'pageError401',
       component: () => import('@/views/pages/Error401.vue')
+    },
+    {
+      path: '/plus-user',
+      name: '/plus-user',
+      component: () => import('@/views/pages/PlusUser.vue')
     }
     ]
   },
