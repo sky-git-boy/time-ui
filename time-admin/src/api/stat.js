@@ -34,3 +34,27 @@ export function getBarChart() {
     method: 'get'
   })
 }
+
+export function orderStatusChart(data) {
+  return request({
+    url: '/statistic/backend/orderStatusChart',
+    method: 'get',
+    params: data
+  })
+}
+
+export function orderTypeChart(data) {
+  return request({
+    url: '/statistic/backend/orderTypeChart',
+    method: 'get',
+    params: data
+  })
+}
+
+export function orderCount(data) {
+  return request({
+    url: '/statistic/backend/orderCount',
+    method: 'get',
+    params: data
+  })
+}
