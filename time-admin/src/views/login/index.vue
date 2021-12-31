@@ -131,7 +131,7 @@ $light_gray:#eee;
   height: 100%;
   width: 100%;
   background-color: $bg;
-  background-image: url("login2.jpg");
+  background-image: url("https://personal-time.oss-cn-shenzhen.aliyuncs.com/login2.jpg");
   background-size: cover;
   background-position: center;
   position: relative;

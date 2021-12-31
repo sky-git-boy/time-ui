@@ -136,7 +136,7 @@
                 :on-error="handleUploadError"
                 class="upload-demo"
                 name="file"
-                action="admin/upload/image"
+                action="http://139.198.122.18/admin/upload/image"
               >
                 <el-button size="small" type="primary">点击上传</el-button>
               </el-upload>
@@ -153,7 +153,7 @@
                 :file-list="fileList"
                 :on-success="handleUploadSuccess"
                 :on-error="handleUploadError"
-                action="admin/upload/image"
+                action="http://139.198.122.18/admin/upload/image"
                 accept="image/*"
                 name="file"
                 list-type="picture"

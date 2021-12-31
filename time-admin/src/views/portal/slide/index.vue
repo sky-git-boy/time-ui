@@ -110,7 +110,7 @@
                 :file-list="fileList"
                 :on-success="handleUploadSuccess"
                 :on-error="handleUploadError"
-                :action="uploadPath"
+                action="http://139.198.122.18/admin/upload/image"
                 accept="image/*"
                 name="file"
                 list-type="picture"
@@ -191,7 +191,7 @@ export default {
     // 查询表格数据
     this.getSlideList()
     // 文件上传的路径
-    this.uploadPath = process.env.VUE_APP_BASE_API + '/admin/upload/image'
+    this.uploadPath = '/139.198.122.18/admin/upload/image'
   },
   // 方法
   methods: {
