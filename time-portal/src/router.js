@@ -72,9 +72,14 @@ const router = new Router({
         component: () => import('@/views/profile/Profile.vue')
       },
       {
+        path: '/reward',
+        name: '/reward',
+        component: () => import('@/views/reward/list.vue')
+      },
+      {
         path: '/test',
         name: '/test',
-        component: () => import('@/views/test.vue')
+        component: () => import('@/views/ForTest.vue')
       }
     ]
   },
