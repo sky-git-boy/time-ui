@@ -20,6 +20,9 @@
             状态
           </vs-th>
           <vs-th>
+            截至时间
+          </vs-th>
+          <vs-th>
             操作
           </vs-th>
         </template>
@@ -44,6 +47,10 @@
             </vs-td>
 
             <vs-td>
+              {{ item.deadLine }}
+            </vs-td>
+
+            <vs-td>
               <vs-button type="flat" size="small" @click="openUpdate(index)">修改</vs-button>
               <vs-button type="flat" size="small" @click="deleteRule(item.id)">删除</vs-button>
             </vs-td>
@@ -64,6 +71,14 @@
         <vs-radio v-model="rule.status" style="margin-right: 20px" vs-value="0">启用</vs-radio>
         <vs-radio v-model="rule.status" vs-value="1">禁用</vs-radio>
       </div>
+      <div style="margin-bottom: 20px">
+        截至时间：
+        <flat-pickr
+          :config="configdateTimePicker"
+          v-model="rule.deadLine"
+          placeholder="Dead Line"
+        />
+      </div>
       <div style="margin-bottom: 20px">奖励内容<vs-textarea v-model="rule.rewardContent" width="300px"/></div>
       <div>惩罚内容<vs-textarea v-model="rule.punishmentContent" width="300px"/></div>
     </vs-prompt>
@@ -71,10 +86,20 @@
 </template>
 
 <script>
+import flatPickr from 'vue-flatpickr-component'
+import 'flatpickr/dist/flatpickr.css'
 import { saveOrUpdate, rulesList, deleteRules } from '@/api/rules'
 
 export default {
+  components: {
+    flatPickr
+  },
   data: () => ({
+    // 时间配置
+    configdateTimePicker: {
+      enableTime: true,
+      dateFormat: 'Y-m-d H:i'
+    },
     rules: [],
     rule: {},
     activeUpdate: false

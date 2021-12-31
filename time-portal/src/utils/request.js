@@ -77,37 +77,31 @@ request.interceptors.response.use(
     // }
   },
   error => {
-    console.log(error.response.status)
     // this.$vs.loading.close()
-    if (error.response.status === 429) {
-      this.$vs.notify({
-        text: '请求太频繁，请稍后再试！',
-        iconPack: 'feather',
-        icon: 'icon-alert-circle',
-        color: 'danger',
-        position: 'top-center'
-      })
-    } else if (error.response.status === 401) {
-      router.push({
-        path: '/pages/error-401'
-        // query: { redirect: router.currentRoute.fullPath }
-      })
-    } else if (error.response.status === 403) {
-      router.push({
-        path: '/pages/error-401'
-        // query: { redirect: router.currentRoute.fullPath }
-      })
+    if (error.response != undefined) {
+      if (error.response.status === 429) {
+        this.$vs.notify({
+          text: '请求太频繁，请稍后再试！',
+          iconPack: 'feather',
+          icon: 'icon-alert-circle',
+          color: 'danger',
+          position: 'top-center'
+        })
+      } else if (error.response.status === 401) {
+        router.push({
+          path: '/pages/error-401'
+          // query: { redirect: router.currentRoute.fullPath }
+        })
+      } else if (error.response.status === 403) {
+        router.push({
+          path: '/pages/error-401'
+          // query: { redirect: router.currentRoute.fullPath }
+        })
+      }
+      return Promise.reject(error)
+    } else {
+      return
     }
-    // this.$vs.loading.close();
-    // this.$vs.notify({
-    //   title: "Error",
-    //   text: error.message,
-    //   iconPack: "feather",
-    //   icon: "icon-alert-circle",
-    //   color: "danger",
-    // });
-    // TODO 401处理
-    return Promise.reject(error)
   }
 )
 

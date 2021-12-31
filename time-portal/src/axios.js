@@ -1,7 +1,7 @@
 // axios
 import axios from 'axios'
 
-const baseURL = 'http://time-server'
+const baseURL = 'http://139.198.122.18'
 
 export default axios.create({
   baseURL: baseURL

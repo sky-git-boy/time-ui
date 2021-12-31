@@ -10,8 +10,19 @@
         <img src="@/assets/images/elements/decore-right.png" class="decore-right" alt="Decore Right" width="175">
         <feather-icon icon="AwardIcon" class="p-6 mb-8 bg-primary inline-flex rounded-full text-white shadow" svg-classes="h-8 w-8"/>
         <h1 class="mb-6 text-white">{{ user_displayName }}</h1>
-        <p class="xl:w-3/4 lg:w-4/5 md:w-2/3 w-4/5 mx-auto text-white">您已经完成您指定的奖励规则。</p>
+        <p class="xl:w-3/4 lg:w-4/5 md:w-2/3 w-4/5 mx-auto text-white">您已经完成您制定的奖惩规则！(๑¯◡¯๑)</p>
         <p class="xl:w-3/4 lg:w-4/5 md:w-2/3 w-4/5 mx-auto text-white">奖励内容：{{ content }}</p>
+      </vx-card>
+    </vs-popup>
+    <vs-popup
+      :active.sync="punishActivo"
+      class="holamundo"
+      title=""
+    >
+      <vx-card class="text-center bg-primary-gradient greet-user">
+        <h1 class="mb-6 text-white">{{ user_displayName }}</h1>
+        <p class="xl:w-3/4 lg:w-4/5 md:w-2/3 w-4/5 mx-auto text-white">很遗憾您未完成您制定的奖惩规则！(＞﹏＜)</p>
+        <p class="xl:w-3/4 lg:w-4/5 md:w-2/3 w-4/5 mx-auto text-white">惩罚内容：{{ content }}</p>
       </vx-card>
     </vs-popup>
   </div>
@@ -23,7 +34,8 @@ export default {
   data: () => ({
     socket: null,
     content: '',
-    popupActivo: false
+    popupActivo: false,
+    punishActivo: false
   }),
   computed: {
     userId() {
@@ -38,9 +50,6 @@ export default {
     this.openSocket()
   },
   methods: {
-    openPop() {
-      this.popupActivo = !this.popupActivo
-    },
     openSocket() {
       if (typeof WebSocket == 'undefined') {
         console.log('您的浏览器不支持WebSocket')
@@ -65,8 +74,13 @@ export default {
         }
         // 获得消息事件
         vr.socket.onmessage = function(msg) {
-          vr.openPop()
-          vr.content = msg.data
+          const data = JSON.parse(msg.data)
+          vr.content = data.content
+          if (data.type == '0') { // 奖赏
+            vr.popupActivo = !vr.popupActivo
+          } else { // 惩罚
+            vr.punishActivo = !vr.punishActivo
+          }
         }
         // 关闭事件
         vr.socket.onclose = function() {

@@ -215,6 +215,14 @@
         <vs-radio v-model="status" style="margin-right: 20px" vs-value="0">启用</vs-radio>
         <vs-radio v-model="status" vs-value="1">禁用</vs-radio>
       </div>
+      <div style="margin-bottom: 20px">
+        截至时间：
+        <flat-pickr
+          :config="configdateTimePicker"
+          v-model="deadLine"
+          placeholder="Dead Line"
+        />
+      </div>
       <div style="margin-bottom: 20px">奖励内容<vs-textarea v-model="reward" width="300px"/></div>
       <div>惩罚内容<vs-textarea v-model="punishment" width="300px"/></div>
     </vs-prompt>
@@ -222,6 +230,8 @@
 </template>
 
 <script>
+import flatPickr from 'vue-flatpickr-component'
+import 'flatpickr/dist/flatpickr.css'
 import { removeToken } from '@/utils/auth'
 import VxAutoSuggest from '@/components/vx-auto-suggest/VxAutoSuggest.vue'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
@@ -253,7 +263,8 @@ export default {
   components: {
     VxAutoSuggest,
     VuePerfectScrollbar,
-    draggable
+    draggable,
+    flatPickr
   },
   props: {
     navbarColor: {
@@ -263,6 +274,12 @@ export default {
   },
   data() {
     return {
+      // 时间配置
+      configdateTimePicker: {
+        enableTime: true,
+        dateFormat: 'Y-m-d H:i'
+      },
+      deadLine: undefined,
       status: '0',
       taskCount: 0,
       reward: '打游戏一小时',
@@ -353,7 +370,8 @@ export default {
         needCount: this.taskCount,
         rewardContent: this.reward,
         punishmentContent: this.punishment,
-        status: this.status
+        status: this.status,
+        deadLine: this.deadLine
       }
       saveOrUpdate(rule).then(res => {
         this.$vs.notify({
