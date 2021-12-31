@@ -77,7 +77,8 @@ request.interceptors.response.use(
     // }
   },
   error => {
-    this.$vs.loading.close()
+    console.log(error.response.status)
+    // this.$vs.loading.close()
     if (error.response.status === 429) {
       this.$vs.notify({
         text: '请求太频繁，请稍后再试！',
@@ -87,6 +88,11 @@ request.interceptors.response.use(
         position: 'top-center'
       })
     } else if (error.response.status === 401) {
+      router.push({
+        path: '/pages/error-401'
+        // query: { redirect: router.currentRoute.fullPath }
+      })
+    } else if (error.response.status === 403) {
       router.push({
         path: '/pages/error-401'
         // query: { redirect: router.currentRoute.fullPath }

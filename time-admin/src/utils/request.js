@@ -65,7 +65,9 @@ service.interceptors.response.use(
     }
   },
   error => {
-    console.log('err' + error) // for debug
+    if (error.response.status === 401) {
+      router.push({ path: '/401' })
+    }
     if (error.message !== 'Request failed with status code 403') {
       Message({
         message: error.message,
