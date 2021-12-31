@@ -64,13 +64,6 @@ export default [{
   i18n: 'music'
 },
 {
-  url: '/tomato',
-  name: '番茄钟',
-  slug: 'tomato',
-  icon: 'ClockIcon',
-  i18n: 'tomato'
-},
-{
   url: '/reward',
   name: '奖惩规则',
   slug: 'reward',
