@@ -3,7 +3,7 @@ import router from '@/router'
 import { getToken } from '@/utils/auth'
 
 const request = axios.create({
-  baseURL: 'http://time-server',
+  baseURL: 'http://139.198.122.18',
   timeout: 20000
 })
 
