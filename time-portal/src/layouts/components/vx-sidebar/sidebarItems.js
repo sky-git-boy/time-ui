@@ -69,5 +69,12 @@ export default [{
   slug: 'tomato',
   icon: 'ClockIcon',
   i18n: 'tomato'
+},
+{
+  url: '/reward',
+  name: '奖惩规则',
+  slug: 'reward',
+  icon: 'StarIcon',
+  i18n: 'reward'
 }
 ]

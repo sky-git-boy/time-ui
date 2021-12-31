@@ -178,6 +178,13 @@
                 </li>
                 <li
                   class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
+                  @click="openStar"
+                >
+                  <feather-icon icon="StarIcon" svg-classes="w-4 h-4"/>
+                  <span class="ml-2">自定义奖惩</span>
+                </li>
+                <li
+                  class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
                   @click="$router.push('/todo')"
                 >
                   <feather-icon icon="CheckSquareIcon" svg-classes="w-4 h-4"/>
@@ -197,6 +204,20 @@
         </div>
       </vs-navbar>
     </div>
+    <vs-prompt
+      :active.sync="activeStar"
+      title="今日奖惩"
+      @accept="addRules"
+    >
+      <div style="margin-bottom: 20px">需完成任务数<vs-input v-model="taskCount" class="inputx"/></div>
+      <div style="margin-bottom: 20px">
+        状态：
+        <vs-radio v-model="status" style="margin-right: 20px" vs-value="0">启用</vs-radio>
+        <vs-radio v-model="status" vs-value="1">禁用</vs-radio>
+      </div>
+      <div style="margin-bottom: 20px">奖励内容<vs-textarea v-model="reward" width="300px"/></div>
+      <div>惩罚内容<vs-textarea v-model="punishment" width="300px"/></div>
+    </vs-prompt>
   </div>
 </template>
 
@@ -206,6 +227,7 @@ import VxAutoSuggest from '@/components/vx-auto-suggest/VxAutoSuggest.vue'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import draggable from 'vuedraggable'
 import { notice } from '@/api/notice'
+import { saveOrUpdate } from '@/api/rules'
 
 export default {
   name: 'TheNavbar',
@@ -241,6 +263,11 @@ export default {
   },
   data() {
     return {
+      status: '0',
+      taskCount: 0,
+      reward: '打游戏一小时',
+      punishment: '禁止打游戏一天',
+      activeStar: false,
       category: ['success', 'danger', 'primary', 'warning', 'dark'],
       navbarSearchAndPinList: this.$store.state.navbarSearchAndPinList,
       searchQuery: '',
@@ -317,6 +344,23 @@ export default {
     })
   },
   methods: {
+    // 奖惩弹出层
+    openStar() {
+      this.activeStar = !this.activeStar
+    },
+    addRules() {
+      const rule = {
+        needCount: this.taskCount,
+        rewardContent: this.reward,
+        punishmentContent: this.punishment,
+        status: this.status
+      }
+      saveOrUpdate(rule).then(res => {
+        this.$vs.notify({
+          title: '操作成功', color: 'success'
+        })
+      })
+    },
     randomCatory(remark) {
       if (remark === 'MessageSquareIcon') {
         return this.category[2]

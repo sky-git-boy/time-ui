@@ -12,7 +12,6 @@
 
       <div class="content-wrapper">
         <the-navbar :navbar-color="navbarColor" />
-
         <div class="router-view">
           <div :class="{ 'mt-0': navbarType == 'hidden' }" class="router-content">
             <div class="content-area__content">
@@ -26,6 +25,7 @@
           </div>
         </div>
       </div>
+      <for-test/>
 
       <the-footer/>
     </div>
@@ -39,13 +39,14 @@ import TheFooter from '../components/TheFooter.vue'
 import themeConfig from '@/../themeConfig.js'
 import sidebarItems from '@/layouts/components/vx-sidebar/sidebarItems.js'
 import BackToTop from 'vue-backtotop'
-
+import ForTest from '@/views/ForTest.vue'
 export default {
   components: {
     VxSidebar,
     TheNavbar,
     TheFooter,
-    BackToTop
+    BackToTop,
+    ForTest
   },
   data() {
     return {

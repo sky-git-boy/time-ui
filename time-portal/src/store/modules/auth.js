@@ -30,6 +30,7 @@ const actions = {
             getUserInfo(phone).then(res => {
               const data = res.data
               localStorage.setItem('userInfo', JSON.stringify({
+                userId: data.userId,
                 displayName: data.userName,
                 email: data.email,
                 photoURL: data.picture
