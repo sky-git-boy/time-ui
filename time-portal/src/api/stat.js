@@ -27,3 +27,11 @@ export function getMixedChart() {
     method: 'get'
   })
 }
+
+export function getRewardInfo(query) {
+  return request({
+    url: '/member/reward/list',
+    method: 'get',
+    params: query
+  })
+}

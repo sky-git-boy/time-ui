@@ -77,8 +77,8 @@ request.interceptors.response.use(
     // }
   },
   error => {
-    // this.$vs.loading.close()
     if (error.response != undefined) {
+      this.$vs.loading.close()
       if (error.response.status === 429) {
         this.$vs.notify({
           text: '请求太频繁，请稍后再试！',

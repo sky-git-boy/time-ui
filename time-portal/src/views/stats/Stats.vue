@@ -1,15 +1,17 @@
 <template>
   <div class="vx-card mb-4 no-gutter w-full justify-center" style="padding: 25px">
     <vs-tabs alignment="center">
-      <vs-tab label="总览" @click="handleClick1(0)"/>
-      <vs-tab label="任务" @click="handleClick2(1)"/>
+      <vs-tab label="总览" @click="handleClick1()"/>
+      <vs-tab label="任务" @click="handleClick2()"/>
+      <vs-tab label="奖惩" @click="handleClick3()"/>
     </vs-tabs>
-    <div v-show="!flag">
+    <div v-show="activeAll">
       <vs-card>
         <div id="mixChart" />
       </vs-card>
     </div>
-    <div v-show="flag">
+
+    <div v-show="activeTask">
       <vs-row style="padding-top: 15px">
         <vs-col type="flex" vs-w="6">
           <vx-card class="text-center bg-primary-gradient greet-user" style="height: 272px">
@@ -40,14 +42,32 @@
         </vs-col>
       </vs-row>
     </div>
+
+    <div v-show="activeReward">
+      <vs-row>
+        <vs-col type="flex" vs-w="6">
+          <vx-card title="奖励">
+            <vx-timeline :data="rewardData"/>
+          </vx-card>
+        </vs-col>
+        <vs-col vs-w="6">
+          <vx-card title="惩罚">
+            <vx-timeline :data="punishData"/>
+          </vx-card>
+        </vs-col>
+      </vs-row>
+    </div>
   </div>
 </template>
 
 <script>
 import ApexCharts from 'apexcharts'
-import { getPieChart, getColumnChart, getLineChartSimple, getMixedChart } from '@/api/stat'
-
+import { getPieChart, getColumnChart, getLineChartSimple, getMixedChart, getRewardInfo } from '@/api/stat'
+import VxTimeline from '@/components/timeline/VxTimeline.vue'
 export default {
+  components: {
+    VxTimeline
+  },
   data() {
     return {
       lineData: [],
@@ -63,9 +83,47 @@ export default {
       eventCountM: [],
       journalCountM: [],
 
+      rewardData: [
+        {
+          id: '0',
+          type: '0',
+          content: 'Task1 Finished',
+          createTime: '2022-01-03 13:00:38'
+        },
+        {
+          id: '1',
+          type: '0',
+          content: 'Task2 Finished',
+          createTime: '2022-01-03 13:00:38'
+        }
+      ],
+
+      punishData: [
+        {
+          id: '2',
+          type: '1',
+          content: 'Task1 Update Found',
+          createTime: '2022-01-03 13:00:38'
+        },
+        {
+          id: '3',
+          type: '1',
+          content: 'Task2 Update Found',
+          createTime: '2022-01-03 13:00:38'
+        }
+      ],
+
+      activeAll: true,
+      activeTask: false,
+      activeReward: false,
+
       flag: false,
       click1Count: 0,
-      click2Count: 0
+      click2Count: 0,
+
+      query: {
+        type: '0'
+      }
     }
   },
   computed: {
@@ -96,6 +154,13 @@ export default {
     getColumnChart().then(res => {
       this.columnData = res.data.count
       this.columnDays = res.data.days
+    })
+    getRewardInfo(this.query).then(res => {
+      this.rewardData = res.data
+    })
+    this.query = { type: '1' }
+    getRewardInfo(this.query).then(res => {
+      this.punishData = res.data
     })
   },
   methods: {
@@ -286,20 +351,29 @@ export default {
     },
 
     handleClick1() {
-      this.flag = false
+      this.activeAll = true
+      this.activeTask = false
+      this.activeReward = false
       if (this.click1Count == 0) {
         this.initMixChart()
         this.click1Count++
       }
     },
     handleClick2() {
-      this.flag = true
+      this.activeAll = false
+      this.activeTask = true
+      this.activeReward = false
       if (this.click2Count == 0) {
         this.initLineChart()
         this.initPieChart()
         this.initColumnChart()
         this.click2Count++
       }
+    },
+    handleClick3() {
+      this.activeAll = false
+      this.activeTask = false
+      this.activeReward = true
     }
   }
 }

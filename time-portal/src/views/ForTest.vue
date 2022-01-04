@@ -58,7 +58,7 @@ export default {
         // 实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接
         // 等同于socket = new WebSocket("ws://localhost:8888/xxxx/im/25");
         // var socketUrl="${request.contextPath}/im/"+$("#userId").val();
-        var socketUrl = 'http://localhost/member/imserver/' + vr.userId
+        var socketUrl = 'http://139.198.122.18/member/imserver/' + vr.userId
         socketUrl = socketUrl.replace('https', 'ws').replace('http', 'ws')
         if (vr.socket != null) {
           vr.socket.close()

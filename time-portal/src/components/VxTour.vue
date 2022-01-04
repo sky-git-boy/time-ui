@@ -21,31 +21,32 @@
 
           <div slot="actions" class="flex justify-center">
             <vs-button
+              v-if="tour.currentStep != tour.steps.length - 1"
               size="small"
               class="mr-3"
               icon-pack="feather"
               icon="icon-x"
               icon-after
               color="#fff"
-              v-if="tour.currentStep != tour.steps.length - 1"
               type="border"
               @click="tour.stop">
               Skip
             </vs-button>
 
             <vs-button
+              v-if="tour.currentStep"
               size="small"
               icon-pack="feather"
               icon="icon-chevrons-left"
               color="#fff"
               type="border"
-              v-if="tour.currentStep"
               class="mr-3"
               @click="tour.previousStep">
               Previous
             </vs-button>
 
             <vs-button
+              v-if="tour.currentStep != tour.steps.length - 1"
               size="small"
               icon-pack="feather"
               icon="icon-chevrons-right"
@@ -53,12 +54,12 @@
               color="#fff"
               type="border"
               class="btn-tour-next"
-              v-if="tour.currentStep != tour.steps.length - 1"
               @click="tour.nextStep">
               Next
             </vs-button>
 
             <vs-button
+              v-if="tour.currentStep == tour.steps.length - 1"
               size="small"
               icon-pack="feather"
               icon="icon-check-circle"
@@ -66,7 +67,6 @@
               color="#fff"
               type="border"
               class="btn-tour-finish"
-              v-if="tour.currentStep == tour.steps.length - 1"
               @click="tour.stop">
               Finish
             </vs-button>
