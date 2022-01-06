@@ -35,3 +35,10 @@ export function getRewardInfo(query) {
     params: query
   })
 }
+
+export function getRewardChart() {
+  return request({
+    url: '/statistic/portal/rewardChart',
+    method: 'get'
+  })
+}

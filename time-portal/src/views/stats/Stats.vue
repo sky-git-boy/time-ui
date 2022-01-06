@@ -45,6 +45,13 @@
 
     <div v-show="activeReward">
       <vs-row>
+        <vs-col>
+          <vs-card>
+            <div id="rewardChart" />
+          </vs-card>
+        </vs-col>
+      </vs-row>
+      <vs-row>
         <vs-col type="flex" vs-w="6">
           <vx-card title="奖励">
             <vx-timeline :data="rewardData"/>
@@ -62,7 +69,7 @@
 
 <script>
 import ApexCharts from 'apexcharts'
-import { getPieChart, getColumnChart, getLineChartSimple, getMixedChart, getRewardInfo } from '@/api/stat'
+import { getPieChart, getColumnChart, getLineChartSimple, getMixedChart, getRewardInfo, getRewardChart } from '@/api/stat'
 import VxTimeline from '@/components/timeline/VxTimeline.vue'
 export default {
   components: {
@@ -89,12 +96,6 @@ export default {
           type: '0',
           content: 'Task1 Finished',
           createTime: '2022-01-03 13:00:38'
-        },
-        {
-          id: '1',
-          type: '0',
-          content: 'Task2 Finished',
-          createTime: '2022-01-03 13:00:38'
         }
       ],
 
@@ -104,14 +105,12 @@ export default {
           type: '1',
           content: 'Task1 Update Found',
           createTime: '2022-01-03 13:00:38'
-        },
-        {
-          id: '3',
-          type: '1',
-          content: 'Task2 Update Found',
-          createTime: '2022-01-03 13:00:38'
         }
       ],
+
+      rewardDays: [],
+      rewardChartData: [],
+      punishChartData: [],
 
       activeAll: true,
       activeTask: false,
@@ -120,6 +119,7 @@ export default {
       flag: false,
       click1Count: 0,
       click2Count: 0,
+      click3Count: 0,
 
       query: {
         type: '0'
@@ -161,6 +161,11 @@ export default {
     this.query = { type: '1' }
     getRewardInfo(this.query).then(res => {
       this.punishData = res.data
+    })
+    getRewardChart().then(res => {
+      this.rewardDays = res.data.days
+      this.rewardChartData = res.data.rewards
+      this.punishChartData = res.data.punishes
     })
   },
   methods: {
@@ -350,6 +355,48 @@ export default {
       chart.render()
     },
 
+    initRewardChart() {
+      var options = {
+        series: [
+          {
+            name: '奖励数',
+            data: this.rewardChartData,
+            color: '#28C76F'
+          }, {
+            name: '惩罚数',
+            data: this.punishChartData,
+            color: '#FFB200'
+          }],
+        chart: {
+          type: 'bar',
+          height: 350
+        },
+        plotOptions: {
+          bar: {
+            horizontal: false,
+            columnWidth: '55%',
+            endingShape: 'rounded'
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          show: true,
+          width: 2,
+          colors: ['transparent']
+        },
+        xaxis: {
+          categories: this.rewardDays
+        },
+        fill: {
+          opacity: 1
+        }
+      }
+      var chart = new ApexCharts(document.querySelector('#rewardChart'), options)
+      chart.render()
+    },
+
     handleClick1() {
       this.activeAll = true
       this.activeTask = false
@@ -374,6 +421,10 @@ export default {
       this.activeAll = false
       this.activeTask = false
       this.activeReward = true
+      if (this.click3Count == 0) {
+        this.initRewardChart()
+        this.click3Count++
+      }
     }
   }
 }

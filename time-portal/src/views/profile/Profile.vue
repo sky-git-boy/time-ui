@@ -147,7 +147,7 @@ export default {
           {
             top: 120,
             left: 'center',
-            range: '2021',
+            range: '2022',
             splitLine: {
               show: true,
               lineStyle: {
