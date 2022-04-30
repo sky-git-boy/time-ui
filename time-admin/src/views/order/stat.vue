@@ -32,12 +32,12 @@
       <el-row :gutter="32">
         <el-col :xs="24" :sm="24" :lg="12">
           <div>
-            <pie-chart ref="p1" :prop-pie-data="revenueOverview" />
+            <pie-chart v-if="fresh" ref="p1" :prop-pie-data="revenueOverview" />
           </div>
         </el-col>
         <el-col :xs="24" :sm="24" :lg="12">
           <div>
-            <pie-chart ref="p2" :prop-pie-data="incomeChanel" />
+            <pie-chart v-if="fresh" ref="p2" :prop-pie-data="incomeChanel" />
           </div>
         </el-col>
       </el-row>
@@ -57,6 +57,7 @@ export default {
   },
   data() {
     return {
+      fresh: true,
       // 遮罩
       loading: false,
       // 查询参数
@@ -69,17 +70,17 @@ export default {
       revenueOverview: { // 收支概况
         title: '订单状态',
         data: [
-          { name: '已支付', value: 4 },
-          { name: '未支付', value: 2 }
+          { name: '未支付', value: 0 },
+          { name: '已支付', value: 0 }
         ]
       },
       incomeChanel: { // 收入渠道
         title: '订单类型',
         data: [
-          { name: '一个月', value: 1 },
-          { name: '半年', value: 1 },
-          { name: '一年', value: 1 },
-          { name: '永久', value: 1 }
+          { name: '一个月', value: 0 },
+          { name: '半年', value: 0 },
+          { name: '一年', value: 0 },
+          { name: '永久', value: 0 }
         ]
       }
     }
@@ -91,15 +92,23 @@ export default {
     loadData() {
       this.loading = true
       var search = this.addDateRange(this.queryParams, this.dateRange)
+      const i = this
       orderCount(search).then(res => {
-        this.totalRevenue = res.data
+        i.totalRevenue = res.data
         orderTypeChart(search).then(res => {
-          this.revenueOverview.data = res.data
+          i.incomeChanel.data = res.data
           orderStatusChart(search).then(res => {
-            this.incomeChanel.data = res.data
-            this.loading = false
+            i.revenueOverview.data = res.data
+            i.reload()
+            i.loading = false
           })
         })
+      })
+    },
+    reload() {
+      this.fresh = false
+      this.$nextTick(function() {
+        this.fresh = true
       })
     },
     handleQuery() {

@@ -26,7 +26,7 @@ export default {
     propPieData: {
       type: Object,
       default() {
-        return { title: '收支概况', data: [{ value: 320, name: '收费金额' }, { value: 240, name: '退费金额' }]
+        return { title: '订单状态', data: [{ value: 320, name: '已支付' }, { value: 240, name: '未支付' }]
         }
       }
     }
@@ -41,9 +41,9 @@ export default {
     propPieData: {
       immediate: true,
       handler(val) {
-        console.log(val)
         this.pieData = val
         this.$nextTick(() => {
+          console.log(1111)
           this.initChart()
         })
       }

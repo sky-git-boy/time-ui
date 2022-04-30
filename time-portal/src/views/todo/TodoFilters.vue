@@ -8,14 +8,14 @@
       <h5>Time</h5>
       <template v-for="filter in todoFilters">
         <div
-          :class="{'text-primary': 0 == filter.filter}"
+          :class="{'text-primary': filterId == filter.filter}"
           :key="filter.filter"
           class="flex mt-6 cursor-pointer"
           @click="queryByTime(filter.filter)"
         >
           <feather-icon
             :icon="filter.icon"
-            :svg-classes="[{'text-primary stroke-current': 0 == filter.filter}, 'h-6 w-6']"
+            :svg-classes="[{'text-primary stroke-current': filterId == filter.filter}, 'h-6 w-6']"
           />
           <span class="text-lg ml-3">{{ filter.filterName }}</span>
         </div>
@@ -36,7 +36,7 @@
           @click="queryByTag(tag.value)"
         >
           <div :class="'bg-' + tag.color" class="h-4 w-4 rounded-full mr-4"/>
-          <span :class="{'text-primary': 0 == tag.value}" class="text-lg">{{ tag.text }}</span>
+          <span :class="{'text-primary': tagId == tag.value}" class="text-lg">{{ tag.text }}</span>
         </div>
       </div>
     </div>
@@ -49,6 +49,8 @@ import { parseTime } from '@/utils/index.js'
 export default {
   data() {
     return {
+      filterId: 0,
+      tagId: 0,
       todoFilters: [
         { filterName: '所有', filter: 0, icon: 'LayersIcon' },
         { filterName: '今天', filter: 1, icon: 'SunIcon' },
@@ -67,12 +69,14 @@ export default {
   methods: {
     // 标签查询
     queryByTag(tagValue) {
+      this.tagId = tagValue
       this.clearfield()
       this.queryParams.tags = tagValue
       this.$emit('queryBy', this.queryParams)
     },
     // 时间查询
     queryByTime(filter) {
+      this.filterId = filter
       this.clearfield()
       // 开始/结束时间（yyyy-MM-dd HH:mm:ss
       const time = new Date() // 获取当前时间
@@ -90,7 +94,6 @@ export default {
         time.setDate(time.getDate() - 7)
         this.queryParams.beginTime = parseTime(time, '{y}-{m}-{d}')
       }
-      console.log(this.queryParams)
       this.$emit('queryBy', this.queryParams)
     },
     clearfield() {
