@@ -12,21 +12,25 @@ export default {
     return {
       dataJson: [
         {
-          'name': '2021年计划',
+          'name': '2022年计划',
           'left': false,
           'children': []
         }
       ],
       addFlag: false, // 新增修改标识
       form: {}, // 表单数据
-      initSuccess: false
+      initSuccess: false,
+      otimer: null
     }
   },
   computed: {
   },
   created() {
     this.getGoalOne()
-    setInterval(this.handleUpdate, 10000)
+    this.otimer = setInterval(this.handleUpdate, 10000)
+  },
+  destroyed() {
+    clearInterval(this.otimer)
   },
   methods: {
     getGoalOne() {
@@ -39,9 +43,9 @@ export default {
     },
     handleUpdate(data, id) {
       this.form = {}
+      this.form.dataJson = JSON.stringify(this.dataJson[0])
       getGoal().then(res => {
-        this.form.dataJson = JSON.stringify(this.dataJson[0])
-        if (res.data === undefined) { // 新增
+        if (res.data === null) { // 新增
           addGoal(this.form)
         } else { // 修改
           this.form.goldId = res.data.goldId
